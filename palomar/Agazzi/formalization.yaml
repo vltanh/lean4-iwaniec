@@ -1,0 +1,185 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Iwaniec's conjecture: the quasiconvexity of L and the L^p norm of the Beurling–Ahlfors transform (Agazzi et al., arXiv:2609.28311)"
+  description: >-
+    A formalization of A. Agazzi et al., Sharp higher integrability theory, Part I: the
+    L^p-norm of the Beurling–Ahlfors transform (arXiv:2609.28311v2). With A z = a₊ z + a₋ z̄,
+    the integrand L (A) = |a₊|² − |a₋|² for |a₊| + |a₋| ≤ 1 and 2|a₊| − 1 otherwise is
+    quasiconvex on R^{2×2}: the integral over the torus of L (A + Dφ) − L (A) is nonnegative
+    for every matrix A and every smooth (in fact every Lipschitz) periodic map φ (Theorem 1).
+
+
+    Hence (Corollary 2) the Burkholder integrands B_p are quasiconvex for every 1 < p < ∞, and
+    the norm of the Beurling–Ahlfors transform on L^p(C) is p* − 1, p* = max (p, p/(p − 1)):
+    Iwaniec's conjecture of 1982. Everything is proved, including the results the paper cites.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.CV", "math.AP"]
+  msc2020: ["30C62", "42B20", "49J45", "26B25"]
+
+sources:
+  - title: "Sharp Higher Integrability Theory, Part I: The L^p-norm of the Beurling–Ahlfors transform"
+    authors:
+      - "Andrea Agazzi"
+      - "Kari Astala"
+      - "Rodrigo Bañuelos"
+      - "Giuseppe Bruno"
+      - "Gabriele Cassese"
+      - "Daniel Faraco"
+      - "André Guerra"
+      - "Mahdi Hormozi"
+      - "Bernd Kirchheim"
+      - "Aleksis Koski"
+      - "Vjekoslav Kovač"
+      - "Jan Kristensen"
+      - "Federico Pasqualotto"
+      - "István Prause"
+      - "Eero Saksman"
+      - "Vladimír Šverák"
+      - "László Székelyhidi"
+      - "Riccardo Tione"
+      - "Alexander Volberg"
+      - "Hang Yang"
+    id: "arXiv:2609.28311v2"
+    type: "preprint"
+    location: "https://arxiv.org/abs/2609.28311v2"
+    relationship: "formalizes"
+    author_endorsement: "not-contacted"
+  - title: "Some conjectures about integral means of ∂f and ∂̄f"
+    authors:
+      - "Albert Baernstein II"
+      - "Stephen J. Montgomery-Smith"
+    id: "arXiv:math/9709215v2"
+    type: "article"
+    location: "Acta Univ. Upsaliensis Skr. Uppsala Univ. C Organ. Hist. 64 (1999), 92–109"
+    relationship: "background"
+    note: "The arguments by which the paper derives Corollary 2: the identities (1.2a), (1.2b), proved by direct integration, and the inequality from Burkholder (1988), proved by the package BanachProbability; the extremals f_α used for Lehto's lower bound."
+  - title: "Quasiconvexity of the Burkholder function on symmetric matrices"
+    authors:
+      - "André Guerra"
+    id: "arXiv:2608.23388v1"
+    type: "preprint"
+    location: "https://arxiv.org/abs/2608.23388v1"
+    relationship: "background"
+    note: "Cited by the paper for further details of Corollary 2; the Mellin representation of B_p is followed; its planar passage to L^p(C) is replaced by transference (see fidelity)."
+  - title: "An introduction to variational inequalities and their applications"
+    authors:
+      - "David Kinderlehrer"
+      - "Guido Stampacchia"
+    type: "book"
+    location: "SIAM Classics in Applied Mathematics 31, 2000, Chapter I, Lemma 2.1 and Theorem 2.3"
+    relationship: "background"
+    note: "The projection on a closed convex set of a Hilbert space, proved by Mathlib's theorems; the book was not read."
+  - title: "Remarks on the integrability of the derivatives of quasiconformal mappings"
+    authors:
+      - "Olli Lehto"
+    type: "article"
+    location: "Ann. Acad. Sci. Fenn. Ser. A I 371 (1965)"
+    relationship: "background"
+    note: "The lower bound p* − 1, proved by the extremals of Baernstein and Montgomery-Smith, the density lemma of HarmonicAnalysis and duality; Lehto's paper was not read."
+
+related_formalizations:
+  - id: "https://github.com/facebookresearch/atlas-lean"
+    relationship: "independent"
+    note: "States Lehto's bound and Iwaniec's conjecture without proof (as listed by lean4-harmonic-analysis); not consulted."
+
+status:
+  scope: >-
+    Every numbered result of the paper is formalized and proved: Lemma 3, Lemma 4, Theorem 1
+    (also for Lipschitz periodic test maps), Corollary 2 (both assertions), and every result
+    the paper cites. Not formalized: the uniqueness of the projection in Lemma 4 (not needed),
+    and the remarks of the introduction on consequences and generalizations.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["Claude Opus 5.5 (claude-opus-5-5)"]
+      framework: "Claude Code 2.1.330 (Claude Agent SDK)"
+      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build."
+      cost:
+        wall_time: "about 1.6 hours elapsed from the start to the verified build; about 4.9 hours of sub-agent time (session transcripts)"
+        spend_usd: "not tracked"
+        hardware: "local machine"
+      prompting_notes: "A coordinating session gave the task; the lead followed the skill's phases and briefed the sub-agents."
+  spend_usd: "not tracked"
+  notes: "AI agents wrote the code and the checks; no person has reviewed the proofs."
+
+fidelity:
+  divergences: >-
+    Statements: none changed. Readings: the torus as periodic maps on R² with integrals over the
+    unit square; W^{1,∞}_per as Lipschitz periodic functions; the L² projection as a minimizer;
+    the norm of the transform as the supremum over Schwartz functions. Theorem 1 and the first
+    assertion of Corollary 2 are proved for Lipschitz periodic test maps, by the paper's
+    arguments, and the paper's smooth statements follow. Proofs: every proof follows the
+    paper's, except the upper bound for the norm, which passes from the torus to the plane by
+    transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6) instead of the planar cut-off
+    argument of the cited sources (economy, not forced; for the user's decision). Gaps of the
+    paper filled: the closedness of the constraint set in L²(Q), the periodization of the ball
+    in Lemma 4, the sign change, the passage of the BMS arguments to periodic maps at every A.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "none"
+  notes: "Independent AI-agent reviews of the statements against the TeX and of the proofs against the paper; no human review."
+
+alignment:
+  namespace: "AgazziChallenge"
+  statements:
+    - source: "Theorem 1 (thm:L-quasiconvexity)"
+      lean: "AgazziChallenge.theorem1"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "C^∞ periodic test maps, as in the paper."
+    - source: "Corollary 2 (cor:Bp-BA), first assertion"
+      lean: "AgazziChallenge.corollary2"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "Every 1 < p < ∞, every A, C^∞ periodic test maps."
+    - source: "Corollary 2 (cor:Bp-BA), second assertion (eq:BA-sharp-norm)"
+      lean: "AgazziChallenge.corollary2_norm"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "The norm on L^p(C;C) as the supremum over Schwartz functions."
+    - source: "(eq:BA-sharp-norm), second equality"
+      lean: "AgazziChallenge.pStar_sub_one_of_le_two"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "p* − 1 = (p − 1)⁻¹ for 1 < p ≤ 2."
+    - source: "(eq:BA-sharp-norm), second equality"
+      lean: "AgazziChallenge.pStar_sub_one_of_two_le"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "p* − 1 = p − 1 for p ≥ 2."
+    - source: "Introduction, TeX line 268"
+      lean: "AgazziChallenge.det_eq"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "Compared theorem: det A = |a₊|² − |a₋|²."
+    - source: "Introduction, TeX line 268"
+      lean: "AgazziChallenge.opNorm_eq"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "Compared theorem: the operator norm is |a₊| + |a₋|."
+    - source: "Theorem 1, |Q| = 1"
+      lean: "AgazziChallenge.volume_unitSquare"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "Compared theorem: the unit square has measure 1."
+    - source: "(eq:BA-definition)"
+      lean: "AgazziChallenge.beurling_dzbar"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "Compared theorem: S ∘ ∂_z̄ = ∂_z on Schwartz functions."
+
+acknowledgements: "Mathlib; the packages lean4-calculus-of-variations, lean4-harmonic-analysis and lean4-banach-probability; Comparator and NanoDa."

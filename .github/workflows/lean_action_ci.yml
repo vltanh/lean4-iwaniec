@@ -1,0 +1,43 @@
+name: Lean Action CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read # Read access to repository contents
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: leanprover/lean-action@v1
+      # The audit sees a module's proofs only through its own `import all` line: every module of
+      # Agazzi/ (Basic/, External/ and the paper's library) and the paper's Solution in palomar/,
+      # but no Challenge (it holds a copy of the paper's definitions). With several papers
+      # (references/multi-paper.md), find ProjectName instead, and grep for
+      # '^import all (ProjectName|PaperA|PaperB)\.'.
+      - name: Check that the audit imports every module of the libraries
+        run: >-
+          diff <({ find Agazzi -name '*.lean'; cd palomar && find . -name Solution.lean; }
+          | sed 's#^\./##; s/\.lean$//; s#/#.#g' | sort)
+          <(grep -E '^import all Agazzi\.' scripts/Audit.lean
+          | sed 's/^import all //' | sort)
+      - name: Audit axioms and dependencies
+        run: lake env lean scripts/Audit.lean
+      # The routes of the paper's proofs (docs/Agazzi/paper_routes.tsv, from route_check.py
+      # extract) and the reviewed differences (docs/Agazzi/route_differences.tsv); see SKILL.md,
+      # "Faithful proofs". With several papers, one such step per paper, with its own two files.
+      - name: Check that the proofs follow the routes of the paper's proofs
+        run: >-
+          python3 scripts/route_check.py check docs/Agazzi/paper_routes.tsv
+          --accept docs/Agazzi/route_differences.tsv
+      # The copy of Agazzi/Defs.lean in palomar/Agazzi/Challenge.lean. Delete this step if the
+      # Challenge carries no copy of shared definitions.
+      - name: Check that the Challenge's copy of the shared definitions is current
+        run: python3 scripts/sync_challenge_defs.py --check
+      # To add with the documents (README.md, docs/Agazzi/REPORT.md, docs/Agazzi/CREDITS.md):
+      # scripts/linkify_docs.py --check and scripts/check_md_tables.py on them.
