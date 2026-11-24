@@ -10,7 +10,10 @@
     "AgazziChallenge.corollary2",
     "AgazziChallenge.corollary2_norm",
     "AgazziChallenge.pStar_sub_one_of_le_two",
-    "AgazziChallenge.pStar_sub_one_of_two_le"
+    "AgazziChallenge.pStar_sub_one_of_two_le",
+    "AgazziChallenge.theorem1_hessian",
+    "AgazziChallenge.astala",
+    "AgazziChallenge.astala_sharp"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],

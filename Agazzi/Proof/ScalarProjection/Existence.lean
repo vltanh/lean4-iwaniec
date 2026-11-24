@@ -8,6 +8,7 @@ module
 public import Agazzi.Proof.ScalarProjection.Defs
 public import Agazzi.External.KinderlehrerStampacchia.Projection
 public import CalculusOfVariations.Convex.SupportFunction
+import CalculusOfVariations.Lipschitz.FundamentalDomain
 import CalculusOfVariations.Lipschitz.GradientConstraint
 import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
 import Mathlib.MeasureTheory.Function.L2Space
@@ -22,9 +23,10 @@ uniquely and, with `h (x) = η (x) − ζ (x)`, satisfies `∫_Q h (ξ − ζ) d
 (`(eq:projection-variational-inequality)`)."
 
 * `lemma4_exists`: the projection exists;
+* `lemma4_unique`, `lemma4_existsUnique`: it is unique, as a Lipschitz periodic function;
 * `lemma4_variationalInequality`: `(eq:projection-variational-inequality)`.
 
-Both follow the paper through Kinderlehrer and Stampacchia, applied in the Hilbert space
+All follow the paper through Kinderlehrer and Stampacchia, applied in the Hilbert space
 `L² (Q) = Lp ℝ 2 (volume.restrict unitSquare)` to the set `𝒞_{L²}` of the classes with a
 representative in `𝒞` (`constraintSetL2`). There the inner product is `∫_Q f g` and the squared norm
 is `∫_Q f²`, so the projection of `η` on `𝒞_{L²}` is the class of an `L² (Q)`-projection of `η` on
@@ -208,6 +210,57 @@ theorem lemma4_exists (hKne : K.Nonempty) (hKc : IsCompact K) (hKcv : Convex ℝ
     exact ciInf_le (bddBelow_norm_sub _) ⟨_, toLp_mem_constraintSetL2 hξ⟩
   rw [← norm_sub_sq_eq hη hy, ← norm_sub_sq_eq hη (MemLp.coeFn_toLp _)]
   exact pow_le_pow_left₀ (norm_nonneg _) hle 2
+
+/-- An `L² (Q)`-projection of `η` on `𝒞` is, as a class of `L² (Q)`, the nearest point of `𝒞_{L²}`
+to `η`. -/
+private theorem norm_sub_toLp_eq_iInf {η ζ : (Fin 2 → ℝ) → ℝ} (hη : LipPer η)
+    (hζ : IsL2Projection (constraintSet K p) η ζ) :
+    ‖(memLp_of_lipPer hη).toLp η - (memLp_of_lipPer hζ.1.1).toLp ζ‖ =
+      ⨅ v : constraintSetL2 K p, ‖(memLp_of_lipPer hη).toLp η - v‖ := by
+  have hy₀ := toLp_mem_constraintSetL2 hζ.1
+  have : Nonempty (constraintSetL2 K p) := ⟨⟨_, hy₀⟩⟩
+  refine le_antisymm (le_ciInf fun v => ?_) (ciInf_le (bddBelow_norm_sub _) ⟨_, hy₀⟩)
+  obtain ⟨ξ', hξ', hv⟩ := v.2
+  rw [← sq_le_sq₀ (norm_nonneg _) (norm_nonneg _), norm_sub_sq_eq hη (MemLp.coeFn_toLp _),
+    norm_sub_sq_eq hη hv]
+  exact hζ.2 ξ' hξ'
+
+/-- The `L² (Q)`-projection is unique (TeX line 412: "the projection `ζ` exists uniquely"): two
+`L² (Q)`-projections of `η` on `𝒞` are equal, as Lipschitz periodic functions, the representatives
+of `W^{1,∞}_per (Q)` in the formalization; in particular they agree almost everywhere on `Q`.
+
+Proof: their classes in `L² (Q)` are nearest points of `𝒞_{L²}` to `η`, which is nonempty, closed
+and convex, so they are equal by the uniqueness in Kinderlehrer–Stampacchia's Lemma 2.1
+(`External.KinderlehrerStampacchia.lemma2_1`): the two functions agree almost everywhere on `Q`.
+Being periodic, they agree almost everywhere on `ℝ²`
+(`CalculusOfVariations.ae_of_ae_restrict_unitCube_of_periodic`), and, being continuous,
+everywhere. -/
+theorem lemma4_unique (hKne : K.Nonempty) (hKc : IsCompact K) (hKcv : Convex ℝ K) (hp : p ∈ K)
+    {η ζ₁ ζ₂ : (Fin 2 → ℝ) → ℝ} (hη : LipPer η) (h₁ : IsL2Projection (constraintSet K p) η ζ₁)
+    (h₂ : IsL2Projection (constraintSet K p) η ζ₂) : ζ₁ = ζ₂ := by
+  obtain ⟨y, -, hy⟩ := External.KinderlehrerStampacchia.lemma2_1
+    (nonempty_constraintSetL2 hp) (isClosed_constraintSetL2 hKne hKc hKcv)
+    (convex_constraintSetL2 hKcv) ((memLp_of_lipPer hη).toLp η)
+  have e₁ := hy _ ⟨toLp_mem_constraintSetL2 h₁.1, norm_sub_toLp_eq_iInf hη h₁⟩
+  have e₂ := hy _ ⟨toLp_mem_constraintSetL2 h₂.1, norm_sub_toLp_eq_iInf hη h₂⟩
+  have hQ : ζ₁ =ᵐ[volume.restrict unitSquare] ζ₂ := by
+    filter_upwards [(memLp_of_lipPer h₁.1.1).coeFn_toLp, (memLp_of_lipPer h₂.1.1).coeFn_toLp]
+      with x hx₁ hx₂
+    rw [← hx₁, ← hx₂, e₁, e₂]
+  have hR : ζ₁ =ᵐ[volume] ζ₂ :=
+    ae_of_ae_restrict_unitCube_of_periodic (P := fun x => ζ₁ x = ζ₂ x)
+      (fun x k hxk => by rwa [h₁.1.1.2 x k, h₂.1.1.2 x k] at hxk) hQ
+  obtain ⟨C₁, hC₁⟩ := h₁.1.1.1
+  obtain ⟨C₂, hC₂⟩ := h₂.1.1.1
+  exact (hC₁.continuous.ae_eq_iff_eq volume hC₂.continuous).1 hR
+
+/-- The `L² (Q)`-projection exists and is unique (TeX line 412): `lemma4_exists` and
+`lemma4_unique`. -/
+theorem lemma4_existsUnique (hKne : K.Nonempty) (hKc : IsCompact K) (hKcv : Convex ℝ K)
+    (hp : p ∈ K) {η : (Fin 2 → ℝ) → ℝ} (hη : LipPer η) :
+    ∃! ζ, IsL2Projection (constraintSet K p) η ζ := by
+  obtain ⟨ζ, hζ⟩ := lemma4_exists hKne hKc hKcv hp hη
+  exact ⟨ζ, hζ, fun ζ' hζ' => lemma4_unique hKne hKc hKcv hp hη hζ' hζ⟩
 
 /-- `(eq:projection-variational-inequality)`: with `h = η − ζ`, `∫_Q h (ξ − ζ) ≤ 0` for every
 `ξ ∈ 𝒞` (TeX lines 412–415).

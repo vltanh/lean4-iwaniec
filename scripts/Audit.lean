@@ -11,6 +11,7 @@ public meta import Lean.DocString
 --     sed 's#^\./##; s/\.lean$//; s#/#.#g; s/^/import all /' | sort
 -- With several papers (references/multi-paper.md), `find ProjectName` in place of `find PaperName`
 -- lists every paper's modules and `Common/`, and the second `find` every paper's Solution.
+import all Agazzi.Astala
 import all Agazzi.Bridges
 import all Agazzi.Corollary2.Norm
 import all Agazzi.Corollary2.NormTorus
@@ -18,8 +19,10 @@ import all Agazzi.Corollary2.Quasiconvexity
 import all Agazzi.Defs
 import all Agazzi.External.BaernsteinMontgomerySmith.Basic
 import all Agazzi.External.BaernsteinMontgomerySmith.RemarkB
+import all Agazzi.External.Guerra.TheoremL
 import all Agazzi.External.KinderlehrerStampacchia.Projection
 import all Agazzi.External.Lehto.LowerBound
+import all Agazzi.Hessian
 import all Agazzi.Proof.RowRepresentation
 import all Agazzi.Proof.ScalarProjection.Defs
 import all Agazzi.Proof.ScalarProjection.Existence
@@ -73,7 +76,8 @@ meta def externalResults : List (String × Name) :=
    ("BMS (1.2b)", ``External.BaernsteinMontgomerySmith.equation1_2b),
    ("BMS/Bu3 ineq.", ``External.BaernsteinMontgomerySmith.phi_le),
    ("BMS rem. (b)", ``External.BaernsteinMontgomerySmith.remark_b),
-   ("Lehto", ``External.Lehto.lowerBound)]
+   ("Lehto", ``External.Lehto.lowerBound),
+   ("Guerra 1.1", ``External.Guerra.theorem1_1)]
 
 /-- The numbered results of the paper, in the order of the paper. -/
 meta def paperResults : List (String × Name) :=
@@ -90,13 +94,25 @@ audited and listed in the table, but not part of the routes. -/
 meta def alternativeProofs : List (String × Name) :=
   [("Cor 2 (b), upper bound, alternative proof (torus)", ``Agazzi.beurlingNorm_le_of_torus)]
 
+/-- Statements of the paper that are not numbered results: the uniqueness of the projection in the
+proof of Lemma 4, and the remarks of the introduction on the Hessian case of Theorem 1 and on
+Astala's theorem. They have no TeX label: audited and listed in the table, but not part of the
+routes. -/
+meta def otherStatements : List (String × Name) :=
+  [("Lemma 4, uniqueness of the projection", ``Agazzi.lemma4_unique),
+   ("Thm 1, Hessian case", ``Agazzi.theorem1_hessian),
+   ("Thm 1, Hessian case: periodic ⇔ compactly supported", ``Agazzi.theorem1_hessian_iff),
+   ("Astala's theorem, from Cor 2 (b)", ``Agazzi.astala),
+   ("Astala's theorem, sharpness", ``Agazzi.astala_sharp)]
+
 /-- The theorems that Palomar's comparator checks (`theorem_names` of
 `palomar/PaperName/comparator.json`), as the Solution restates them. -/
 meta def solutionResults : List Name :=
   [``AgazziChallenge.det_eq, ``AgazziChallenge.opNorm_eq, ``AgazziChallenge.volume_unitSquare,
    ``AgazziChallenge.beurling_dzbar, ``AgazziChallenge.theorem1, ``AgazziChallenge.corollary2,
    ``AgazziChallenge.corollary2_norm, ``AgazziChallenge.pStar_sub_one_of_le_two,
-   ``AgazziChallenge.pStar_sub_one_of_two_le]
+   ``AgazziChallenge.pStar_sub_one_of_two_le, ``AgazziChallenge.theorem1_hessian,
+   ``AgazziChallenge.astala, ``AgazziChallenge.astala_sharp]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
@@ -208,7 +224,7 @@ elab "#audit" : command => do
     let usesStr := if uses.isEmpty then "–" else ", ".intercalate (uses.map fun u => s!"`{u}`")
     let axStr := ", ".intercalate (axs.toList.map toString)
     rows := rows.push s!"| {label} | `{n}` | {usesStr} | {axStr} |"
-  for (label, n) in alternativeProofs do
+  for (label, n) in alternativeProofs ++ otherStatements do
     let axs ← liftCoreM <| collectAxioms n
     if axs.any (!standardAxioms.contains ·) then bad := bad.push n
     let (uses, deps') := externalUses env library deps n

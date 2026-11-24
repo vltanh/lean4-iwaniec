@@ -48,12 +48,21 @@ Conventions.
   `𝒮`, the Fourier multiplier with `𝒮 ∘ ∂_z̄ = ∂_z` (`(eq:BA-definition)`), and `beurlingNorm p`
   its norm on `L^p (ℂ; ℂ)`, the supremum of `‖𝒮 f‖_p / ‖f‖_p` over the (dense) Schwartz functions.
   `dz`, `dzbar` are the Wirtinger derivatives.
+* Sobolev functions on an open `Ω ⊆ ℂ`: `MemLpLoc f p Ω` is `f ∈ L^p_loc (Ω)` (`f ∈ L^p (K)` for
+  every compact `K ⊆ Ω`); `HasWeakLineDerivOn Ω f g v` says that `g` is the weak derivative of `f`
+  in the direction `v` on `Ω` (`∫ (∂_v φ) f = −∫ φ g` for every real `φ ∈ C_c^∞ (ℂ)` with support
+  in `Ω`); `MemW12Loc Ω f fx fy` is `f ∈ W^{1,2}_loc (Ω)` with the weak partial derivatives
+  `fx = ∂_x f` and `fy = ∂_y f` (all three in `L²_loc (Ω)`). Then `∂f = (fx − i fy) / 2` and
+  `∂̄f = (fx + i fy) / 2`, and `Df ∈ L^p_loc (Ω)` means `fx, fy ∈ L^p_loc (Ω)`.
+* `radialStretch α z = |z|^{α − 1} z`, the radial stretch.
 
 The block between the markers is copied word for word into `palomar/Agazzi/Challenge.lean` by
 `scripts/sync_challenge_defs.py`, and the imports are the Challenge's. The definitions of the
 Beurling–Ahlfors transform repeat those of the package `HarmonicAnalysis` (`HarmonicAnalysis.Defs`),
-specialized to `ℂ` and to the first power, and the jacobian is the package `CalculusOfVariations`'s
-`grad`; the bridges are in `Agazzi.Bridges`.
+specialized to `ℂ` and to the first power, the Sobolev definitions and the radial stretch repeat
+those of `HarmonicAnalysis.Sobolev.Basic` and `HarmonicAnalysis.Complex.RadialStretch`, specialized
+to `ℂ`, and the jacobian is the package `CalculusOfVariations`'s `grad`; the bridges are in
+`Agazzi.Bridges`.
 -/
 
 @[expose] public section
@@ -133,6 +142,27 @@ def dz (g : ℂ → ℂ) (z : ℂ) : ℂ :=
 real-differentiable). -/
 def dzbar (g : ℂ → ℂ) (z : ℂ) : ℂ :=
   (2⁻¹ : ℂ) • (fderiv ℝ g z 1 + Complex.I • fderiv ℝ g z Complex.I)
+
+/-- `f ∈ L^p_loc (Ω)`: `f ∈ L^p (K)` for every compact `K ⊆ Ω`. -/
+def MemLpLoc (f : ℂ → ℂ) (p : ℝ≥0∞) (Ω : Set ℂ) : Prop :=
+  ∀ K ⊆ Ω, IsCompact K → MemLp f p (volume.restrict K)
+
+open scoped ContDiff in
+/-- `g` is the weak derivative of `f` in the direction `v` on `Ω`: `∫ (∂_v φ) f = −∫ φ g` for every
+real `φ ∈ C_c^∞ (ℂ)` with `tsupport φ ⊆ Ω`. -/
+def HasWeakLineDerivOn (Ω : Set ℂ) (f g : ℂ → ℂ) (v : ℂ) : Prop :=
+  ∀ φ : ℂ → ℝ, ContDiff ℝ ∞ φ → HasCompactSupport φ → tsupport φ ⊆ Ω →
+    ∫ z, fderiv ℝ φ z v • f z = -∫ z, φ z • g z
+
+/-- `f ∈ W^{1,2}_loc (Ω)`, with the weak partial derivatives `fx = ∂_x f` and `fy = ∂_y f`: `f`,
+`fx` and `fy` are in `L²_loc (Ω)`, and `fx`, `fy` are the weak derivatives of `f` on `Ω` in the
+directions `1` and `i`. -/
+def MemW12Loc (Ω : Set ℂ) (f fx fy : ℂ → ℂ) : Prop :=
+  MemLpLoc f 2 Ω ∧ MemLpLoc fx 2 Ω ∧ MemLpLoc fy 2 Ω ∧
+    HasWeakLineDerivOn Ω f fx 1 ∧ HasWeakLineDerivOn Ω f fy Complex.I
+
+/-- The radial stretch `z ↦ |z|^{α − 1} z` (`0` at `z = 0`), `r e^{iθ} ↦ r^α e^{iθ}` for `α > 0`. -/
+def radialStretch (α : ℝ) (z : ℂ) : ℂ := (‖z‖ ^ (α - 1) : ℝ) • z
 
 -- END SHARED DEFINITIONS
 

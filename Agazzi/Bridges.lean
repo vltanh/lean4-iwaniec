@@ -8,6 +8,8 @@ module
 public import Agazzi.Defs
 public import CalculusOfVariations.Basic
 public import HarmonicAnalysis.BeurlingAhlfors.Basic
+public import HarmonicAnalysis.Complex.RadialStretch
+public import HarmonicAnalysis.Sobolev.Basic
 public import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
@@ -16,7 +18,8 @@ public import Mathlib.Analysis.CStarAlgebra.Matrix
 * The jacobian, the unit square and periodicity are those of the package `CalculusOfVariations`
   (`grad`, `unitCube 2`, the periodicity in `QuasiconvexAtPeriodic`); the Beurling–Ahlfors
   transform, its norm and the Wirtinger derivatives are those of the package `HarmonicAnalysis`
-  (`beurlingPow 1`, `beurlingPowNorm 1`, `dz`, `dzbar`).
+  (`beurlingPow 1`, `beurlingPowNorm 1`, `dz`, `dzbar`), and so are `L^p_loc`, weak derivatives and
+  the radial stretch (`MemLpLoc`, `HasWeakLineDerivOn`, `radialStretch`).
 * The facts that the paper states in the introduction (TeX lines 264–268): with
   `A z = a₊ z + a₋ z̄`, the operator norm is `|A| = |a₊| + |a₋|` (`opNorm_eq`) and
   `det A = |a₊|² − |a₋|²` (`det_eq`).
@@ -57,6 +60,14 @@ theorem beurlingNorm_eq_beurlingPowNorm (p : ℝ) :
   rfl
 
 theorem dz_eq (g : ℂ → ℂ) : dz g = HarmonicAnalysis.dz g := rfl
+
+theorem memLpLoc_iff {f : ℂ → ℂ} {p : ℝ≥0∞} {Ω : Set ℂ} :
+    MemLpLoc f p Ω ↔ HarmonicAnalysis.MemLpLoc f p Ω := Iff.rfl
+
+theorem hasWeakLineDerivOn_iff {Ω : Set ℂ} {f g : ℂ → ℂ} {v : ℂ} :
+    HasWeakLineDerivOn Ω f g v ↔ HarmonicAnalysis.HasWeakLineDerivOn Ω f g v := Iff.rfl
+
+theorem radialStretch_eq : radialStretch = HarmonicAnalysis.radialStretch := rfl
 
 theorem dzbar_eq (g : ℂ → ℂ) : dzbar g = HarmonicAnalysis.dzbar g := rfl
 
