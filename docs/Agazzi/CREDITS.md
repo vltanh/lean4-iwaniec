@@ -15,7 +15,7 @@ How this formalization was made, from the run log and the session transcripts.
   - ten sub-agents launched by the lead, all Claude Opus 5.5;
   - one more sub-agent, Claude Opus 5.5, launched by the main session to review the documents.
 
-  There was no earlier draft.
+  There was no earlier draft. The second round (below) was made in the same Claude Code session, by a lead agent and three sub-agents, all Claude Opus 5.5.
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill. The local copy used is not a git checkout, so its commit is not recorded.
 - **Review:** no person has reviewed the proofs. Independent agents, each starting from the TeX source and not from the provers' notes, checked:
   - the statements against the TeX and against the cited sources;
@@ -78,3 +78,42 @@ What the figures leave out or include beyond this project:
 - the main session's own work in the same window on another project, and its two sub-agents there, which the figures include;
 - pauses;
 - cost, which was not tracked.
+
+## Second round (24 November 2026)
+
+The author asked for two changes:
+- remove the departure in the upper bound `‖𝒮‖_p ≤ p* − 1`: replace the bound on the torus and transference by the planar arguments that the paper cites, those of Baernstein–Montgomery-Smith and Guerra;
+- move the general code into the packages:
+  - the toolkit of `Agazzi/Basic/` into lean4-calculus-of-variations;
+  - the case `n = 1` of Dragičević's lower bound (from `External/Lehto/`) into lean4-harmonic-analysis;
+  - the Cauchy transform that the planar argument needs into lean4-harmonic-analysis.
+
+How it was made:
+- **Lead.** The main session (Claude Opus 5.5) gave the task to a lead agent (Claude Opus 5.5). The lead:
+  - read the sources of the planar argument (Baernstein–Montgomery-Smith, §1; Guerra, proofs of the corollaries labelled `cor:beurling` and `cor:beurling-lp`);
+  - chose the dense class and fixed the statement of the package theorem that the project calls;
+  - prepared the package clones for building, with copies of built dependencies;
+  - wrote the new proof of the upper bound in [`Agazzi/Corollary2/Norm.lean`](../../Agazzi/Corollary2/Norm.lean) and the statement of remark (b) in `External/`;
+  - updated the project's imports and names to the packages;
+  - ran the checks, and Comparator with in-project copies of the packages;
+  - wrote the documents.
+- **Sub-agents.** Three, all Claude Opus 5.5, each in one package, without access to the project's build:
+  - the toolkit of `Agazzi/Basic/` into lean4-calculus-of-variations, as stand-alone modules (no statement changed);
+  - the case `n = 1` of Dragičević's lower bound into lean4-harmonic-analysis, next to the case `n = 2`, with a lemma shared by both;
+  - the Cauchy transform on the dense class and Guerra's cut-off argument (`‖𝒮‖_p` as the best constant of `‖∂u‖_p ≤ C ‖∂̄u‖_p` on `C_c^∞`) in lean4-harmonic-analysis, in a separate worktree.
+
+  The first two ran at the same time. The lead merged the third one's branch into the package and checked the three packages' work against the brief.
+- **Commits.** Each package has local commits of this round, not yet published. The project requires the two packages by local path until they are published and pinned.
+
+Figures, from the start of the round (24 November 2026, 08:40 CST) to the end of the Lean work, the checks and these documents (09:49 CST), from `session_stats.py` on the transcripts of the lead and of its three sub-agents:
+- **Elapsed time:** 1.15 h.
+- **Sub-agents:** 3, at most 2 running at once, 0.80 h of work in total.
+- **Sub-agents' tool calls and tokens:** 230 tool calls; 0.34M output tokens, 0.94M input tokens, 45M cache reads.
+- **Lead's tool calls and tokens:** 171 tool calls; 0.19M output tokens, 0.95M input tokens, 52M cache reads.
+- **Model calls:** Claude Opus 5.5: 164 by the lead and 205 by its sub-agents.
+
+What the figures leave out:
+- the main session's own work in this round, whose transcript also holds work on another project in the same window;
+- the lead's last edits and commits after 09:49 CST;
+- cost, which was not tracked.
+

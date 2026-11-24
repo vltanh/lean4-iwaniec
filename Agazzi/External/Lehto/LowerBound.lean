@@ -27,8 +27,8 @@ The source has not been read: its statement is the classical one, as the paper u
 Not Lehto's, which was not read. First `‖𝓑‖_p ≥ p − 1`: the package's
 `HarmonicAnalysis.sub_one_le_beurlingPowNorm_one`, the case `n = 1` of Dragičević's lower bound
 `‖𝓑^n‖_p ≥ κ_n (p)` (Arch. Math. 96 (2011), Theorem 1.1, `κ₁ (p) = p − 1`), proved there by
-Dragičević's argument with his test functions for `n = 1`, which on the unit disc are the
-extremal functions `f_α (z) = z |z|^{−2α}`, `0 < α < 1/p`, of Baernstein–Montgomery-Smith
+Dragičević's argument with the test functions of that paper for `n = 1`, which on the unit disc
+are the extremal functions `f_α (z) = z |z|^{−2α}`, `0 < α < 1/p`, of Baernstein–Montgomery-Smith
 (1999, §1):
 
 * `‖∂f_α‖_p ≤ ‖𝓑‖_p ‖∂̄f_α‖_p`, by `𝓑 (∂̄φ) = ∂φ` for Schwartz functions `φ` and Schwartz

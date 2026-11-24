@@ -5,7 +5,7 @@ The paper formalized here is A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Ca
 - It deduces the conjecture from the quasiconvexity of an integrand `L` on `ℝ^{2×2}` (Theorem 1). Writing `A z = a₊ z + a₋ z̄`, `L (A) = |a₊|² − |a₋|²` if `|a₊| + |a₋| ≤ 1` and `2|a₊| − 1` otherwise.
 
 Every result of the paper is formalized and proved, in Lean 4 with Mathlib. This includes the results the paper cites, and nothing is assumed.
-- The proofs follow the paper's, with one departure, which is waiting for the maintainer's decision ([report, Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
+- The proofs follow the paper's arguments or, where the paper only cites, the arguments of the cited sources ([report, Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
 - Not formalized: the remarks of the introduction (Astala's area distortion as a consequence; the extensions to forms, to higher dimensions and to other integrands; the attribution of the Hessian case to Guerra), and the uniqueness of the projection, which no proof needs ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)).
 - No Palomar preflight has been run, and nothing has been submitted.
 
@@ -29,7 +29,7 @@ Results marked (C) are stated in the Challenge, [`palomar/Agazzi/Challenge.lean`
 | Theorem 1 (C) | [`Agazzi.theorem1`](Agazzi/Theorem1.lean#L401) | `∫_Q [L (A + Dφ) − L (A)] ≥ 0` for every `A ∈ ℝ^{2×2}` and every `C^∞` `ℤ²`-periodic `φ : ℝ² → ℝ²` |
 | Theorem 1, Lipschitz form | [`Agazzi.theorem1_lipschitz`](Agazzi/Theorem1.lean#L250) | the same for Lipschitz periodic `φ` |
 | Corollary 2 (a) (C) | [`Agazzi.corollary2`](Agazzi/Corollary2/Quasiconvexity.lean#L424) | `∫_Q [B_p (A + Dφ) − B_p (A)] ≥ 0` for `1 < p < ∞` |
-| Corollary 2 (b) (C) | [`Agazzi.corollary2_norm`](Agazzi/Corollary2/Norm.lean#L262) | `‖𝒮‖_{L^p (ℂ) → L^p (ℂ)} = p* − 1` for `1 < p < ∞` |
+| Corollary 2 (b) (C) | [`Agazzi.corollary2_norm`](Agazzi/Corollary2/Norm.lean#L376) | `‖𝒮‖_{L^p (ℂ) → L^p (ℂ)} = p* − 1` for `1 < p < ∞` |
 | Lemma 3 | [`Agazzi.lemma3`](Agazzi/Proof/RowRepresentation.lean#L220) | `L (A) = sup_{z ∈ 𝒵 (A¹)} G_z (A¹, A²)` |
 | Lemma 4 | [`Agazzi.lemma4_exists`](Agazzi/Proof/ScalarProjection/Existence.lean#L198), [`Agazzi.lemma4`](Agazzi/Proof/ScalarProjection/Main.lean#L748) | the `L² (Q)`-projection on a gradient-constrained class exists, and satisfies `Dw = Dv` or `Dw ∈ ∂K` a.e. and `∫_Q Dw · (Dv − Dw) ≥ 0` |
 | (quasiconvexity in the sense of the package CalculusOfVariations) | [`Agazzi.quasiconvex_integrandL`](Agazzi/Quasiconvex.lean#L68), [`Agazzi.quasiconvex_burkholderB`](Agazzi/Quasiconvex.lean#L74), [`Agazzi.quasiconvex_burkholder`](Agazzi/Quasiconvex.lean#L82) | `L`, and `B_p` for `1 < p < ∞`, are quasiconvex for Lipschitz test maps vanishing outside the unit cube; for `1 < p < 2`, so is `(\|a₊\| − (p − 1)\|a₋\|)(\|a₊\| + \|a₋\|)^{p−1}` |
@@ -60,7 +60,7 @@ It also states the two values of `p* − 1`.
 
 The audit found no error and no missing hypothesis. Its findings are E1–E5 above and the typos (E6). E2, E3 and E5 are gaps, each filled in Lean; E1 concerns a remark of the introduction, which is not formalized. See the [report](docs/Agazzi/REPORT.md).
 
-The proofs follow the paper's, except the passage from the torus to the plane in the upper bound for `‖𝒮‖_p`. That passage uses transference instead of the planar argument of the cited sources. It was chosen for economy, it is not forced, and it waits for the maintainer's decision ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
+The proofs follow the paper's arguments, and those of the cited sources where the paper only cites them. The upper bound for `‖𝒮‖_p` follows the planar argument of Baernstein–Montgomery-Smith, from their Conjecture 2 to the norm, and Guerra's passage to `L^p (ℂ)` with cut-offs, in the gradient case ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
 
 ## Trust
 
@@ -75,9 +75,11 @@ The proofs follow the paper's, except the passage from the torus to the plane in
 | Library | Pin | Used for |
 | --- | --- | --- |
 | Mathlib | `v4.36.0-rc2` | everything |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `b7a207a` | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `90f1e01` | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, torus multipliers, transference, duality, the density lemma |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | local path, commit `220f56c` (not yet published) | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps; the general toolkit of Lemma 4 and Theorem 1 (periodic integrals, derivatives of Lipschitz functions, gradient constraints, support functions, periodization) |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | local path, commit `d752beb` (not yet published) | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, duality, the density lemma, the case `n = 1` of Dragičević's lower bound, the Cauchy transform and the passage from `C_c^∞` to the norm by Guerra's cut-offs |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `dc3966c` | Burkholder's function and its majorization |
+
+Until their new commits are published, lean4-calculus-of-variations and lean4-harmonic-analysis are required by local path (`../lean4-calculus-of-variations`, `../lean4-harmonic-analysis` in [`lakefile.toml`](lakefile.toml)): the repository then builds only next to clones of the two packages, and Comparator, whose sandbox sees only the repository, needs copies of them inside it.
 
 ## Palomar
 
@@ -110,7 +112,7 @@ python3 scripts/route_check.py check docs/Agazzi/paper_routes.tsv --accept docs/
 
 | Directory | Contents |
 | --- | --- |
-| [`Agazzi/`](Agazzi) | the Lean code: `Defs.lean` (the definitions of the Challenge), `Bridges.lean`, `Proof/` (§2: Lemma 3, Lemma 4), `Theorem1.lean`, `Corollary2/`, `Quasiconvex.lean`; `Basic/` (general lemmas, [README](Agazzi/Basic/README.md)); `External/` (the cited results, one directory per source, each with a README) |
+| [`Agazzi/`](Agazzi) | the Lean code: `Defs.lean` (the definitions of the Challenge), `Bridges.lean`, `Proof/` (§2: Lemma 3, Lemma 4), `Theorem1.lean`, `Corollary2/`, `Quasiconvex.lean`; `External/` (the cited results, one directory per source, each with a README). The general lemmas are in the packages (Dependencies) |
 | [`palomar/Agazzi/`](palomar/Agazzi) | the Palomar submission |
 | [`docs/Agazzi/`](docs/Agazzi) | [`REPORT.md`](docs/Agazzi/REPORT.md), [`CREDITS.md`](docs/Agazzi/CREDITS.md), the routes of the paper's proofs |
 | [`scripts/`](scripts) | the audit, the route check, the Challenge's copy of the definitions |
@@ -124,6 +126,7 @@ python3 scripts/route_check.py check docs/Agazzi/paper_routes.tsv --accept docs/
 - No other formalization of the paper was found. Other formalizations of `𝒮` are listed in the [report, Section 10](docs/Agazzi/REPORT.md#10-the-paper-in-the-literature).
 - The formalization was made by AI agents, at the request of the author and maintainer, The-Anh Vu-Le:
   - a main session (Claude Fable 5.2 in Claude Code) and a lead agent with sub-agents (Claude Opus 5.5);
+  - in a second round, a lead agent with three sub-agents (Claude Opus 5.5), for the planar proof of the upper bound and the move of general code into the packages;
   - following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill.
 
   No person has reviewed the proofs. See [`CREDITS.md`](docs/Agazzi/CREDITS.md).

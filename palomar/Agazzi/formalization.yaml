@@ -60,7 +60,7 @@ sources:
     type: "article"
     location: "Acta Univ. Upsaliensis Skr. Uppsala Univ. C Organ. Hist. 64 (1999), 92–109"
     relationship: "background"
-    note: "The arguments by which the paper derives Corollary 2: the identities (1.2a), (1.2b), proved by direct integration, and the inequality from Burkholder (1988), proved by the package BanachProbability; the extremals f_α used for Lehto's lower bound."
+    note: "The arguments by which the paper derives Corollary 2: the identities (1.2a), (1.2b), proved by direct integration; the inequality from Burkholder (1988), proved by the package BanachProbability; the passage from Conjecture 2 to Conjecture 3, and remark (b) (Conjecture 3 gives the norm), proved by Guerra's argument in the package HarmonicAnalysis. Its extremals f_α are, on the unit disc, the test functions of the lower bound."
   - title: "Quasiconvexity of the Burkholder function on symmetric matrices"
     authors:
       - "André Guerra"
@@ -68,7 +68,7 @@ sources:
     type: "preprint"
     location: "https://arxiv.org/abs/2608.23388v1"
     relationship: "background"
-    note: "Cited by the paper for further details of Corollary 2; the Mellin representation of B_p is followed; its planar passage to L^p(C) is replaced by transference (see fidelity)."
+    note: "Cited by the paper for further details of Corollary 2: the Mellin representation of B_p is followed, and its passage to L^p(C) by a potential and cut-offs (proof of cor:beurling-lp) is followed in the gradient case, with the Cauchy transform and a dense class whose Cauchy transforms are Schwartz functions, in the package HarmonicAnalysis (see fidelity)."
   - title: "An introduction to variational inequalities and their applications"
     authors:
       - "David Kinderlehrer"
@@ -83,7 +83,7 @@ sources:
     type: "article"
     location: "Ann. Acad. Sci. Fenn. Ser. A I 371 (1965)"
     relationship: "background"
-    note: "The lower bound p* − 1, proved by the extremals of Baernstein and Montgomery-Smith, the density lemma of HarmonicAnalysis and duality; Lehto's paper was not read."
+    note: "The lower bound p* − 1, proved by the case n = 1 of Dragičević's lower bound in the package HarmonicAnalysis (with test functions that are, on the unit disc, the extremals of Baernstein and Montgomery-Smith) and duality; Lehto's paper was not read."
 
 related_formalizations:
   - id: "https://github.com/facebookresearch/atlas-lean"
@@ -105,9 +105,9 @@ automation:
     - method: "agent"
       models: ["Claude Opus 5.5 (claude-opus-5-5)"]
       framework: "Claude Code 2.1.330 (Claude Agent SDK)"
-      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build."
+      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build. A second round (the planar proof of the upper bound, general code moved into the packages): a lead agent and three sub-agents, one per package task."
       cost:
-        wall_time: "about 1.6 hours elapsed from the start to the verified build; about 4.9 hours of sub-agent time (session transcripts)"
+        wall_time: "about 1.6 hours elapsed from the start to the verified build, and about 4.9 hours of sub-agent time; second round, about 1.2 hours elapsed and 0.8 hours of sub-agent time (session transcripts)"
         spend_usd: "not tracked"
         hardware: "local machine"
       prompting_notes: "A coordinating session gave the task; the lead followed the skill's phases and briefed the sub-agents."
@@ -121,11 +121,17 @@ fidelity:
     the norm of the transform as the supremum over Schwartz functions. Theorem 1 and the first
     assertion of Corollary 2 are proved for Lipschitz periodic test maps, by the paper's
     arguments, and the paper's smooth statements follow. Proofs: every proof follows the
-    paper's, except the upper bound for the norm, which passes from the torus to the plane by
-    transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6) instead of the planar cut-off
-    argument of the cited sources (economy, not forced; for the user's decision). Gaps of the
-    paper filled: the closedness of the constraint set in L²(Q), the periodization of the ball
-    in Lemma 4, the sign change, the passage of the BMS arguments to periodic maps at every A.
+    paper's argument or, where the paper only cites, that of the cited sources. The upper bound
+    for the norm follows Baernstein–Montgomery-Smith on the plane (Corollary 2 at A = 0 for
+    compactly supported maps, Conjectures 2 and 3, remark (b)) and Guerra's passage to L^p(C),
+    with three repairs along that argument, made in the package HarmonicAnalysis: the gradient
+    case (the Cauchy transform in place of the logarithmic potential); the dense class of the
+    Schwartz functions with Fourier transform compactly supported off 0 (Hytönen–van
+    Neerven–Veraar–Weis, Prop. 2.4.23 (ii)) in place of C_c^∞ (economy: their Cauchy transforms
+    are Schwartz functions; not forced); and the density step made explicit. Gaps of the paper
+    filled: the closedness of the constraint set in L²(Q), the periodization of the ball in
+    Lemma 4, the sign change, the passage of the BMS arguments to periodic maps at every A and
+    back to the plane for the norm.
 
 review:
   status: "agent-reviewed"
