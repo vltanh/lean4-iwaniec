@@ -12,7 +12,8 @@ public import CalculusOfVariations.Basic
 
 General facts about `ℤ^m`-periodic functions on `ℝ^m = Fin m → ℝ`, integrated over the open unit
 cube `(0, 1)^m` (`CalculusOfVariations.unitCube m`), a fundamental domain of `ℤ^m`, that is, over the
-torus `ℝ^m / ℤ^m`.
+torus `ℝ^m / ℤ^m`. They are general and could join the package `CalculusOfVariations`; they are in
+the namespace `Agazzi` so as not to clash with it.
 
 * `setIntegral_unitCube_comp_add`: translation invariance, `∫_Q f (x + a) dx = ∫_Q f (x) dx` for a
   periodic `f` integrable on `Q`;
@@ -26,7 +27,9 @@ torus `ℝ^m / ℤ^m`.
 
 open MeasureTheory
 
-namespace CalculusOfVariations
+namespace Agazzi
+
+open CalculusOfVariations
 
 variable {m : ℕ}
 
@@ -63,4 +66,4 @@ theorem setIntegral_unitCube_det_add_grad {ψ : (Fin 2 → ℝ) → Fin 2 → �
     ∫ x in unitCube 2, (A + grad ψ x).det = A.det := by
   sorry
 
-end CalculusOfVariations
+end Agazzi

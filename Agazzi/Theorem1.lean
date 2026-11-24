@@ -6,7 +6,7 @@ Authors: The-Anh Vu-Le
 module
 
 public import Agazzi.Proof.RowRepresentation
-public import Agazzi.Proof.ScalarProjection
+public import Agazzi.Proof.ScalarProjection.Main
 public import Agazzi.Basic.Analysis.Calculus.Periodic
 public import Mathlib.Analysis.Calculus.ContDiff.Defs
 

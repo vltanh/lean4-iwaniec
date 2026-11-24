@@ -29,11 +29,11 @@ open scoped InnerProductSpace
 
 namespace External.KinderlehrerStampacchia
 
-variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℝ H]
 
 /-- **Chapter I, Lemma 2.1** (as used by the paper): the projection of `x` on a nonempty closed
 convex `K` exists and is unique: there is exactly one `y ∈ K` with `‖x − y‖ = inf_{v ∈ K} ‖x − v‖`. -/
-theorem lemma2_1 {K : Set H} (hne : K.Nonempty) (hcl : IsClosed K) (hcv : Convex ℝ K) (x : H) :
+theorem lemma2_1 [CompleteSpace H] {K : Set H} (hne : K.Nonempty) (hcl : IsClosed K) (hcv : Convex ℝ K) (x : H) :
     ∃! y, y ∈ K ∧ ‖x - y‖ = ⨅ v : K, ‖x - v‖ := by
   sorry
 
