@@ -48,8 +48,8 @@ It also states the two values of `p* − 1`.
 - The package HarmonicAnalysis proves that this supremum is the norm of the bounded extension (`HarmonicAnalysis.enorm_eq_multiplierNorm`). The Challenge does not restate that bridge.
 - The torus `Q = ℝ² / ℤ²` is represented by `ℤ²`-periodic maps on `ℝ²`, with integrals over the open unit square.
 
-**lean4-morrey.** [`Agazzi.quasiconvex_burkholder`](Agazzi/Quasiconvex.lean#L83) is, by definitional unfolding, the hypothesis `CalculusOfVariations.Quasiconvex (HomogeneousIsotropic.burkholder p)`, `1 < p < 2`, of the library `HomogeneousIsotropic` of [lean4-morrey](https://github.com/vltanh/lean4-morrey).
-- lean4-morrey requires this project and uses that theorem.
+**lean4-morrey.** [`Agazzi.quasiconvex_burkholder`](Agazzi/Quasiconvex.lean#L83) is, by definitional unfolding, `CalculusOfVariations.Quasiconvex (HomogeneousIsotropic.burkholderCoord p)`, `1 < p < 2`, for the coordinate form `burkholderCoord` of the Burkholder function in the library `HomogeneousIsotropic` of [lean4-morrey](https://github.com/vltanh/lean4-morrey).
+- lean4-morrey requires this project and uses that theorem, and [`Agazzi.opNorm_eq`](Agazzi/Bridges.lean#L139) for the operator norm.
 - With it, a nonnegative, isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is quasiconvex for every `p > 0` (`HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_pos`), with no hypothesis on the Burkholder function.
 
 ## What the audit found

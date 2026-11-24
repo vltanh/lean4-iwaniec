@@ -23,7 +23,7 @@ the paper's proofs give the periodic inequalities for Lipschitz periodic maps
 * `quasiconvex_burkholder`: for `1 < p < 2`, the Burkholder function
   `(|a₊| − (p − 1)|a₋|)(|a₊| + |a₋|)^{p−1}` (a positive multiple of `B_p`, and quasiconvexity
   passes to positive multiples, `quasiconvex_const_mul`) is quasiconvex. This is the form in which
-  lean4-morrey (`HomogeneousIsotropic.burkholder p`) uses it.
+  lean4-morrey (`HomogeneousIsotropic.burkholderCoord p`) uses it.
 -/
 
 @[expose] public section
