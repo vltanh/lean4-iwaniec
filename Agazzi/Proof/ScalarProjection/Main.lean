@@ -6,12 +6,12 @@ Authors: The-Anh Vu-Le
 module
 
 public import Agazzi.Proof.ScalarProjection.Existence
-public import Agazzi.Basic.Analysis.Convex.SupportFunction
-public import Agazzi.Basic.Analysis.Calculus.Periodic
+public import CalculusOfVariations.Convex.SupportFunction
+public import CalculusOfVariations.Minors.Periodic
 public import CalculusOfVariations.Lipschitz.ZeroSet
-public import Agazzi.Basic.Analysis.Calculus.LipschitzFDeriv
-public import Agazzi.Basic.MeasureTheory.Periodic
-public import Agazzi.Basic.Topology.MetricSpace.Periodize
+public import CalculusOfVariations.Lipschitz.FDeriv
+public import CalculusOfVariations.Lipschitz.FundamentalDomain
+public import CalculusOfVariations.Lipschitz.Periodize
 
 /-!
 # §2: the scalar projection lemma (Lemma 4)
@@ -44,7 +44,7 @@ any norm.
 
 noncomputable section
 
-open MeasureTheory Filter Topology
+open MeasureTheory Filter Topology CalculusOfVariations
 
 namespace Agazzi
 

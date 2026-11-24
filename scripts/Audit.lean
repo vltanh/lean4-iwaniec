@@ -11,21 +11,14 @@ public meta import Lean.DocString
 --     sed 's#^\./##; s/\.lean$//; s#/#.#g; s/^/import all /' | sort
 -- With several papers (references/multi-paper.md), `find ProjectName` in place of `find PaperName`
 -- lists every paper's modules and `Common/`, and the second `find` every paper's Solution.
-import all Agazzi.Basic.Analysis.Calculus.GradientConstraint
-import all Agazzi.Basic.Analysis.Calculus.LipschitzFDeriv
-import all Agazzi.Basic.Analysis.Calculus.Periodic
-import all Agazzi.Basic.Analysis.Convex.SupportFunction
-import all Agazzi.Basic.MeasureTheory.Periodic
-import all Agazzi.Basic.Topology.MetricSpace.Periodize
 import all Agazzi.Bridges
 import all Agazzi.Corollary2.Norm
 import all Agazzi.Corollary2.Quasiconvexity
-import all Agazzi.Corollary2.Torus
 import all Agazzi.Defs
 import all Agazzi.External.BaernsteinMontgomerySmith.Basic
+import all Agazzi.External.BaernsteinMontgomerySmith.RemarkB
 import all Agazzi.External.KinderlehrerStampacchia.Projection
 import all Agazzi.External.Lehto.LowerBound
-import all Agazzi.External.Lehto.TestFunctions
 import all Agazzi.Proof.RowRepresentation
 import all Agazzi.Proof.ScalarProjection.Defs
 import all Agazzi.Proof.ScalarProjection.Existence
@@ -78,6 +71,7 @@ meta def externalResults : List (String × Name) :=
    ("BMS (1.2a)", ``External.BaernsteinMontgomerySmith.equation1_2a),
    ("BMS (1.2b)", ``External.BaernsteinMontgomerySmith.equation1_2b),
    ("BMS/Bu3 ineq.", ``External.BaernsteinMontgomerySmith.phi_le),
+   ("BMS rem. (b)", ``External.BaernsteinMontgomerySmith.remark_b),
    ("Lehto", ``External.Lehto.lowerBound)]
 
 /-- The numbered results of the paper, in the order of the paper. -/

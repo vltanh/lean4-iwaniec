@@ -357,7 +357,7 @@ theorem corollary2_lipschitz {p : ℝ} (hp : 1 < p) (A : Matrix (Fin 2) (Fin 2) 
       exact mul_le_mul_of_nonneg_left (hL t) (Real.rpow_pos_of_pos ht _).le
   · -- `p = 2`: `B_2 = −det`, a null Lagrangian
     have hdet : ∫ x in unitSquare, (A + jacobian φ x).det = A.det :=
-      setIntegral_unitCube_det_add_grad hφ hper A
+      CalculusOfVariations.setIntegral_unitCube_det_add_grad hφ hper A
     simp_rw [burkholderB_two]
     rw [integral_sub (integrableOn_comp_add_jacobian (f := fun B => -B.det)
         (continuous_id.matrix_det.neg) A hφ)
@@ -411,7 +411,7 @@ theorem corollary2_lipschitz {p : ℝ} (hp : 1 < p) (A : Matrix (Fin 2) (Fin 2) 
       refine mul_le_mul_of_nonneg_left ?_ (Real.rpow_pos_of_pos ht _).le
       have hdet : ∫ x in unitSquare, (t⁻¹ • A + jacobian (fun y => t⁻¹ • φ y) x).det =
           (t⁻¹ • A).det :=
-        setIntegral_unitCube_det_add_grad (hφt t) (hpert t) (t⁻¹ • A)
+        CalculusOfVariations.setIntegral_unitCube_det_add_grad (hφt t) (hpert t) (t⁻¹ • A)
       have h := hL t
       simp_rw [hjt t] at h ⊢
       rw [integral_sub (integrableOn_comp_add_jacobian continuous_integrandL _ (hφt t))

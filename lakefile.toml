@@ -16,14 +16,12 @@ rev = "v4.36.0-rc2"
 # Quasiconvexity, periodic test maps, null Lagrangians.
 [[require]]
 name = "CalculusOfVariations"
-git = "https://github.com/vltanh/lean4-calculus-of-variations"
-rev = "b7a207a470596b2bc7721d363803ffc009f23f31"
+path = "../lean4-calculus-of-variations"
 
 # The Beurling–Ahlfors transform, Fourier multipliers, transference.
 [[require]]
 name = "HarmonicAnalysis"
-git = "https://github.com/vltanh/lean4-harmonic-analysis"
-rev = "90f1e01a8e8c8e14f504926a26bd57b4f0729ac4"
+path = "../lean4-harmonic-analysis"
 
 # Burkholder's function. Pinned at an older revision, which the HarmonicAnalysis pin above requires.
 [[require]]

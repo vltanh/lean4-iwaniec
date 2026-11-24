@@ -7,7 +7,7 @@ module
 
 public import Agazzi.Proof.RowRepresentation
 public import Agazzi.Proof.ScalarProjection.Main
-public import Agazzi.Basic.Analysis.Calculus.Periodic
+public import CalculusOfVariations.Minors.Periodic
 public import Mathlib.Analysis.Calculus.ContDiff.Defs
 
 /-!
@@ -27,7 +27,7 @@ statement, for `C^∞` periodic `φ`, which are Lipschitz
 
 noncomputable section
 
-open MeasureTheory
+open MeasureTheory CalculusOfVariations
 open scoped ContDiff
 
 namespace Agazzi

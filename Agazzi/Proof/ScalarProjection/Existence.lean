@@ -7,8 +7,8 @@ module
 
 public import Agazzi.Proof.ScalarProjection.Defs
 public import Agazzi.External.KinderlehrerStampacchia.Projection
-public import Agazzi.Basic.Analysis.Convex.SupportFunction
-import Agazzi.Basic.Analysis.Calculus.GradientConstraint
+public import CalculusOfVariations.Convex.SupportFunction
+import CalculusOfVariations.Lipschitz.GradientConstraint
 import Mathlib.MeasureTheory.Function.ConvergenceInMeasure
 import Mathlib.MeasureTheory.Function.L2Space
 import Mathlib.Analysis.Calculus.Rademacher
@@ -50,7 +50,7 @@ lies in `𝒞` and represents the `L²` limit.
 
 noncomputable section
 
-open MeasureTheory
+open MeasureTheory CalculusOfVariations
 
 namespace Agazzi
 
