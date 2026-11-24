@@ -14,12 +14,16 @@ General facts about the a.e. derivative of real Lipschitz functions on `ℝ^m = 
 the proof of Lemma 4 (`Agazzi.lemma4`). They are general and could join the package
 `CalculusOfVariations`.
 
-* `lem4_ae_fderiv_eq_zero`: the derivative vanishes almost everywhere on the zero set (the
+* `ae_fderiv_eq_zero_of_eq_zero`: the derivative vanishes almost everywhere on the zero set (the
   real-valued form of `CalculusOfVariations.rd_ae_fderiv_eq_zero`);
-* `lem4_ae_fderiv_max`: almost everywhere, the derivative of `max f g` is that of `f` or that of
+* `ae_fderiv_max_eq_or`: almost everywhere, the derivative of `max f g` is that of `f` or that of
   `g`;
-* `lem4_tendsto_setIntegral_slope_mul`: the integral over a set of finite measure of the product
-  of two difference quotients in a direction `v` tends to `∫ ∂_v f ∂_v g` (dominated convergence).
+* `tendsto_slope_of_differentiableAt`: the difference quotient `t⁻¹ (f (x + t v) − f (x))` tends
+  to `∂_v f (x)` where `f` is differentiable;
+* `abs_slope_le_of_lipschitzWith`: the difference quotients of a `K`-Lipschitz `f` in a direction
+  `v` are bounded by `K ‖v‖`;
+* `tendsto_setIntegral_slope_mul`: the integral over a set of finite measure of the product of two
+  difference quotients in a direction `v` tends to `∫ ∂_v f ∂_v g` (dominated convergence).
 -/
 
 @[expose] public section
@@ -31,7 +35,7 @@ namespace Agazzi
 variable {m : ℕ}
 
 /-- The derivative of a real Lipschitz function vanishes almost everywhere on its zero set. -/
-theorem lem4_ae_fderiv_eq_zero {f : (Fin m → ℝ) → ℝ} {K : NNReal} (hf : LipschitzWith K f) :
+theorem ae_fderiv_eq_zero_of_eq_zero {f : (Fin m → ℝ) → ℝ} {K : NNReal} (hf : LipschitzWith K f) :
     ∀ᵐ x ∂(volume : Measure (Fin m → ℝ)), f x = 0 → fderiv ℝ f x = 0 := by
   have hφ : LipschitzWith K (fun x (_ : Fin 1) => f x) :=
     LipschitzWith.of_dist_le_mul fun x y => by rw [dist_pi_const]; exact hf.dist_le_mul x y
@@ -48,14 +52,14 @@ theorem lem4_ae_fderiv_eq_zero {f : (Fin m → ℝ) → ℝ} {K : NNReal} (hf : 
 /-- **The derivative of a maximum.** For real Lipschitz `f`, `g`, almost everywhere the derivative
 of `max f g` is the derivative of `f` or that of `g`: where `f > g` or `f < g` the maximum is
 locally `f` or `g`, and almost everywhere on `{f = g}` the derivative of `max f g − g` vanishes
-(the zero-set lemma `lem4_ae_fderiv_eq_zero`). -/
-theorem lem4_ae_fderiv_max {f g : (Fin m → ℝ) → ℝ} {Kf Kg : NNReal} (hf : LipschitzWith Kf f)
+(the zero-set lemma `ae_fderiv_eq_zero_of_eq_zero`). -/
+theorem ae_fderiv_max_eq_or {f g : (Fin m → ℝ) → ℝ} {Kf Kg : NNReal} (hf : LipschitzWith Kf f)
     (hg : LipschitzWith Kg g) :
     ∀ᵐ x ∂(volume : Measure (Fin m → ℝ)),
       fderiv ℝ (fun y => max (f y) (g y)) x = fderiv ℝ f x ∨
         fderiv ℝ (fun y => max (f y) (g y)) x = fderiv ℝ g x := by
   have hM := hf.max hg
-  filter_upwards [lem4_ae_fderiv_eq_zero (hM.sub hg), hg.ae_differentiableAt,
+  filter_upwards [ae_fderiv_eq_zero_of_eq_zero (hM.sub hg), hg.ae_differentiableAt,
     hM.ae_differentiableAt] with x h0 hgd hMd
   rcases lt_trichotomy (f x) (g x) with hlt | heq | hgt
   · right
@@ -75,7 +79,7 @@ theorem lem4_ae_fderiv_max {f g : (Fin m → ℝ) → ℝ} {Kf Kg : NNReal} (hf 
 
 /-- The difference quotient `t⁻¹ (f (x + t v) − f (x))` of a differentiable `f` tends to
 `∂_v f (x)` as `t → 0`, `t ≠ 0`. -/
-theorem lem4_tendsto_slope {f : (Fin m → ℝ) → ℝ} {x : Fin m → ℝ}
+theorem tendsto_slope_of_differentiableAt {f : (Fin m → ℝ) → ℝ} {x : Fin m → ℝ}
     (hf : DifferentiableAt ℝ f x) (v : Fin m → ℝ) :
     Tendsto (fun t : ℝ => t⁻¹ * (f (x + t • v) - f x)) (𝓝[≠] 0) (𝓝 (fderiv ℝ f x v)) := by
   have h1 : HasDerivAt (fun t : ℝ => x + t • v) v 0 := by
@@ -87,7 +91,7 @@ theorem lem4_tendsto_slope {f : (Fin m → ℝ) → ℝ} {x : Fin m → ℝ}
   simpa using h2.tendsto_slope_zero
 
 /-- `|t⁻¹ (f (x + t v) − f (x))| ≤ K ‖v‖` for a `K`-Lipschitz `f`. -/
-theorem lem4_abs_slope_le {f : (Fin m → ℝ) → ℝ} {K : NNReal} (hf : LipschitzWith K f)
+theorem abs_slope_le_of_lipschitzWith {f : (Fin m → ℝ) → ℝ} {K : NNReal} (hf : LipschitzWith K f)
     (x v : Fin m → ℝ) (t : ℝ) : |t⁻¹ * (f (x + t • v) - f x)| ≤ K * ‖v‖ := by
   rcases eq_or_ne t 0 with rfl | ht
   · simp; positivity
@@ -101,7 +105,7 @@ theorem lem4_abs_slope_le {f : (Fin m → ℝ) → ℝ} {K : NNReal} (hf : Lipsc
 /-- **Difference quotients and dominated convergence.** For real Lipschitz `f`, `g`, a direction
 `v` and a set `s` of finite measure,
 `∫_s t⁻¹ (f (x + t v) − f x) · t⁻¹ (g (x + t v) − g x) dx → ∫_s ∂_v f ∂_v g` as `t → 0`. -/
-theorem lem4_tendsto_setIntegral_slope_mul {f g : (Fin m → ℝ) → ℝ} {Kf Kg : NNReal}
+theorem tendsto_setIntegral_slope_mul {f g : (Fin m → ℝ) → ℝ} {Kf Kg : NNReal}
     (hf : LipschitzWith Kf f) (hg : LipschitzWith Kg g) (v : Fin m → ℝ)
     {s : Set (Fin m → ℝ)} (hs : volume s ≠ ⊤) :
     Tendsto (fun t : ℝ => ∫ x in s,
@@ -116,10 +120,10 @@ theorem lem4_tendsto_setIntegral_slope_mul {f g : (Fin m → ℝ) → ℝ} {Kf K
     exact (Continuous.aestronglyMeasurable (by fun_prop))
   · refine Eventually.of_forall fun x => ?_
     rw [Real.norm_eq_abs, abs_mul]
-    exact mul_le_mul (lem4_abs_slope_le hf x v t) (lem4_abs_slope_le hg x v t) (abs_nonneg _)
-      (by positivity)
+    exact mul_le_mul (abs_slope_le_of_lipschitzWith hf x v t)
+      (abs_slope_le_of_lipschitzWith hg x v t) (abs_nonneg _) (by positivity)
   · filter_upwards [ae_restrict_of_ae hf.ae_differentiableAt,
       ae_restrict_of_ae hg.ae_differentiableAt] with x hfx hgx
-    exact (lem4_tendsto_slope hfx v).mul (lem4_tendsto_slope hgx v)
+    exact (tendsto_slope_of_differentiableAt hfx v).mul (tendsto_slope_of_differentiableAt hgx v)
 
 end Agazzi

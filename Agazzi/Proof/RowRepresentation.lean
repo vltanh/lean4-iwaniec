@@ -14,16 +14,18 @@ public import Mathlib.Analysis.Convex.Function
 
 The notation of §2 (TeX lines 332–344). For a matrix `A` with rows `A¹ = A 0`, `A² = A 1`:
 
-* `rot a = J a`, `J = [[0, −1], [1, 0]]`, and `det2 a b = det (a, b) = J a · b`;
+* `rot a = J a`, `J = [[0, −1], [1, 0]]`, and `det2 a b = det (a, b) = J a · b`
+  (`det_eq_det2`, `det2_eq_rot_dotProduct`);
 * `euclidNorm a = |a|`, the Euclidean norm of `a ∈ ℝ²`, and `unitCircle = 𝕊¹`;
 * `rowG z a b = G_z (a, b) = det (z, b) + z · (a − z)`;
 * `rowF A = F (A) = sup_{|z| = 1} G_z (A¹, A²)`, which is `|A² + J A¹| − 1 = 2 |a₊| − 1`
   (`rowF_eq_norm`, `rowF_eq`), a convex function (`convexOn_rowF`);
 * `rowZ a = 𝒵 (a) = 𝕊¹ ∪ {a}` if `|a| ≤ 1`, `𝕊¹` if `|a| > 1`.
 
-Lemma 3 (`lemma3`, the display `(eq:L-row-representation)`): `L (A) = sup_{z ∈ 𝒵 (A¹)} G_z (A¹, A²)`.
-Its consequences `G_z (A¹, A²) ≤ L (A)` for `z ∈ 𝒵 (A¹)` (`rowG_le_integrandL`) and `F ≤ L`
-(`rowF_le_integrandL`); `|a| = √(a₁² + a₂²)` (`euclidNorm_eq`).
+Lemma 3 (`lemma3`, the display `(eq:L-row-representation)`):
+`L (A) = sup_{z ∈ 𝒵 (A¹)} G_z (A¹, A²)`. Its consequences `G_z (A¹, A²) ≤ L (A)` for
+`z ∈ 𝒵 (A¹)` (`rowG_le_integrandL`) and `F ≤ L` (`rowF_le_integrandL`); `|a| = √(a₁² + a₂²)`
+(`euclidNorm_eq`).
 -/
 
 @[expose] public section

@@ -7,6 +7,7 @@ module
 
 public import Agazzi.Basic.Analysis.Convex.SupportFunction
 public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+import Agazzi.Basic.MeasureTheory.Periodic
 import CalculusOfVariations.Lipschitz.Mollify
 import Mathlib.Analysis.Calculus.Deriv.MeanValue
 import Mathlib.Analysis.Calculus.LineDeriv.Measurable
@@ -18,17 +19,19 @@ For `ξ : ℝ^m → ℝ` Lipschitz and `ℤ^m`-periodic, `p ∈ ℝ^m` and `K �
 "`p + Dξ ∈ K` almost everywhere on the unit cube `(0, 1)^m`" is equivalent to the slope bound
 `ξ (y) − ξ (x) + p · (y − x) ≤ H_K (y − x)` for all `x, y` (`H_K = supportFun K`):
 
-* `gc_sub_le_supportFun`: the constraint implies the slope bound. The constraint holds almost
-  everywhere on `ℝ^m` by periodicity (`gc_ae_of_ae_restrict_unitCube`); the mollifications
-  `ρ_n ⋆ ξ` are smooth with `D (ρ_n ⋆ ξ) v = ρ_n ⋆ ∂_v ξ ≤ H_K (v) − p · v` (the package
-  `CalculusOfVariations`, `plancherelMollify_fderiv`), hence satisfy the slope bound by the mean
-  value theorem, and converge to `ξ` pointwise.
-* `gc_mem_of_sub_le_supportFun`: for `K` also convex and nonempty, the slope bound implies
-  `p + Dξ (x) ∈ K` at every point of differentiability (`mem_of_forall_dotProduct_le_supportFun`).
-* `gc_exists_lipschitzWith_of_sub_le_supportFun`: the slope bound implies a Lipschitz bound that
-  depends only on `K` and `p`.
-* `gc_exists_tendsto_of_ae_tendsto`: an equi-Lipschitz sequence of `ℤ^m`-periodic functions that
-  converges almost everywhere on the unit cube converges everywhere.
+* `sub_add_dotProduct_le_supportFun_of_ae_mem`: the constraint implies the slope bound. The
+  constraint holds almost everywhere on `ℝ^m` by periodicity
+  (`ae_of_ae_restrict_unitCube_of_periodic`); the mollifications `ρ_n ⋆ ξ` are smooth with
+  `D (ρ_n ⋆ ξ) v = ρ_n ⋆ ∂_v ξ ≤ H_K (v) − p · v` (the package `CalculusOfVariations`,
+  `plancherelMollify_fderiv`), hence satisfy the slope bound by the mean value theorem, and
+  converge to `ξ` pointwise.
+* `add_fderiv_mem_of_sub_add_dotProduct_le_supportFun`: for `K` also convex and nonempty, the
+  slope bound implies `p + Dξ (x) ∈ K` at every point of differentiability
+  (`mem_of_forall_dotProduct_le_supportFun`).
+* `exists_lipschitzWith_of_sub_add_dotProduct_le_supportFun`: the slope bound implies a Lipschitz
+  bound that depends only on `K` and `p`.
+* `exists_tendsto_of_ae_restrict_unitCube_tendsto`: an equi-Lipschitz sequence of `ℤ^m`-periodic
+  functions that converges almost everywhere on the unit cube converges everywhere.
 -/
 
 @[expose] public section
@@ -40,30 +43,6 @@ open MeasureTheory Filter Topology
 namespace Agazzi
 
 variable {m : ℕ}
-
-/-- A `ℤ^m`-periodic property that holds almost everywhere on the unit cube `(0, 1)^m` holds
-almost everywhere on `ℝ^m`: every `x` has a translate `x − ⌊x⌋` in `[0, 1)^m`, which differs from
-the open cube by a null set, and the translations by `ℤ^m` preserve the Lebesgue measure. -/
-theorem gc_ae_of_ae_restrict_unitCube {P : (Fin m → ℝ) → Prop}
-    (hP : ∀ x (k : Fin m → ℤ), P (x + fun i => (k i : ℝ)) → P x)
-    (h : ∀ᵐ x ∂(volume.restrict (Set.pi Set.univ fun _ : Fin m => Set.Ioo (0 : ℝ) 1)), P x) :
-    ∀ᵐ x, P x := by
-  have hIco : (Set.pi Set.univ fun _ : Fin m => Set.Ioo (0 : ℝ) 1)
-      =ᵐ[(volume : Measure (Fin m → ℝ))] (Set.pi Set.univ fun _ : Fin m => Set.Ico (0 : ℝ) 1) :=
-    (Measure.univ_pi_Ioo_ae_eq_Icc (μ := fun _ : Fin m => (volume : Measure ℝ))
-      (f := fun _ => (0 : ℝ)) (g := fun _ => 1)).trans
-      (Measure.univ_pi_Ico_ae_eq_Icc (μ := fun _ : Fin m => (volume : Measure ℝ))
-      (f := fun _ => (0 : ℝ)) (g := fun _ => 1)).symm
-  rw [Measure.restrict_congr_set hIco,
-    ae_restrict_iff' (MeasurableSet.univ_pi fun _ => measurableSet_Ico)] at h
-  have hk : ∀ k : Fin m → ℤ, ∀ᵐ x : Fin m → ℝ,
-      (x + fun i => (k i : ℝ)) ∈ (Set.pi Set.univ fun _ : Fin m => Set.Ico (0 : ℝ) 1) →
-        P (x + fun i => (k i : ℝ)) := fun k =>
-    (measurePreserving_add_right volume (fun i => (k i : ℝ))).quasiMeasurePreserving.ae h
-  filter_upwards [ae_all_iff.2 hk] with x hx
-  refine hP x (fun i => -⌊x i⌋) (hx _ fun i _ => ?_)
-  simp only [Int.cast_neg, Set.mem_Ico, Pi.add_apply]
-  constructor <;> linarith [Int.floor_le (x i), Int.lt_floor_add_one (x i)]
 
 /-- The derivative of a `ℤ^m`-periodic function is `ℤ^m`-periodic. -/
 private theorem gc_fderiv_periodic {ξ : (Fin m → ℝ) → ℝ}
@@ -123,14 +102,14 @@ private theorem gc_sub_le_of_fderiv_le {f : (Fin m → ℝ) → ℝ} (hf : Diffe
 
 /-- **The slope bound.** For `ξ` Lipschitz and `ℤ^m`-periodic with `p + Dξ ∈ K` almost everywhere
 on `(0, 1)^m`, `K` compact: `ξ (y) − ξ (x) + p · (y − x) ≤ H_K (y − x)` for all `x, y`. -/
-theorem gc_sub_le_supportFun {K : Set (Fin m → ℝ)} (hKc : IsCompact K) {p : Fin m → ℝ}
-    {ξ : (Fin m → ℝ) → ℝ} {C : NNReal} (hξ : LipschitzWith C ξ)
+theorem sub_add_dotProduct_le_supportFun_of_ae_mem {K : Set (Fin m → ℝ)} (hKc : IsCompact K)
+    {p : Fin m → ℝ} {ξ : (Fin m → ℝ) → ℝ} {C : NNReal} (hξ : LipschitzWith C ξ)
     (hper : ∀ x (k : Fin m → ℤ), ξ (x + fun i => (k i : ℝ)) = ξ x)
     (hK : ∀ᵐ x ∂(volume.restrict (Set.pi Set.univ fun _ : Fin m => Set.Ioo (0 : ℝ) 1)),
       p + (fun j => fderiv ℝ ξ x (Pi.single j 1)) ∈ K) (x y : Fin m → ℝ) :
     ξ y - ξ x + p ⬝ᵥ (y - x) ≤ supportFun K (y - x) := by
   have hK' : ∀ᵐ z, p + (fun j => fderiv ℝ ξ z (Pi.single j 1)) ∈ K :=
-    gc_ae_of_ae_restrict_unitCube (fun z k hz => by rwa [gc_fderiv_periodic hper] at hz) hK
+    ae_of_ae_restrict_unitCube_of_periodic (fun z k hz => by rwa [gc_fderiv_periodic hper] at hz) hK
   have hall := hξ.ae_differentiableAt.and hK'
   have hn : ∀ n : ℕ,
       CalculusOfVariations.plancherelMollify volume (CalculusOfVariations.plancherelBump m n) ξ y -
@@ -149,8 +128,9 @@ theorem gc_sub_le_supportFun {K : Set (Fin m → ℝ)} (hKc : IsCompact K) {p : 
 /-- **The converse.** For `K` compact, convex and nonempty, if `ξ` satisfies the slope bound
 `ξ (y) − ξ (x) + p · (y − x) ≤ H_K (y − x)`, then `p + Dξ (x) ∈ K` wherever `ξ` is differentiable:
 `Dξ (x) v = lim_{t → 0⁺} (ξ (x + t v) − ξ (x)) / t ≤ H_K (v) − p · v`. -/
-theorem gc_mem_of_sub_le_supportFun {K : Set (Fin m → ℝ)} (hKc : IsCompact K) (hKne : K.Nonempty)
-    (hKcv : Convex ℝ K) {p : Fin m → ℝ} {ξ : (Fin m → ℝ) → ℝ}
+theorem add_fderiv_mem_of_sub_add_dotProduct_le_supportFun {K : Set (Fin m → ℝ)}
+    (hKc : IsCompact K) (hKne : K.Nonempty) (hKcv : Convex ℝ K) {p : Fin m → ℝ}
+    {ξ : (Fin m → ℝ) → ℝ}
     (h : ∀ x y, ξ y - ξ x + p ⬝ᵥ (y - x) ≤ supportFun K (y - x)) {x : Fin m → ℝ}
     (hx : DifferentiableAt ℝ ξ x) : p + (fun j => fderiv ℝ ξ x (Pi.single j 1)) ∈ K := by
   apply mem_of_forall_dotProduct_le_supportFun hKc hKne hKcv
@@ -172,8 +152,8 @@ theorem gc_mem_of_sub_le_supportFun {K : Set (Fin m → ℝ)} (hKc : IsCompact K
   linarith
 
 /-- The slope bound implies a Lipschitz bound `L` that depends only on `K` and `p`. -/
-theorem gc_exists_lipschitzWith_of_sub_le_supportFun {K : Set (Fin m → ℝ)} (hKc : IsCompact K)
-    (hKne : K.Nonempty) (p : Fin m → ℝ) :
+theorem exists_lipschitzWith_of_sub_add_dotProduct_le_supportFun {K : Set (Fin m → ℝ)}
+    (hKc : IsCompact K) (hKne : K.Nonempty) (p : Fin m → ℝ) :
     ∃ L : NNReal, ∀ ξ : (Fin m → ℝ) → ℝ,
       (∀ x y, ξ y - ξ x + p ⬝ᵥ (y - x) ≤ supportFun K (y - x)) → LipschitzWith L ξ := by
   obtain ⟨C, hC⟩ := lipschitzWith_supportFun hKc hKne
@@ -195,7 +175,7 @@ theorem gc_exists_lipschitzWith_of_sub_le_supportFun {K : Set (Fin m → ℝ)} (
 /-- An equi-Lipschitz sequence of `ℤ^m`-periodic functions that converges almost everywhere on the
 unit cube converges everywhere: the points of convergence are dense in `ℝ^m` (by periodicity they
 have full measure), and the equicontinuity makes the sequence Cauchy at every point. -/
-theorem gc_exists_tendsto_of_ae_tendsto {F : ℕ → (Fin m → ℝ) → ℝ} {L : NNReal}
+theorem exists_tendsto_of_ae_restrict_unitCube_tendsto {F : ℕ → (Fin m → ℝ) → ℝ} {L : NNReal}
     (hF : ∀ k, LipschitzWith L (F k))
     (hper : ∀ k x (z : Fin m → ℤ), F k (x + fun i => (z i : ℝ)) = F k x)
     {u : (Fin m → ℝ) → ℝ}
@@ -203,7 +183,7 @@ theorem gc_exists_tendsto_of_ae_tendsto {F : ℕ → (Fin m → ℝ) → ℝ} {L
       Tendsto (fun k => F k x) atTop (𝓝 (u x))) :
     ∃ ξ : (Fin m → ℝ) → ℝ, ∀ x, Tendsto (fun k => F k x) atTop (𝓝 (ξ x)) := by
   have hall : ∀ᵐ x, CauchySeq fun k => F k x :=
-    gc_ae_of_ae_restrict_unitCube (P := fun x => CauchySeq fun k => F k x)
+    ae_of_ae_restrict_unitCube_of_periodic (P := fun x => CauchySeq fun k => F k x)
       (fun x z hx => by simpa only [hper] using hx) (h.mono fun x hx => hx.cauchySeq)
   have hdense := Measure.dense_of_ae hall
   have hcs : ∀ x, CauchySeq fun k => F k x := by

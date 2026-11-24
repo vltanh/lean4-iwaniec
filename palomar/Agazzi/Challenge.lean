@@ -28,8 +28,8 @@ Conventions (the definitions are below, between the markers).
 * `integrandL A` is the paper's `L (A)`: `|a₊|² − |a₋|²` if `|a₊| + |a₋| ≤ 1`, and `2 |a₊| − 1`
   otherwise.
 * `pStar p = max (p, p / (p − 1))`; `burkholderB p A` is the paper's `B_p (A)`:
-  `((p* − 1) |a₊| − |a₋|) (|a₊| + |a₋|)^{p−1}` if `p < 2`, `((p* − 1) |a₋| − |a₊|) (|a₊| + |a₋|)^{p−1}`
-  if `p ≥ 2`.
+  `((p* − 1) |a₊| − |a₋|) (|a₊| + |a₋|)^{p−1}` if `p < 2`, and
+  `((p* − 1) |a₋| − |a₊|) (|a₊| + |a₋|)^{p−1}` if `p ≥ 2`.
 * The torus `Q = ℝ² / ℤ²` is represented by `ℤ²`-periodic maps on `ℝ² = Fin 2 → ℝ` (`IsPeriodic`),
   and `∫_Q` by the integral over the open unit square `unitSquare = (0, 1)²`, which has measure `1`.
   A map `φ ∈ C^∞_per (Q; ℝ²)` is a `C^∞` (`ContDiff ℝ ∞`) periodic map `ℝ² → ℝ²`, and

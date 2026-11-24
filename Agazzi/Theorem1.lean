@@ -19,7 +19,8 @@ public import Mathlib.Analysis.Calculus.ContDiff.Defs
 The paper's proof (TeX lines 376–396) uses only that `φ` is Lipschitz and periodic: Lemma 4 is
 stated for `W^{1,∞}_per (Q)`. `theorem1_lipschitz` states the theorem for Lipschitz periodic `φ`
 (`φ ∈ W^{1,∞}_per (Q; ℝ²)`), proved by the paper's argument, and `theorem1` is the paper's
-statement, for `C^∞` periodic `φ`, which are Lipschitz.
+statement, for `C^∞` periodic `φ`, which are Lipschitz
+(`exists_lipschitzWith_of_contDiff_of_isPeriodic`).
 -/
 
 @[expose] public section
@@ -71,23 +72,12 @@ private theorem thm1_det_eq (A : Matrix (Fin 2) (Fin 2) ℝ) :
   simp only [conformalPart, anticonformalPart]
   ring
 
-/-- `L ≥ F`. -/
-private theorem thm1_rowF_le_integrandL (B : Matrix (Fin 2) (Fin 2) ℝ) : rowF B ≤ integrandL B := by
-  rw [rowF_eq, integrandL]
-  split_ifs with h
-  · nlinarith [norm_nonneg (anticonformalPart B), norm_nonneg (conformalPart B)]
-  · exact le_rfl
-
-/-- `|a| = √(a₁² + a₂²)`. -/
-private theorem thm1_euclidNorm_eq (a : Fin 2 → ℝ) : euclidNorm a = √(a 0 ^ 2 + a 1 ^ 2) := by
-  simp [euclidNorm, EuclideanSpace.norm_eq, Fin.sum_univ_two]
-
 private theorem thm1_continuous_euclidNorm : Continuous euclidNorm := by
-  have : euclidNorm = fun a : Fin 2 → ℝ => √(a 0 ^ 2 + a 1 ^ 2) := funext thm1_euclidNorm_eq
+  have : euclidNorm = fun a : Fin 2 → ℝ => √(a 0 ^ 2 + a 1 ^ 2) := funext euclidNorm_eq
   rw [this]; fun_prop
 
 private theorem thm1_abs_le_euclidNorm (a : Fin 2 → ℝ) (i : Fin 2) : |a i| ≤ euclidNorm a := by
-  rw [thm1_euclidNorm_eq]
+  rw [euclidNorm_eq]
   apply Real.abs_le_sqrt
   fin_cases i <;> simp <;> nlinarith [sq_nonneg (a 0), sq_nonneg (a 1)]
 
@@ -97,7 +87,7 @@ private theorem thm1_euclidNorm_row_le (A : Matrix (Fin 2) (Fin 2) ℝ) :
   have hw : (⟨A 0 0, -A 0 1⟩ : ℂ) = conformalPart A + (starRingEnd ℂ) (anticonformalPart A) := by
     apply Complex.ext <;> simp [conformalPart, anticonformalPart] <;> ring
   have hn : euclidNorm (A 0) = ‖(⟨A 0 0, -A 0 1⟩ : ℂ)‖ := by
-    rw [thm1_euclidNorm_eq, Complex.norm_def, Complex.normSq_mk]
+    rw [euclidNorm_eq, Complex.norm_def, Complex.normSq_mk]
     congr 1; ring
   rw [hn, hw]
   exact (norm_add_le _ _).trans (by rw [Complex.norm_conj])
@@ -156,24 +146,10 @@ private theorem thm1_bddAbove_rowG_unitCircle (a b : Fin 2 → ℝ) :
   simp only [rowG, det2, dotProduct, Fin.sum_univ_two, Pi.sub_apply]
   nlinarith [sq_nonneg (z 0), sq_nonneg (z 1)]
 
-/-- `z ↦ G_z (a, b)` is bounded above on `𝒵 (a)`, `𝕊¹` and at most one more point. -/
-private theorem thm1_bddAbove_rowG_rowZ (a b : Fin 2 → ℝ) :
-    BddAbove ((fun z => rowG z a b) '' rowZ a) := by
-  rw [rowZ, Set.image_union]
-  refine (thm1_bddAbove_rowG_unitCircle a b).union (Set.Finite.bddAbove ?_)
-  refine Set.Finite.image _ ?_
-  split_ifs <;> simp
-
 /-- `G_z (A¹, A²) ≤ F (A)` for `|z| = 1`. -/
 private theorem thm1_rowG_le_rowF {z : Fin 2 → ℝ} (hz : z ∈ unitCircle)
     (B : Matrix (Fin 2) (Fin 2) ℝ) : rowG z (B 0) (B 1) ≤ rowF B :=
   le_csSup (thm1_bddAbove_rowG_unitCircle _ _) ⟨z, hz, rfl⟩
-
-/-- `G_z (A¹, A²) ≤ L (A)` for `z ∈ 𝒵 (A¹)` (Lemma 3). -/
-private theorem thm1_rowG_le_integrandL {B : Matrix (Fin 2) (Fin 2) ℝ} {z : Fin 2 → ℝ}
-    (hz : z ∈ rowZ (B 0)) : rowG z (B 0) (B 1) ≤ integrandL B := by
-  rw [lemma3]
-  exact le_csSup (thm1_bddAbove_rowG_rowZ _ _) ⟨z, hz, rfl⟩
 
 /-- `D (p · x + ζ) = p + Dζ` where `ζ` is differentiable. -/
 private theorem thm1_sgrad_dotProduct_add (p : Fin 2 → ℝ) {ζ : (Fin 2 → ℝ) → ℝ} {x : Fin 2 → ℝ}
@@ -253,7 +229,8 @@ private theorem thm1_integral_rowG (A : Matrix (Fin 2) (Fin 2) ℝ) {φ : (Fin 2
           measureReal_def, thm1_volume_unitSquare, ENNReal.toReal_one, one_smul, add_zero]
 
 /-- **Theorem 1** (`thm:L-quasiconvexity`) for Lipschitz periodic test maps
-(`φ ∈ W^{1,∞}_per (Q; ℝ²)`), by the paper's proof: for all `A ∈ ℝ^{2×2}`, `∫_Q [L (A + Dφ) − L (A)] dx ≥ 0`.
+(`φ ∈ W^{1,∞}_per (Q; ℝ²)`), by the paper's proof: for all `A ∈ ℝ^{2×2}`,
+`∫_Q [L (A + Dφ) − L (A)] dx ≥ 0`.
 
 The proof of the paper (TeX lines 376–396), with `u = A x + φ`, `Du = A + Dφ` (`|Q| = 1`, so the
 claim is `∫_Q L (Du) ≥ L (A)`):
@@ -306,7 +283,7 @@ theorem theorem1_lipschitz (A : Matrix (Fin 2) (Fin 2) ℝ) {φ : (Fin 2 → ℝ
           integrandL (A + jacobian φ x) := by
       filter_upwards [hae, hdζ, hdη, hζK] with x hx hxζ hxη hxK
       rw [thm1_sgrad_dotProduct_add _ hxζ, thm1_sgrad_dotProduct_add _ hxη] at hx
-      apply thm1_rowG_le_integrandL
+      apply rowG_le_integrandL
       rcases hx with h | h
       · -- `Dw = Du¹`, and `|Dw| ≤ 1`
         rw [hrow0, ← h, rowZ, ite_eq_left (show euclidNorm (A 0 + sgrad ζ x) ≤ 1 from hxK)]
@@ -377,7 +354,7 @@ theorem theorem1_lipschitz (A : Matrix (Fin 2) (Fin 2) ℝ) {φ : (Fin 2 → ℝ
     rw [hLA]
     calc rowF A ≤ ∫ x in unitSquare, rowF (A + jacobian φ x) := by
           -- `F = sup_{|z| = 1} G_z`, the `G_z` affine: `G_z (A) = ∫_Q G_z (Du) ≤ ∫_Q F (Du)`
-          refine csSup_le ⟨_, ![1, 0], by simp [unitCircle, thm1_euclidNorm_eq], rfl⟩ ?_
+          refine csSup_le ⟨_, ![1, 0], by simp [unitCircle, euclidNorm_eq], rfl⟩ ?_
           rintro _ ⟨z, hz, rfl⟩
           calc rowG z (A 0) (A 1)
               = ∫ x in unitSquare, rowG z ((A + jacobian φ x) 0) ((A + jacobian φ x) 1) :=
@@ -390,7 +367,7 @@ theorem theorem1_lipschitz (A : Matrix (Fin 2) (Fin 2) ℝ) {φ : (Fin 2 → ℝ
                   fun_prop
                 exact thm1_integrableOn hc A hφ
       _ ≤ ∫ x in unitSquare, integrandL (A + jacobian φ x) :=
-          integral_mono hIF hIL fun x => thm1_rowF_le_integrandL _
+          integral_mono hIF hIL fun x => rowF_le_integrandL _
 
 /-- A `C^∞` `ℤ²`-periodic map `ℝ² → ℝ²` is Lipschitz: its derivative is continuous and periodic,
 hence bounded (by its bound on the compact `[0, 1]²`), and `ℝ²` is convex. -/

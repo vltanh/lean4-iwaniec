@@ -14,16 +14,17 @@ public import Mathlib.Order.ConditionallyCompleteLattice.Indexed
 /-!
 # The `ℤ^m`-periodization of a function supported in a small ball
 
-For `g : ℝ^m → ℝ`, `lem4Periodize g x = sup_{k ∈ ℤ^m} g (x + k)`. When `g ≥ 0` vanishes outside
+For `g : ℝ^m → ℝ`, `supPeriodize g x = sup_{k ∈ ℤ^m} g (x + k)`. When `g ≥ 0` vanishes outside
 the ball `B_r (x₀)` (sup norm) with `r < 1/2`, the translates `B_r (x₀ − k)` are disjoint, and
-`lem4Periodize g` is the `ℤ^m`-periodic function equal to `g (· + k)` near every point `x` with
+`supPeriodize g` is the `ℤ^m`-periodic function equal to `g (· + k)` near every point `x` with
 `‖x + k − x₀‖ ≤ 1/2`: the extension of `g` from the torus. Used in the proof of Lemma 4
 (`Agazzi.lemma4`) to make the competitor `(c − w)_+` of the paper periodic.
 
-* `lem4Periodize_periodic`: `lem4Periodize g` is `ℤ^m`-periodic;
-* `lem4_exists_intVec_near`: every `x` has a `k ∈ ℤ^m` with `‖x + k − x₀‖ ≤ 1/2`;
-* `lem4Periodize_eventuallyEq`, `lem4Periodize_eq`: near such an `x`, `lem4Periodize g = g (· + k)`;
-* `lem4Periodize_lipschitzWith`: `lem4Periodize g` is `K`-Lipschitz if `g` is (and bounded above).
+* `supPeriodize_periodic`: `supPeriodize g` is `ℤ^m`-periodic;
+* `exists_norm_add_intVec_sub_le_half`: every `x` has a `k ∈ ℤ^m` with `‖x + k − x₀‖ ≤ 1/2`;
+* `one_le_norm_intVec_sub`: distinct points of `ℤ^m` are at distance at least `1`;
+* `supPeriodize_eventuallyEq`, `supPeriodize_eq`: near such an `x`, `supPeriodize g = g (· + k)`;
+* `lipschitzWith_supPeriodize`: `supPeriodize g` is `K`-Lipschitz if `g` is (and bounded above).
 -/
 
 @[expose] public section
@@ -37,12 +38,12 @@ namespace Agazzi
 variable {m : ℕ}
 
 /-- The `ℤ^m`-periodization `x ↦ sup_{k ∈ ℤ^m} g (x + k)` of `g : ℝ^m → ℝ`. -/
-def lem4Periodize (g : (Fin m → ℝ) → ℝ) (x : Fin m → ℝ) : ℝ :=
+def supPeriodize (g : (Fin m → ℝ) → ℝ) (x : Fin m → ℝ) : ℝ :=
   ⨆ k : Fin m → ℤ, g (x + fun i => (k i : ℝ))
 
-theorem lem4Periodize_periodic (g : (Fin m → ℝ) → ℝ) (x : Fin m → ℝ) (k : Fin m → ℤ) :
-    lem4Periodize g (x + fun i => (k i : ℝ)) = lem4Periodize g x := by
-  unfold lem4Periodize
+theorem supPeriodize_periodic (g : (Fin m → ℝ) → ℝ) (x : Fin m → ℝ) (k : Fin m → ℤ) :
+    supPeriodize g (x + fun i => (k i : ℝ)) = supPeriodize g x := by
+  unfold supPeriodize
   refine (Equiv.addLeft k).iSup_congr fun k' => ?_
   congr 1
   ext i
@@ -50,7 +51,7 @@ theorem lem4Periodize_periodic (g : (Fin m → ℝ) → ℝ) (x : Fin m → ℝ)
   ring
 
 /-- Every `x ∈ ℝ^m` has an integer translate within `1/2` of `x₀` (sup norm). -/
-theorem lem4_exists_intVec_near (x₀ x : Fin m → ℝ) :
+theorem exists_norm_add_intVec_sub_le_half (x₀ x : Fin m → ℝ) :
     ∃ k : Fin m → ℤ, ‖x + (fun i => (k i : ℝ)) - x₀‖ ≤ 1 / 2 := by
   refine ⟨fun i => round (x₀ i - x i), (pi_norm_le_iff_of_nonneg (by norm_num)).2 fun i => ?_⟩
   have h := abs_sub_round (x₀ i - x i)
@@ -61,7 +62,7 @@ theorem lem4_exists_intVec_near (x₀ x : Fin m → ℝ) :
     _ ≤ 1 / 2 := h
 
 /-- Distinct points of `ℤ^m` are at distance at least `1` (sup norm). -/
-theorem lem4_one_le_norm_intVec_sub {k k' : Fin m → ℤ} (h : k ≠ k') :
+theorem one_le_norm_intVec_sub {k k' : Fin m → ℤ} (h : k ≠ k') :
     1 ≤ ‖(fun i => (k i : ℝ)) - fun i => (k' i : ℝ)‖ := by
   obtain ⟨i, hi⟩ := Function.ne_iff.1 h
   calc (1 : ℝ) ≤ |(k i : ℝ) - k' i| := by
@@ -73,11 +74,11 @@ theorem lem4_one_le_norm_intVec_sub {k k' : Fin m → ℤ} (h : k ≠ k') :
 variable {g : (Fin m → ℝ) → ℝ} {x₀ : Fin m → ℝ} {r : ℝ}
 
 /-- If `g ≥ 0` vanishes outside `B_r (x₀)`, `r < 1/2`, and `‖x + k − x₀‖ ≤ 1/2`, then
-`lem4Periodize g = g (· + k)` near `x`: the other translates vanish there. -/
-theorem lem4Periodize_eventuallyEq (hg0 : ∀ x, 0 ≤ g x)
+`supPeriodize g = g (· + k)` near `x`: the other translates vanish there. -/
+theorem supPeriodize_eventuallyEq (hg0 : ∀ x, 0 ≤ g x)
     (hsupp : ∀ x, r ≤ ‖x - x₀‖ → g x = 0) (hr : r < 1 / 2) {x : Fin m → ℝ} {k : Fin m → ℤ}
     (hk : ‖x + (fun i => (k i : ℝ)) - x₀‖ ≤ 1 / 2) :
-    lem4Periodize g =ᶠ[𝓝 x] fun y => g (y + fun i => (k i : ℝ)) := by
+    supPeriodize g =ᶠ[𝓝 x] fun y => g (y + fun i => (k i : ℝ)) := by
   filter_upwards [Metric.ball_mem_nhds x (show (0 : ℝ) < 1 / 2 - r by linarith)] with y hy
   rw [Metric.mem_ball, dist_eq_norm] at hy
   have hle : ∀ k' : Fin m → ℤ, g (y + fun i => (k' i : ℝ)) ≤ g (y + fun i => (k i : ℝ)) := by
@@ -86,7 +87,7 @@ theorem lem4Periodize_eventuallyEq (hg0 : ∀ x, 0 ≤ g x)
     · rw [hk']
     rw [hsupp _ ?_]
     · exact hg0 _
-    have h1 := lem4_one_le_norm_intVec_sub hk'
+    have h1 := one_le_norm_intVec_sub hk'
     have h2 : ‖y + (fun i => (k i : ℝ)) - x₀‖ ≤ ‖y - x‖ + ‖x + (fun i => (k i : ℝ)) - x₀‖ := by
       calc _ = ‖(y - x) + (x + (fun i => (k i : ℝ)) - x₀)‖ := by congr 1; abel
         _ ≤ _ := norm_add_le _ _
@@ -100,22 +101,22 @@ theorem lem4Periodize_eventuallyEq (hg0 : ∀ x, 0 ≤ g x)
     (le_ciSup (f := fun k' : Fin m → ℤ => g (y + fun i => (k' i : ℝ)))
       ⟨_, by rintro _ ⟨k', rfl⟩; exact hle k'⟩ k)
 
-theorem lem4Periodize_eq (hg0 : ∀ x, 0 ≤ g x)
+theorem supPeriodize_eq (hg0 : ∀ x, 0 ≤ g x)
     (hsupp : ∀ x, r ≤ ‖x - x₀‖ → g x = 0) (hr : r < 1 / 2) {x : Fin m → ℝ} {k : Fin m → ℤ}
     (hk : ‖x + (fun i => (k i : ℝ)) - x₀‖ ≤ 1 / 2) :
-    lem4Periodize g x = g (x + fun i => (k i : ℝ)) :=
-  (lem4Periodize_eventuallyEq hg0 hsupp hr hk).eq_of_nhds
+    supPeriodize g x = g (x + fun i => (k i : ℝ)) :=
+  (supPeriodize_eventuallyEq hg0 hsupp hr hk).eq_of_nhds
 
 /-- The periodization of a `K`-Lipschitz function bounded above is `K`-Lipschitz. -/
-theorem lem4Periodize_lipschitzWith {K : NNReal} (hg : LipschitzWith K g) {M : ℝ}
-    (hM : ∀ x, g x ≤ M) : LipschitzWith K (lem4Periodize g) := by
+theorem lipschitzWith_supPeriodize {K : NNReal} (hg : LipschitzWith K g) {M : ℝ}
+    (hM : ∀ x, g x ≤ M) : LipschitzWith K (supPeriodize g) := by
   refine LipschitzWith.of_le_add_mul K fun x y => ciSup_le fun k => ?_
   have hb : BddAbove (Set.range fun k : Fin m → ℤ => g (y + fun i => (k i : ℝ))) :=
     ⟨M, by rintro _ ⟨k, rfl⟩; exact hM _⟩
   calc g (x + fun i => (k i : ℝ))
       ≤ g (y + fun i => (k i : ℝ)) + K * dist (x + fun i => (k i : ℝ)) (y + fun i => (k i : ℝ)) :=
         hg.le_add_mul _ _
-    _ ≤ lem4Periodize g y + K * dist x y := by
+    _ ≤ supPeriodize g y + K * dist x y := by
         rw [dist_eq_norm, dist_eq_norm, add_sub_add_right_eq_sub]
         gcongr
         exact le_ciSup hb k

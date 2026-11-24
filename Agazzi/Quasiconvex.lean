@@ -21,8 +21,9 @@ the paper's proofs give the periodic inequalities for Lipschitz periodic maps
 * `quasiconvex_integrandL`: `L` is quasiconvex;
 * `quasiconvex_burkholderB`: `B_p` is quasiconvex for every `1 < p < ∞`;
 * `quasiconvex_burkholder`: for `1 < p < 2`, the Burkholder function
-  `(|a₊| − (p − 1)|a₋|)(|a₊| + |a₋|)^{p−1}` (a positive multiple of `B_p`) is quasiconvex. This is
-  the form in which lean4-morrey (`Isotropic.burkholder p`) uses it.
+  `(|a₊| − (p − 1)|a₋|)(|a₊| + |a₋|)^{p−1}` (a positive multiple of `B_p`, and quasiconvexity
+  passes to positive multiples, `quasiconvex_const_mul`) is quasiconvex. This is the form in which
+  lean4-morrey (`Isotropic.burkholder p`) uses it.
 -/
 
 @[expose] public section
@@ -76,8 +77,9 @@ theorem quasiconvex_burkholderB {p : ℝ} (hp : 1 < p) :
   quasiconvex_of_periodic (continuous_burkholderB hp) fun A _ _ hφ hper =>
     corollary2_lipschitz hp A hφ hper
 
-/-- For `1 < p < 2`, the Burkholder function `(|a₊| − (p − 1)|a₋|)(|a₊| + |a₋|)^{p−1}` is quasiconvex,
-in the sense of `CalculusOfVariations`: it is `(p − 1) B_p` (`burkholderB_of_lt_two`). -/
+/-- For `1 < p < 2`, the Burkholder function `(|a₊| − (p − 1)|a₋|)(|a₊| + |a₋|)^{p−1}` is
+quasiconvex, in the sense of `CalculusOfVariations`: it is `(p − 1) B_p`
+(`burkholderB_of_lt_two`). -/
 theorem quasiconvex_burkholder (p : ℝ) (hp1 : 1 < p) (hp2 : p < 2) :
     CalculusOfVariations.Quasiconvex fun A : Matrix (Fin 2) (Fin 2) ℝ =>
       (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *

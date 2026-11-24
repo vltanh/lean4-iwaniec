@@ -12,11 +12,11 @@ public meta import Lean.DocString
 -- With several papers (references/multi-paper.md), `find ProjectName` in place of `find PaperName`
 -- lists every paper's modules and `Common/`, and the second `find` every paper's Solution.
 import all Agazzi.Basic.Analysis.Calculus.GradientConstraint
-import all Agazzi.Basic.Analysis.Calculus.Lem4Lipschitz
+import all Agazzi.Basic.Analysis.Calculus.LipschitzFDeriv
 import all Agazzi.Basic.Analysis.Calculus.Periodic
 import all Agazzi.Basic.Analysis.Convex.SupportFunction
-import all Agazzi.Basic.MeasureTheory.Lem4Periodic
-import all Agazzi.Basic.Topology.MetricSpace.Lem4Periodize
+import all Agazzi.Basic.MeasureTheory.Periodic
+import all Agazzi.Basic.Topology.MetricSpace.Periodize
 import all Agazzi.Bridges
 import all Agazzi.Corollary2.Norm
 import all Agazzi.Corollary2.Quasiconvexity

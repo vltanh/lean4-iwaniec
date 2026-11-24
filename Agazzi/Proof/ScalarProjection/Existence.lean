@@ -37,12 +37,13 @@ is `∫_Q f²`, so the projection of `η` on `𝒞_{L²}` is the class of an `L�
 
 The paper asserts the closedness; the argument here: for `ξ` Lipschitz and periodic, the constraint
 `p + Dξ ∈ K` a.e. is equivalent to the slope bound `ξ (y) − ξ (x) + p · (y − x) ≤ H_K (y − x)` for
-all `x, y`, with `H_K` the support function of `K` (`gc_sub_le_supportFun`, by mollification and
-the mean value theorem; `gc_mem_of_sub_le_supportFun` for the converse). The slope bound gives a
-Lipschitz constant that depends only on `K` and `p`. A sequence of `𝒞_{L²}` converging in `L² (Q)`
-has a subsequence converging a.e. on `Q`; its representatives in `𝒞` are equi-Lipschitz and
-periodic, so they converge everywhere (`gc_exists_tendsto_of_ae_tendsto`), and the limit satisfies
-the slope bound, so it lies in `𝒞` and represents the `L²` limit.
+all `x, y`, with `H_K` the support function of `K` (`sub_add_dotProduct_le_supportFun_of_ae_mem`,
+by mollification and the mean value theorem; `add_fderiv_mem_of_sub_add_dotProduct_le_supportFun`
+for the converse). The slope bound gives a Lipschitz constant that depends only on `K` and `p`. A
+sequence of `𝒞_{L²}` converging in `L² (Q)` has a subsequence converging a.e. on `Q`; its
+representatives in `𝒞` are equi-Lipschitz and periodic, so they converge everywhere
+(`exists_tendsto_of_ae_restrict_unitCube_tendsto`), and the limit satisfies the slope bound, so it
+lies in `𝒞` and represents the `L²` limit.
 -/
 
 @[expose] public section
@@ -158,14 +159,14 @@ private theorem isClosed_constraintSetL2 (hKne : K.Nonempty) (hKc : IsCompact K)
   choose ξ hξ hξu using hu'
   obtain ⟨ns, -, hns⟩ := (tendstoInMeasure_of_tendsto_Lp hlim).exists_seq_tendsto_ae
   have hslope : ∀ n x y, ξ n y - ξ n x + p ⬝ᵥ (y - x) ≤ supportFun K (y - x) := fun n =>
-    gc_sub_le_supportFun hKc (hξ n).1.1.choose_spec (hξ n).1.2 (hξ n).2
-  obtain ⟨L, hL⟩ := gc_exists_lipschitzWith_of_sub_le_supportFun hKc hKne p
+    sub_add_dotProduct_le_supportFun_of_ae_mem hKc (hξ n).1.1.choose_spec (hξ n).1.2 (hξ n).2
+  obtain ⟨L, hL⟩ := exists_lipschitzWith_of_sub_add_dotProduct_le_supportFun hKc hKne p
   have hae : ∀ᵐ x ∂(volume.restrict unitSquare),
       Tendsto (fun k => ξ (ns k) x) atTop (𝓝 (u₀ x)) := by
     filter_upwards [hns, ae_all_iff.2 hξu] with x hx hx'
     exact hx.congr fun k => hx' (ns k)
-  obtain ⟨ξ', hξ'⟩ := gc_exists_tendsto_of_ae_tendsto (fun k => hL _ (hslope (ns k)))
-    (fun k => (hξ (ns k)).1.2) hae
+  obtain ⟨ξ', hξ'⟩ := exists_tendsto_of_ae_restrict_unitCube_tendsto
+    (fun k => hL _ (hslope (ns k))) (fun k => (hξ (ns k)).1.2) hae
   have hslope' : ∀ x y, ξ' y - ξ' x + p ⬝ᵥ (y - x) ≤ supportFun K (y - x) := fun x y =>
     le_of_tendsto' (((hξ' y).sub (hξ' x)).add_const _) fun k => hslope _ x y
   have hper' : IsPeriodic ξ' := fun x z =>
@@ -174,7 +175,7 @@ private theorem isClosed_constraintSetL2 (hKne : K.Nonempty) (hKc : IsCompact K)
   have hlip' := hL _ hslope'
   refine ⟨ξ', ⟨⟨⟨L, hlip'⟩, hper'⟩, ?_⟩, ?_⟩
   · filter_upwards [ae_restrict_of_ae hlip'.ae_differentiableAt] with x hx
-    exact gc_mem_of_sub_le_supportFun hKc hKne hKcv hslope' hx
+    exact add_fderiv_mem_of_sub_add_dotProduct_le_supportFun hKc hKne hKcv hslope' hx
   · filter_upwards [hae] with x hx
     exact tendsto_nhds_unique hx (hξ' x)
 

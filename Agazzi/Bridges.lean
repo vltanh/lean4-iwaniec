@@ -17,8 +17,9 @@ public import Mathlib.Analysis.CStarAlgebra.Matrix
   (`grad`, `unitCube 2`, the periodicity in `QuasiconvexAtPeriodic`); the Beurling–Ahlfors
   transform, its norm and the Wirtinger derivatives are those of the package `HarmonicAnalysis`
   (`beurlingPow 1`, `beurlingPowNorm 1`, `dz`, `dzbar`).
-* The facts that the paper states in the introduction (TeX lines 264–268): with `A z = a₊ z + a₋ z̄`,
-  the operator norm is `|A| = |a₊| + |a₋|` (`opNorm_eq`) and `det A = |a₊|² − |a₋|²` (`det_eq`).
+* The facts that the paper states in the introduction (TeX lines 264–268): with
+  `A z = a₊ z + a₋ z̄`, the operator norm is `|A| = |a₊| + |a₋|` (`opNorm_eq`) and
+  `det A = |a₊|² − |a₋|²` (`det_eq`).
 * `p* − 1 = (p − 1)⁻¹` for `1 < p ≤ 2` and `p − 1` for `p ≥ 2` (the second equality of
   `(eq:BA-sharp-norm)`).
 * The torus `Q` has measure `1` (`volume_unitSquare`).
@@ -176,8 +177,8 @@ theorem pStar_sub_one_of_two_le {p : ℝ} (hp2 : 2 ≤ p) : pStar p - 1 = p - 1 
     rw [div_le_iff₀ h1]; nlinarith
   rw [pStar, max_eq_left hle]
 
-/-- For `1 < p < 2`, `B_p = (p − 1)⁻¹ (|a₊| − (p − 1) |a₋|) (|a₊| + |a₋|)^{p−1}`: a positive multiple
-of the form of the Burkholder function used for `1 < p ≤ 2`.
+/-- For `1 < p < 2`, `B_p = (p − 1)⁻¹ (|a₊| − (p − 1) |a₋|) (|a₊| + |a₋|)^{p−1}`: a positive
+multiple of the form of the Burkholder function used for `1 < p ≤ 2`.
 
 Proof: `p* − 1 = (p − 1)⁻¹` (`pStar_sub_one_of_le_two`). -/
 theorem burkholderB_of_lt_two {p : ℝ} (hp : 1 < p) (hp2 : p < 2)

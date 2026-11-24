@@ -34,8 +34,8 @@ Conventions.
   `a₊ = conformalPart A = ((a₁₁ + a₂₂) + i (a₂₁ − a₁₂)) / 2` and the anticonformal part
   `a₋ = anticonformalPart A = ((a₁₁ − a₂₂) + i (a₂₁ + a₁₂)) / 2`. Then the operator norm of `A` is
   `|a₊| + |a₋|` and `det A = |a₊|² − |a₋|²` (`Agazzi.opNorm_eq`, `Agazzi.det_eq`).
-* `L A` is the integrand `(eq:L-definition)`: `|a₊|² − |a₋|²` if `|A| ≤ 1`, `2 |a₊| − 1` if
-  `|A| > 1`, with `|A| = |a₊| + |a₋|`.
+* `integrandL A = L (A)` is the integrand `(eq:L-definition)`: `|a₊|² − |a₋|²` if `|A| ≤ 1`,
+  `2 |a₊| − 1` if `|A| > 1`, with `|A| = |a₊| + |a₋|`.
 * `pStar p = max (p, p / (p − 1))` and `burkholderB p A` is the Burkholder integrand
   `(eq:Bp-definition)`.
 * The torus `Q = ℝ² / ℤ²` is represented by `ℤ²`-periodic maps on `ℝ²` (`IsPeriodic`), and

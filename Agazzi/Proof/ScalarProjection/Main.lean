@@ -9,9 +9,9 @@ public import Agazzi.Proof.ScalarProjection.Existence
 public import Agazzi.Basic.Analysis.Convex.SupportFunction
 public import Agazzi.Basic.Analysis.Calculus.Periodic
 public import CalculusOfVariations.Lipschitz.ZeroSet
-public import Agazzi.Basic.Analysis.Calculus.Lem4Lipschitz
-public import Agazzi.Basic.MeasureTheory.Lem4Periodic
-public import Agazzi.Basic.Topology.MetricSpace.Lem4Periodize
+public import Agazzi.Basic.Analysis.Calculus.LipschitzFDeriv
+public import Agazzi.Basic.MeasureTheory.Periodic
+public import Agazzi.Basic.Topology.MetricSpace.Periodize
 
 /-!
 # §2: the scalar projection lemma (Lemma 4)
@@ -147,7 +147,7 @@ private lemma lem4_lipschitz_dot_add {f : (Fin 2 → ℝ) → ℝ} {C : NNReal} 
 periodic property. -/
 private lemma lemma4_ae_constraint {ξ : (Fin 2 → ℝ) → ℝ} (hξ : ξ ∈ constraintSet K p) :
     ∀ᵐ x ∂(volume : Measure (Fin 2 → ℝ)), p + sgrad ξ x ∈ K :=
-  lem4_ae_of_ae_unitCube (fun x k => by rw [sgrad_periodic hξ.1.2]) hξ.2
+  ae_of_ae_restrict_unitCube_of_periodic (fun x k h => by rwa [sgrad_periodic hξ.1.2] at h) hξ.2
 
 /-! ### Step 1: `Dw = Dv` almost everywhere on `{h = 0}` -/
 
@@ -158,7 +158,7 @@ private lemma lemma4_step1 {η ζ : (Fin 2 → ℝ) → ℝ} (hη : LipPer η) (
       sgrad (fun y => p ⬝ᵥ y + ζ y) x = sgrad (fun y => p ⬝ᵥ y + η y) x := by
   obtain ⟨Cη, hηL⟩ := hη.1
   obtain ⟨Cζ, hζL⟩ := hζ.1
-  filter_upwards [lem4_ae_fderiv_eq_zero (hηL.sub hζL), hηL.ae_differentiableAt,
+  filter_upwards [ae_fderiv_eq_zero_of_eq_zero (hηL.sub hζL), hηL.ae_differentiableAt,
     hζL.ae_differentiableAt] with x h0 hηd hζd hx
   have h1 := h0 hx
   rw [fderiv_fun_sub hηd hζd, sub_eq_zero] at h1
@@ -370,13 +370,13 @@ where differentiable) and the cut-off `g = (s (c − w))_+` on `B_r (x₀)`, ext
 (`lem4Cutoff`), the function `ξ = ζ + s ĝ`, with `ĝ` the `ℤ²`-periodization of `g`, lies in `𝒞`.
 Near a point of `B_r (x₀)` (up to an integer translation), `p · x + ξ = s max {s c, s w}` (that
 is, `max {w, c}` for `s = 1` and `min {w, c}` for `s = −1`), whose gradient is a.e. `Dc ∈ K` or
-`Dw ∈ K` (`lem4_ae_fderiv_max`); away from `B_{2ε/ρ} (x₀)`, `ξ = ζ` up to translation. -/
+`Dw ∈ K` (`ae_fderiv_max_eq_or`); away from `B_{2ε/ρ} (x₀)`, `ξ = ζ` up to translation. -/
 private lemma lemma4_competitor_mem {ζ w c : (Fin 2 → ℝ) → ℝ} (hζ : ζ ∈ constraintSet K p)
     (hw : w = fun y => p ⬝ᵥ y + ζ y) {Cc : NNReal} (hcL : LipschitzWith Cc c)
     (hcK : ∀ z, DifferentiableAt ℝ c z → sgrad c z ∈ K) {s : ℝ} (hs2 : s * s = 1)
     {x₀ : Fin 2 → ℝ} {r ρ ε : ℝ} (hr : r < 1 / 2) (hρ : 0 < ρ) (hε : 0 < ε)
     (hερ : 2 * ε < ρ * r) (hF : ∀ x, ‖x - x₀‖ ≤ r → s * (c x - w x) ≤ ε - ρ / 2 * ‖x - x₀‖) :
-    (fun x => ζ x + s * lem4Periodize (lem4Cutoff (fun x => s * (c x - w x)) x₀ r) x) ∈
+    (fun x => ζ x + s * supPeriodize (lem4Cutoff (fun x => s * (c x - w x)) x₀ r) x) ∈
       constraintSet K p := by
   have hζK := lemma4_ae_constraint hζ
   obtain ⟨⟨⟨Cζ, hζL⟩, hζper⟩, -⟩ := hζ
@@ -385,14 +385,14 @@ private lemma lemma4_competitor_mem {ζ w c : (Fin 2 → ℝ) → ℝ} (hζ : ζ
   have hsupp : ∀ x, r ≤ ‖x - x₀‖ → lem4Cutoff (fun x => s * (c x - w x)) x₀ r x = 0 :=
     fun x hx => lem4Cutoff_eq_zero hρ hερ hF (by nlinarith)
   obtain ⟨Cg, hgL⟩ := lem4Cutoff_lipschitz (lem4_lipschitz_const_mul (hcL.sub hwL) s) hρ hερ hF
-  have hφL := lem4Periodize_lipschitzWith hgL (lem4Cutoff_le hρ hε hερ hF)
+  have hφL := lipschitzWith_supPeriodize hgL (lem4Cutoff_le hρ hε hερ hF)
   set g := lem4Cutoff (fun x => s * (c x - w x)) x₀ r with hg_def
-  set φ := lem4Periodize g with hφ_def
+  set φ := supPeriodize g with hφ_def
   have hξL : LipschitzWith _ (fun x => ζ x + s * φ x) := hζL.add (lem4_lipschitz_const_mul hφL s)
   refine ⟨⟨⟨_, hξL⟩, fun x k => ?_⟩, ae_restrict_of_ae ?_⟩
   · -- periodicity
     simp only [hφ_def]
-    rw [hζper x k, lem4Periodize_periodic]
+    rw [hζper x k, supPeriodize_periodic]
   -- the gradient constraint, almost everywhere on `ℝ²`
   have hML := (lem4_lipschitz_const_mul hcL s).max (lem4_lipschitz_const_mul hwL s)
   have hgood : ∀ᵐ z ∂(volume : Measure (Fin 2 → ℝ)), DifferentiableAt ℝ ζ z ∧
@@ -401,13 +401,13 @@ private lemma lemma4_competitor_mem {ζ w c : (Fin 2 → ℝ) → ℝ} (hζ : ζ
       (fderiv ℝ (fun u => max (s * c u) (s * w u)) z = fderiv ℝ (fun u => s * c u) z ∨
         fderiv ℝ (fun u => max (s * c u) (s * w u)) z = fderiv ℝ (fun u => s * w u) z) := by
     filter_upwards [hζL.ae_differentiableAt, hζK, hcL.ae_differentiableAt, hML.ae_differentiableAt,
-      lem4_ae_fderiv_max (lem4_lipschitz_const_mul hcL s) (lem4_lipschitz_const_mul hwL s)]
+      ae_fderiv_max_eq_or (lem4_lipschitz_const_mul hcL s) (lem4_lipschitz_const_mul hwL s)]
       with z h1 h2 h3 h4 h5
     exact ⟨h1, h2, h3, h4, h5⟩
   have hgood' := ae_all_iff.2 fun k : Fin 2 → ℤ => QuasiMeasurePreserving.ae
     (measurePreserving_add_right volume fun i => (k i : ℝ)).quasiMeasurePreserving hgood
   filter_upwards [hgood', hξL.ae_differentiableAt] with x hx hξd
-  obtain ⟨k, hk⟩ := lem4_exists_intVec_near x₀ x
+  obtain ⟨k, hk⟩ := exists_norm_add_intVec_sub_le_half x₀ x
   obtain ⟨hζd, hζK', hcd, hMd, hmax⟩ := hx k
   set z := x + fun i => (k i : ℝ) with hz
   have hwd : DifferentiableAt ℝ w z := by rw [hw]; exact (hasFDerivAt_dot_add hζd).differentiableAt
@@ -415,7 +415,7 @@ private lemma lemma4_competitor_mem {ζ w c : (Fin 2 → ℝ) → ℝ} (hζ : ζ
   -- near `x`, `p · y + ξ (y) = (w + s g) (y + k) − p · k`
   have hW : (fun y => p ⬝ᵥ y + (ζ y + s * φ y)) =ᶠ[𝓝 x]
       fun y => (fun u => w u + s * g u) (y + fun i => (k i : ℝ)) + -(p ⬝ᵥ fun i => (k i : ℝ)) := by
-    filter_upwards [lem4Periodize_eventuallyEq (lem4Cutoff_nonneg _ x₀ r) hsupp hr hk] with y hy
+    filter_upwards [supPeriodize_eventuallyEq (lem4Cutoff_nonneg _ x₀ r) hsupp hr hk] with y hy
     have hy' : φ y = g (y + fun i => (k i : ℝ)) := hy
     simp only [hy', hw, hζper y k, dotProduct_add]
     ring
@@ -458,7 +458,7 @@ private lemma lemma4_competitor_integral_pos {η ζ w c : (Fin 2 → ℝ) → �
     (hF : ∀ x, ‖x - x₀‖ ≤ r → s * (c x - w x) ≤ ε - ρ / 2 * ‖x - x₀‖)
     (hFx₀ : s * (c x₀ - w x₀) = ε) (hh : ∀ x, ‖x - x₀‖ ≤ r → 0 < s * (η x - ζ x)) :
     0 < ∫ x in unitSquare, (η x - ζ x) *
-      ((ζ x + s * lem4Periodize (lem4Cutoff (fun x => s * (c x - w x)) x₀ r) x) - ζ x) := by
+      ((ζ x + s * supPeriodize (lem4Cutoff (fun x => s * (c x - w x)) x₀ r) x) - ζ x) := by
   obtain ⟨⟨Cη, hηL⟩, hηper⟩ := hη
   obtain ⟨⟨Cζ, hζL⟩, hζper⟩ := hζ
   obtain ⟨Cw, hwL⟩ := lem4_lipschitz_dot_add (p := p) hζL
@@ -467,9 +467,9 @@ private lemma lemma4_competitor_integral_pos {η ζ w c : (Fin 2 → ℝ) → �
   have hsupp : ∀ x, r ≤ ‖x - x₀‖ → lem4Cutoff (fun x => s * (c x - w x)) x₀ r x = 0 :=
     fun x hx => lem4Cutoff_eq_zero hρ hερ hF (by nlinarith)
   obtain ⟨Cg, hgL⟩ := lem4Cutoff_lipschitz (lem4_lipschitz_const_mul (hcL.sub hwL) s) hρ hερ hF
-  have hφc := (lem4Periodize_lipschitzWith hgL (lem4Cutoff_le hρ hε hερ hF)).continuous
+  have hφc := (lipschitzWith_supPeriodize hgL (lem4Cutoff_le hρ hε hερ hF)).continuous
   set g := lem4Cutoff (fun x => s * (c x - w x)) x₀ r with hg_def
-  set φ := lem4Periodize g with hφ_def
+  set φ := supPeriodize g with hφ_def
   have hηc := hηL.continuous
   have hζc := hζL.continuous
   have hGc : Continuous fun x => (η x - ζ x) * ((ζ x + s * φ x) - ζ x) := by fun_prop
@@ -478,8 +478,8 @@ private lemma lemma4_competitor_integral_pos {η ζ w c : (Fin 2 → ℝ) → �
   -- `s h ĝ ≥ 0`: where `ĝ (x) = g (x + k) > 0`, `x + k ∈ B_r (x₀)` and `s h (x + k) > 0`
   have hG0 : ∀ x, 0 ≤ (η x - ζ x) * ((ζ x + s * φ x) - ζ x) := by
     intro x
-    obtain ⟨k, hk⟩ := lem4_exists_intVec_near x₀ x
-    rw [hGeq, hφ_def, lem4Periodize_eq (lem4Cutoff_nonneg _ x₀ r) hsupp hr hk]
+    obtain ⟨k, hk⟩ := exists_norm_add_intVec_sub_le_half x₀ x
+    rw [hGeq, hφ_def, supPeriodize_eq (lem4Cutoff_nonneg _ x₀ r) hsupp hr hk]
     rcases (lem4Cutoff_nonneg (fun x => s * (c x - w x)) x₀ r
       (x + fun i => (k i : ℝ))).eq_or_lt with h0 | hpos
     · rw [← h0, mul_zero]
@@ -493,7 +493,7 @@ private lemma lemma4_competitor_integral_pos {η ζ w c : (Fin 2 → ℝ) → �
   have hGx₀ : 0 < (η x₀ - ζ x₀) * ((ζ x₀ + s * φ x₀) - ζ x₀) := by
     have hk0 : ‖x₀ + (fun i => ((0 : Fin 2 → ℤ) i : ℝ)) - x₀‖ ≤ 1 / 2 := by simp
     have h0 : (fun i => ((0 : Fin 2 → ℤ) i : ℝ)) = 0 := by ext; simp
-    rw [hGeq, hφ_def, lem4Periodize_eq (lem4Cutoff_nonneg _ x₀ r) hsupp hr hk0, h0, add_zero,
+    rw [hGeq, hφ_def, supPeriodize_eq (lem4Cutoff_nonneg _ x₀ r) hsupp hr hk0, h0, add_zero,
       lem4Cutoff, Set.indicator_of_mem (Metric.mem_ball_self hr0), hFx₀,
       max_eq_left hε.le]
     exact mul_pos (hh x₀ (by rw [sub_self, norm_zero]; exact hr0.le)) hε
@@ -634,7 +634,8 @@ private lemma lemma4_step3_diff (hKcv : Convex ℝ K) {η ζ : (Fin 2 → ℝ) �
       simp only
       rw [hηper x k, hζper x k, show x + (fun i => (k i : ℝ)) + -(t • e) =
         x + -(t • e) + fun i => (k i : ℝ) by abel, hζper _ k]
-    have := setIntegral_unitCube_comp_add hper himinus (t • e)
+    have := setIntegral_unitCube_comp_add
+      (f := fun x => (η x - ζ x) * (ζ (x + -(t • e)) - ζ x)) hper (t • e)
     rw [← lem4_unitSquare_eq] at this
     rw [← this]
     congr 1
@@ -657,7 +658,7 @@ private lemma lemma4_step3_partial (hKcv : Convex ℝ K) {η ζ : (Fin 2 → ℝ
     0 ≤ ∫ x in unitSquare, fderiv ℝ (fun y => η y - ζ y) x e * fderiv ℝ ζ x e := by
   obtain ⟨Cη, hηL⟩ := hη.1
   obtain ⟨Cζ, hζL⟩ := hζ.1.1.1
-  have hlim := lem4_tendsto_setIntegral_slope_mul (hηL.sub hζL) hζL e
+  have hlim := tendsto_setIntegral_slope_mul (hηL.sub hζL) hζL e
     (s := unitSquare) (by rw [lem4_volume_unitSquare]; exact ENNReal.one_ne_top)
   refine ge_of_tendsto hlim (Eventually.of_forall fun t => ?_)
   have h := lemma4_step3_diff hKcv hη hζ e t
@@ -684,8 +685,9 @@ private lemma lemma4_step3 (hKcv : Convex ℝ K) {η ζ : (Fin 2 → ℝ) → �
   -- `Dw = p + Dζ` and `Dv − Dw = Dh` almost everywhere
   have hae : (fun x => sgrad (fun y => p ⬝ᵥ y + ζ y) x ⬝ᵥ
       (sgrad (fun y => p ⬝ᵥ y + η y) x - sgrad (fun y => p ⬝ᵥ y + ζ y) x))
-      =ᵐ[volume.restrict unitSquare] fun x => ∑ j, (p j * fderiv ℝ (fun y => η y - ζ y) x (Pi.single j 1) +
-        fderiv ℝ ζ x (Pi.single j 1) * fderiv ℝ (fun y => η y - ζ y) x (Pi.single j 1)) := by
+      =ᵐ[volume.restrict unitSquare] fun x =>
+        ∑ j, (p j * fderiv ℝ (fun y => η y - ζ y) x (Pi.single j 1) +
+          fderiv ℝ ζ x (Pi.single j 1) * fderiv ℝ (fun y => η y - ζ y) x (Pi.single j 1)) := by
     filter_upwards [ae_restrict_of_ae hηL.ae_differentiableAt,
       ae_restrict_of_ae hζL.ae_differentiableAt] with x hηd hζd
     rw [sgrad_dot_add hηd, sgrad_dot_add hζd, fderiv_fun_sub hηd hζd]
@@ -737,7 +739,7 @@ The proof is the paper's (TeX lines 411–443), in the steps `lemma4_step1`, `le
 
 * the ball `B_r (x₀)` of the competitor is taken with `r < 1/2`, so that it embeds in the torus
   (its integer translates are disjoint) and `(c − w)_+`, extended by zero, extends to a
-  `ℤ²`-periodic function (`lem4Periodize`); the paper leaves this implicit;
+  `ℤ²`-periodic function (`supPeriodize`); the paper leaves this implicit;
 * "by changing signs, we may assume `h (x₀) > 0`" is made explicit: for `h (x₀) < 0` the mirror
   cone `c (x) = w (x₀) − ε + H (x − x₀)`, `min {w, c}` and `ζ − (w − c)_+` (`s = −1` in
   `lemma4_step2_core`);

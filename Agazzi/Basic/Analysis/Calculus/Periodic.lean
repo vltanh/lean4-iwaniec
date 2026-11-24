@@ -14,12 +14,12 @@ public import Mathlib.Algebra.Module.ZLattice.Basic
 # Periodic Lipschitz functions on `ℝ^m`: integrals over the unit cube
 
 General facts about `ℤ^m`-periodic functions on `ℝ^m = Fin m → ℝ`, integrated over the open unit
-cube `(0, 1)^m` (`CalculusOfVariations.unitCube m`), a fundamental domain of `ℤ^m`, that is, over the
-torus `ℝ^m / ℤ^m`. They are general and could join the package `CalculusOfVariations`; they are in
-the namespace `Agazzi` so as not to clash with it.
+cube `(0, 1)^m` (`CalculusOfVariations.unitCube m`), a fundamental domain of `ℤ^m`, that is, over
+the torus `ℝ^m / ℤ^m`. They are general and could join the package `CalculusOfVariations`; they are
+in the namespace `Agazzi` so as not to clash with it.
 
-* `setIntegral_unitCube_comp_add`: translation invariance, `∫_Q f (x + a) dx = ∫_Q f (x) dx` for a
-  periodic `f` integrable on `Q`;
+* `setIntegral_unitCube_comp_add`: translation invariance, `∫_Q f (x + a) dx = ∫_Q f (x) dx` for
+  a periodic `f`;
 * `setIntegral_unitCube_fderiv_eq_zero`: `∫_Q ∂_v f = 0` for a periodic Lipschitz `f`;
 * `setIntegral_unitCube_grad_eq_zero`: `∫_Q ∇φ = 0`, entrywise, for a periodic Lipschitz map `φ`;
 * `setIntegral_unitCube_det_add_grad`: the determinant is a null Lagrangian for periodic Lipschitz
@@ -51,14 +51,12 @@ open scoped Pointwise
 
 variable {m : ℕ}
 
--- The integrability hypothesis is not needed: `IsAddFundamentalDomain.setIntegral_eq` holds for
--- every invariant function.
-set_option linter.unusedVariables false in
-/-- Translation invariance of the integral over the torus: for a `ℤ^m`-periodic `f` integrable on
-the unit cube, `∫_{(0,1)^m} f (x + a) dx = ∫_{(0,1)^m} f (x) dx`. -/
+/-- Translation invariance of the integral over the torus: for a `ℤ^m`-periodic `f`,
+`∫_{(0,1)^m} f (x + a) dx = ∫_{(0,1)^m} f (x) dx`. No integrability is needed: two fundamental
+domains carry the same integral of every `ℤ^m`-invariant function
+(`IsAddFundamentalDomain.setIntegral_eq`). -/
 theorem setIntegral_unitCube_comp_add {f : (Fin m → ℝ) → ℝ}
-    (hf : ∀ (x : Fin m → ℝ) (z : Fin m → ℤ), f (x + fun i => (z i : ℝ)) = f x)
-    (hfi : IntegrableOn f (unitCube m)) (a : Fin m → ℝ) :
+    (hf : ∀ (x : Fin m → ℝ) (z : Fin m → ℤ), f (x + fun i => (z i : ℝ)) = f x) (a : Fin m → ℝ) :
     ∫ x in unitCube m, f (x + a) = ∫ x in unitCube m, f x := by
   set b := Pi.basisFun ℝ (Fin m)
   set F : Set (Fin m → ℝ) := Set.pi Set.univ fun _ => Set.Ico (0:ℝ) 1
