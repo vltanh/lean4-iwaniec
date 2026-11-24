@@ -6,6 +6,9 @@ Authors: The-Anh Vu-Le
 module
 
 public import Agazzi.Proof.ScalarProjection.Existence
+public import Agazzi.Basic.Analysis.Convex.SupportFunction
+public import Agazzi.Basic.Analysis.Calculus.Periodic
+public import CalculusOfVariations.Lipschitz.ZeroSet
 
 /-!
 # §2: the scalar projection lemma (Lemma 4)

@@ -7,6 +7,7 @@ module
 
 public import Agazzi.Proof.ScalarProjection.Defs
 public import Agazzi.External.KinderlehrerStampacchia.Projection
+public import Agazzi.Basic.Analysis.Convex.SupportFunction
 
 /-!
 # §2, Lemma 4: the projection exists and satisfies the variational inequality
