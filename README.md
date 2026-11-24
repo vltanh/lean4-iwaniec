@@ -6,10 +6,11 @@ The paper formalized here is A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Ca
 - It claims Iwaniec's conjecture of 1982: the Beurling–Ahlfors transform `𝒮` has norm `p* − 1` on `L^p (ℂ)`, where `p* = max (p, p / (p − 1))`.
 - It deduces the conjecture from the quasiconvexity of an integrand `L` on `ℝ^{2×2}` (Theorem 1). Writing `A z = a₊ z + a₋ z̄`, `L (A) = |a₊|² − |a₋|²` if `|a₊| + |a₋| ≤ 1` and `2|a₊| − 1` otherwise.
 
-Every result of the paper is formalized and proved in Lean 4 with Mathlib, together with the claims of its introduction and proofs that have a precise statement and the results it cites.
+Every result of the paper is formalized and proved in Lean 4 with Mathlib, together with the claims of its introduction and proofs that have a precise statement and the cited results that the paper uses.
 - The proofs follow the paper's arguments or, where the paper only cites, the arguments of the cited sources. Two cited statements are proved by other arguments: Lehto's lower bound, whose source was not available, and Guerra's Theorem 1.1, which follows from the paper's Theorem 1 ([report, Section 2](docs/Agazzi/REPORT.md#2-results-from-prior-work-and-how-the-paper-uses-them)).
-- Not formalized: the extensions that the paper announces for later articles of the series, without precise statements ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)).
-- Nothing has been submitted to Palomar.
+- Not formalized ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)):
+  - the extensions that the paper announces for later articles of the series, without precise statements;
+  - the results that the paper cites only for context, among them the earlier upper bounds for `‖𝒮‖_p` and the earlier quasiconvexity results under sign restrictions.
 
 ## Status
 
@@ -23,7 +24,8 @@ Every result of the paper is formalized and proved in Lean 4 with Mathlib, toget
 | §2, Lemma 3: the row representation of `L` | proved |
 | §2, Lemma 4: the scalar projection lemma | proved |
 | §2, Lemma 4: the uniqueness of the projection (l. 412) | proved |
-| Cited results (Kinderlehrer–Stampacchia, Baernstein–Montgomery-Smith, Guerra, Lehto, Astala) | proved |
+| Cited results that the paper uses (Kinderlehrer–Stampacchia, Baernstein–Montgomery-Smith, Guerra, Lehto, Astala) | proved |
+| Results cited only for context ([report, Section 2](docs/Agazzi/REPORT.md#does-the-paper-use-each-cited-result-correctly)) | not formalized |
 
 ## Main results
 
@@ -105,7 +107,7 @@ To run Comparator (it needs bubblewrap):
 lake env lake comparator --config=palomar/Agazzi/comparator.json
 ```
 
-Palomar's local metadata and source checks pass. Nothing has been submitted.
+Palomar's local metadata and source checks pass.
 
 ## Building
 
@@ -122,7 +124,7 @@ python3 scripts/route_check.py check docs/Agazzi/paper_routes.tsv --accept docs/
 
 | Directory | Contents |
 | --- | --- |
-| [`Agazzi/`](Agazzi) | the Lean code: `Defs.lean` (the definitions of the Challenge), `Bridges.lean`, `Proof/` (§2: Lemma 3, Lemma 4), `Theorem1.lean`, `Hessian.lean` (Theorem 1 for Hessians), `Corollary2/`, `Astala.lean` (Astala's theorem from Corollary 2), `Quasiconvex.lean`; `External/` (the cited results, one directory per source, each with a README). The general lemmas are in the packages (Dependencies) |
+| [`Agazzi/`](Agazzi) | the Lean code: `Defs.lean` (the definitions of the Challenge), `Bridges.lean`, `Proof/` (§2: Lemma 3, Lemma 4), `Theorem1.lean`, `Hessian.lean` (Theorem 1 for Hessians), `Corollary2/`, `Astala.lean` (Astala's theorem from Corollary 2), `Quasiconvex.lean`; `External/` (the cited results that the paper uses, one directory per source, each with a README). The general lemmas are in the packages (Dependencies) |
 | [`palomar/Agazzi/`](palomar/Agazzi) | the Palomar submission |
 | [`docs/Agazzi/`](docs/Agazzi) | [`REPORT.md`](docs/Agazzi/REPORT.md), [`CREDITS.md`](docs/Agazzi/CREDITS.md), the routes of the paper's proofs |
 | [`scripts/`](scripts) | the audit, the route check, the Challenge's copy of the definitions |

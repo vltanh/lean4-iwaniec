@@ -15,8 +15,10 @@ project:
     the norm of the Beurling–Ahlfors transform on L^p(C) is p* − 1, p* = max (p, p/(p − 1)):
     Iwaniec's conjecture of 1982. Also proved: the Hessian case of Theorem 1, the uniqueness of the
     projection in Lemma 4, and Astala's sharp higher integrability of quasiconformal maps as a
-    consequence of Corollary 2, with its sharpness. Everything is proved, including the results the
-    paper cites.
+    consequence of Corollary 2, with its sharpness. The cited results that the paper uses are
+    proved too (Kinderlehrer–Stampacchia, Baernstein–Montgomery-Smith, Guerra, Lehto); the results
+    it cites only for context, such as the earlier upper bounds for the norm and the earlier
+    quasiconvexity results, are not formalized.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -111,12 +113,16 @@ related_formalizations:
 status:
   scope: >-
     Every numbered result of the paper is formalized and proved: Lemma 3, Lemma 4, Theorem 1
-    (also for Lipschitz periodic test maps), Corollary 2 (both assertions), and every result
-    the paper cites. So are the statements of the introduction and of the proofs: the Hessian
+    (also for Lipschitz periodic test maps), Corollary 2 (both assertions), and the cited
+    results that the paper uses: the projection of Kinderlehrer–Stampacchia, the identities, the
+    inequality and remark (b) of Baernstein–Montgomery-Smith, Guerra's Theorem 1.1 and Lehto's
+    lower bound. So are the statements of the introduction and of the proofs: the Hessian
     case of Theorem 1 (also in Guerra's compactly supported form, with the equivalence of the two
     forms), the uniqueness of the projection in Lemma 4, and Astala's higher integrability as a
     consequence of Corollary 2, with its sharpness. Not formalized: the extensions that the paper
-    announces for later articles of the series, without precise statements.
+    announces for later articles of the series, without precise statements, and the results that
+    the paper cites only for context, among them the earlier upper bounds for the norm and the
+    earlier quasiconvexity results under sign restrictions (docs/Agazzi/REPORT.md, Section 2).
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -124,16 +130,23 @@ status:
 automation:
   methods:
     - method: "agent"
+      models: ["Claude Fable 5.2 (claude-fable-5-2)"]
+      framework: "Claude Code 2.1.330 (Claude Agent SDK)"
+      tool_setup: "The main session of Claude Code in the first round, which coordinated it: it gave the task to the lead agent and relayed the author's decisions, launched the independent review of the project documents (one sub-agent, Claude Opus 5.5), wrote the four documents to disk from the lead agent's text, and corrected them after that review."
+      cost:
+        spend_usd: "not tracked"
+      prompting_notes: "The task came from the author's request."
+    - method: "agent"
       models: ["Claude Opus 5.5 (claude-opus-5-5)"]
       framework: "Claude Code 2.1.330 (Claude Agent SDK)"
-      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build. A second round (the planar proof of the upper bound, general code moved into the packages): a lead agent and six sub-agents, one per package task. A third round (the Hessian case, the uniqueness of the projection, Astala's theorem; Sobolev spaces and the Beltrami equation in the packages): a lead agent and six sub-agents, five provers and one statement reviewer."
+      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper). First round: a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build, and one sub-agent that reviewed the documents. A second round (the planar proof of the upper bound, general code moved into the packages): the main session, a lead agent and six sub-agents, one per package task. A third round (the Hessian case, the uniqueness of the projection, Astala's theorem; Sobolev spaces and the Beltrami equation in the packages): the main session, a lead agent and six sub-agents, five provers and one statement reviewer."
       cost:
         wall_time: "about 1.6 hours elapsed from the start to the verified build, and about 4.9 hours of sub-agent time; second round, about 1.7 hours elapsed and 1.2 hours of sub-agent time; third round, about 1.7 hours elapsed and 1.3 hours of sub-agent time (session transcripts)"
         spend_usd: "not tracked"
         hardware: "local machine"
-      prompting_notes: "A coordinating session gave the task; the lead followed the skill's phases and briefed the sub-agents."
+      prompting_notes: "The main session (Claude Fable 5.2 in the first round, Claude Opus 5.5 in the second and the third) gave each round's task; each lead followed the skill's phases and briefed its sub-agents."
   spend_usd: "not tracked"
-  notes: "AI agents wrote the code and the checks; no person has reviewed the proofs."
+  notes: "AI agents wrote the code and the checks; no person has reviewed the proofs. Who did what in each round, with the models and the figures: docs/Agazzi/CREDITS.md in the repository at the submitted commit."
 
 fidelity:
   divergences: >-
@@ -165,8 +178,11 @@ fidelity:
 review:
   status: "agent-reviewed"
   reviewers:
-    - "none"
-  notes: "Independent AI-agent reviews of the statements against the TeX and of the proofs against the paper; no human review."
+    - "a Claude Opus 5.5 sub-agent (first round): the statements against the TeX and the cited sources"
+    - "a Claude Opus 5.5 sub-agent (first round): the proofs against the paper"
+    - "a Claude Opus 5.5 sub-agent (first round): the documents against the TeX, the sources, the code and the literature"
+    - "a Claude Opus 5.5 sub-agent (third round): the new statements against the TeX of the paper and of Guerra's preprint"
+  notes: "Independent AI-agent reviews, each agent starting from the TeX source and not from the provers' notes (docs/Agazzi/CREDITS.md); no human review."
 
 alignment:
   namespace: "AgazziChallenge"

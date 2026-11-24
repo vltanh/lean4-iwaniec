@@ -8,9 +8,9 @@ How this formalization was made, from the run log and the session transcripts.
   project. The main session set the first priority (the quasiconvexity of the Burkholder
   function) and chose the toolchain and the package pins.
 - **Formalization:** AI systems, in one Claude Code session (Claude Code 2.1.330, Claude Agent SDK):
-  - a main session, Claude Fable 5.2, which:
-    - gave the task and relayed decisions;
-    - wrote the four project documents to disk from the lead agent's text, and corrected them after their review;
+  - a main session, which gave each round's task and relayed the author's decisions:
+    - in the first round, Claude Fable 5.2, which also wrote the four project documents to disk from the lead agent's text, and corrected them after their review;
+    - in the second and the third rounds, Claude Opus 5.5;
   - a lead agent, Claude Opus 5.5, which ran the procedure;
   - ten sub-agents launched by the lead, all Claude Opus 5.5;
   - one more sub-agent, Claude Opus 5.5, launched by the main session to review the documents.

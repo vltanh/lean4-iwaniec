@@ -26,8 +26,10 @@ Status of the formalization:
   - the Hessian case of Theorem 1 (l. 285), in the periodic form and in Guerra's compactly supported form, with the equivalence of the two forms (E1);
   - the uniqueness of the projection in Lemma 4 (l. 412);
   - Astala's sharp higher integrability of quasiconformal maps, as a consequence of Corollary 2 (l. 325), with the sharpness of the exponent.
-- Not formalized: the extensions that the paper announces for later articles of the series, without precise statements (Section 9).
-- Every cited result is proved, by the arguments named in Section 2, some of them through the packages: in [`Agazzi/External/`](../../Agazzi/External), and Astala's theorem, as a consequence of Corollary 2, in [`Agazzi/Astala.lean`](../../Agazzi/Astala.lean).
+- Not formalized (Section 9):
+  - the extensions that the paper announces for later articles of the series, without precise statements;
+  - the results that the paper cites only for context (end of Section 2).
+- Every cited result that the paper uses is proved, by the arguments named in Section 2, some of them through the packages: in [`Agazzi/External/`](../../Agazzi/External), and Astala's theorem, as a consequence of Corollary 2, in [`Agazzi/Astala.lean`](../../Agazzi/Astala.lean).
 - `lake build` passes. No `sorry` remains outside the Challenge, and there is no `axiom`.
 - [`scripts/Audit.lean`](../../scripts/Audit.lean) checks that every declaration of the library depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
 - Comparator accepts the Solution against [`palomar/Agazzi/Challenge.lean`](../../palomar/Agazzi/Challenge.lean), under Lean's kernel and under NanoDa.
@@ -298,6 +300,7 @@ The route check compares, for each result, the paper's own numbered results that
 ## 9. Not formalized
 
 - The extensions that the paper announces for later articles of the series, without precise statements (l. 327): to higher dimensions and to the Beurling–Ahlfors transform on forms, to the integrands of Faraco–Székelyhidi, Kirchheim–Székelyhidi and Székelyhidi, and to the Monge–Ampère equation.
+- The results that the paper cites only for context, listed at the end of Section 2, among them the earlier upper bounds for `‖𝒮‖_p` and the earlier quasiconvexity results under sign restrictions. The paper's proofs do not use them.
 - The classical lower bound is proved, but by the argument named in Section 2, not by Lehto's, which was not available.
 
 ## 10. The paper in the literature
@@ -362,7 +365,7 @@ Bibliographic data not verified against the work itself are marked "as in the pa
   - boundedness on `L^p` (will1491/no-wandering-domains, TauCetiProject/TauCeti);
   - the `L²` isometry (openai/math, Tencent-Hunyuan/Hyra-results);
   - statements without proof of Lehto's bound and of Iwaniec's conjecture (facebookresearch/atlas-lean).
-- The cited results are proved here, with the help of three packages: lean4-calculus-of-variations, lean4-harmonic-analysis and lean4-banach-probability (see the README).
+- The cited results that the paper uses are proved here, with the help of three packages: lean4-calculus-of-variations, lean4-harmonic-analysis and lean4-banach-probability (see the README).
 
 ## 11. What's next
 
