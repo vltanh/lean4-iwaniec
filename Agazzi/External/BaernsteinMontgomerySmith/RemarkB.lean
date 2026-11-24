@@ -33,14 +33,19 @@ argument needs: if `∫ |∂f|^p ≤ C^p ∫ |∂̄f|^p` for every smooth compac
 ## Proof
 
 Guerra's argument, in the gradient case, as formalized in the package `HarmonicAnalysis`
-(`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`): for `g` in a dense class,
-its Cauchy transform `f` has `∂̄f = g` and `∂f = 𝒮 g`, the inequality applied to `η_R f` passes to
-the limit `R → ∞`, and density carries the bound to every Schwartz `g`. The package takes as dense
-class the Schwartz functions whose Fourier transform is compactly supported in `ℂ ∖ {0}`
-(Hytönen–van Neerven–Veraar–Weis, Prop. 2.4.23 (ii)), whose Cauchy transforms are Schwartz
-functions, in place of Guerra's `C_c^∞`, and uses the Cauchy transform in place of the logarithmic
-potential of the Hessian case; its docstrings give the reasons and the details. Here the integral
-inequality is turned into the inequality of `L^p` norms that the package's statement takes.
+(`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`):
+* the dense class `C_c^∞`: for `g ∈ C_c^∞`, its Cauchy transform
+  `f (z) = (1/π) ∫ g (w) / (z − w) dw` has `∂̄f = g` (the Cauchy–Pompeiu formula), `∂f = 𝒮 g`
+  (Liouville's theorem for `∂f − 𝒮 g`), `f = O (1/|z|)` and `∂f = O (1/|z|²)`;
+* the inequality is applied to `η_R f`, with Guerra's cut-offs `η_R`, and `R → ∞`;
+* density carries the bound to every Schwartz `g`.
+
+The one departure from Guerra's text is forced: Guerra treats Hessians of real functions, with the
+logarithmic potential, while the norm on complex `L^p` needs the gradient case, with the Cauchy
+transform. Guerra's "by density" presupposes the boundedness of `𝒮` on `L^p`, which the package
+does not prove; its density step uses the convergence of the Fourier transforms in `L¹` and
+Fatou's lemma instead. Here the integral inequality is turned into the inequality of `L^p` norms
+that the package's statement takes.
 -/
 
 @[expose] public section
@@ -107,7 +112,7 @@ the Beurling–Ahlfors transform on `L^p (ℂ)` is at most `C`, `1 < p < ∞`.
 Proof: Guerra's passage to `L^p (ℂ)` (arXiv:2608.23388, proof of `cor:beurling-lp`), in the
 gradient case, as formalized in the package `HarmonicAnalysis`
 (`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`; the module docstring
-gives its departures from Guerra's proof). -/
+says how it follows Guerra's proof). -/
 theorem remark_b {p : ℝ} (hp : 1 < p) {C : ℝ} (hC : 0 ≤ C)
     (h : ∀ f : ℂ → ℂ, ContDiff ℝ ∞ f → HasCompactSupport f →
       ∫ z, ‖HarmonicAnalysis.dz f z‖ ^ p ≤ C ^ p * ∫ z, ‖HarmonicAnalysis.dzbar f z‖ ^ p) :

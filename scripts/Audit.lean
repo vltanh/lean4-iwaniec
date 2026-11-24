@@ -13,6 +13,7 @@ public meta import Lean.DocString
 -- lists every paper's modules and `Common/`, and the second `find` every paper's Solution.
 import all Agazzi.Bridges
 import all Agazzi.Corollary2.Norm
+import all Agazzi.Corollary2.NormTorus
 import all Agazzi.Corollary2.Quasiconvexity
 import all Agazzi.Defs
 import all Agazzi.External.BaernsteinMontgomerySmith.Basic
@@ -83,6 +84,11 @@ meta def paperResults : List (String × Name) :=
    ("Cor 2 (b)", ``Agazzi.corollary2_norm),
    ("Lemma 3", ``Agazzi.lemma3),
    ("Lemma 4", ``Agazzi.lemma4)]
+
+/-- Alternative proofs of results of the paper, kept beside the paper's route and not used by it:
+audited and listed in the table, but not part of the routes. -/
+meta def alternativeProofs : List (String × Name) :=
+  [("Cor 2 (b), upper bound, alternative proof (torus)", ``Agazzi.beurlingNorm_le_of_torus)]
 
 /-- The theorems that Palomar's comparator checks (`theorem_names` of
 `palomar/PaperName/comparator.json`), as the Solution restates them. -/
@@ -195,6 +201,14 @@ elab "#audit" : command => do
   let mut rows : Array String := #["| Result | Lean | Results from prior work used | Axioms |",
     "| --- | --- | --- | --- |"]
   for (label, n) in paperResults do
+    let axs ← liftCoreM <| collectAxioms n
+    if axs.any (!standardAxioms.contains ·) then bad := bad.push n
+    let (uses, deps') := externalUses env library deps n
+    deps := deps'
+    let usesStr := if uses.isEmpty then "–" else ", ".intercalate (uses.map fun u => s!"`{u}`")
+    let axStr := ", ".intercalate (axs.toList.map toString)
+    rows := rows.push s!"| {label} | `{n}` | {usesStr} | {axStr} |"
+  for (label, n) in alternativeProofs do
     let axs ← liftCoreM <| collectAxioms n
     if axs.any (!standardAxioms.contains ·) then bad := bad.push n
     let (uses, deps') := externalUses env library deps n

@@ -54,18 +54,20 @@ TeX, with the cut-offs of the proof of `cor:beurling`).
    (`External.BaernsteinMontgomerySmith.remark_b`). Its proof is general harmonic analysis, in the
    package `HarmonicAnalysis`
    (`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`): density, a potential,
-   the cut-offs `η_R` of Guerra's proof, and the limit. The package follows Guerra in the gradient
-   case (the Cauchy transform `f` of `g`, with `∂̄f = g` and `∂f = 𝒮g`, in place of the logarithmic
-   potential of a real `h`) and takes as dense class the Schwartz functions whose Fourier transform
-   is compactly supported off `0` (Hytönen–van Neerven–Veraar–Weis, Prop. 2.4.23 (ii)), whose
-   Cauchy transforms are Schwartz functions, in place of Guerra's `C_c^∞`. This repair along
-   Guerra's lines is described in the package's docstrings.
+   the cut-offs `η_R` of Guerra's proof, and the limit. The package follows Guerra's proof, with
+   Guerra's dense class `C_c^∞`, in the gradient case: the Cauchy transform
+   `f (z) = (1/π) ∫ g (w) / (z − w) dw` of `g`, with `∂̄f = g` and `∂f = 𝒮g`, in place of the
+   logarithmic potential of a real `h`, a departure that the norm on complex `L^p` forces.
 
 Steps 2 and 3 are Baernstein–Montgomery-Smith's passage from their Conjecture 2 to their
 Conjecture 3; their passage from Conjecture 1 to Conjecture 2, through the Mellin identities, is
 the first assertion of Corollary 2 (`corollary2_lipschitz`), which step 1 brings to the plane.
 Step 4 is the argument of their remark (b), as Guerra details it. No step uses the torus beyond
 Corollary 2 itself.
+
+A shorter proof of the upper bound, through the torus and transference, is kept beside this one
+and not used by `corollary2_norm` (`Agazzi.beurlingNorm_le_of_torus`, in
+`Agazzi.Corollary2.NormTorus`).
 -/
 
 @[expose] public section
