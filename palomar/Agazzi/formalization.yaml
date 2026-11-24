@@ -154,11 +154,11 @@ fidelity:
     h and its logarithmic potential); Guerra's "by density", which presupposes the L^p-boundedness
     of the transform, is made by Fatou's lemma with the convergence of the Fourier transforms in
     L¹. A shorter proof of the upper bound, on the torus and by transference (Hytönen–van
-    Neerven–Veraar–Weis, Cor. 5.7.6), is kept beside it and not used. Astala's theorem follows
-    from Corollary 2 (b) by Iwaniec's derivation, in the package HarmonicAnalysis; Guerra's
-    Theorem 1.1 is proved from Theorem 1, not by Guerra's argument, and Lehto's lower bound by
-    Dragičević's case n = 1 and duality, not by Lehto's argument. Gaps of the paper
-    filled: the closedness of the constraint set in L²(Q), the periodization of the ball in
+    Neerven–Veraar–Weis, Cor. 5.7.6), is in the library; the results do not use it. Astala's
+    theorem follows from Corollary 2 (b) by Iwaniec's derivation, in the package
+    HarmonicAnalysis; Guerra's Theorem 1.1 is proved from Theorem 1, not by Guerra's argument,
+    and Lehto's lower bound by Dragičević's case n = 1 and duality, not by Lehto's argument. Gaps
+    of the paper filled: the closedness of the constraint set in L²(Q), the periodization of the ball in
     Lemma 4, the sign change, the passage of the BMS arguments to periodic maps at every A and
     back to the plane for the norm.
 

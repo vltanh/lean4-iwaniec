@@ -22,13 +22,12 @@ Status of the formalization:
   - Theorem 1;
   - both assertions of Corollary 2.
 - Theorem 1 and the first assertion of Corollary 2 are also proved for Lipschitz periodic test maps.
-- The statements of the introduction and of the proofs are proved too:
+- The claims of the introduction and of the proofs that have a precise statement are proved:
   - the Hessian case of Theorem 1 (l. 285), in the periodic form and in Guerra's compactly supported form, with the equivalence of the two forms (E1);
   - the uniqueness of the projection in Lemma 4 (l. 412);
   - Astala's sharp higher integrability of quasiconformal maps, as a consequence of Corollary 2 (l. 325), with the sharpness of the exponent.
 - Not formalized: the extensions that the paper announces for later articles of the series, without precise statements (Section 9).
 - Every cited result is proved, by the arguments named in Section 2, some of them through the packages: in [`Agazzi/External/`](../../Agazzi/External), and Astala's theorem, as a consequence of Corollary 2, in [`Agazzi/Astala.lean`](../../Agazzi/Astala.lean).
-- Nothing is assumed: the formalization is unconditional.
 - `lake build` passes. No `sorry` remains outside the Challenge, and there is no `axiom`.
 - [`scripts/Audit.lean`](../../scripts/Audit.lean) checks that every declaration of the library depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
 - Comparator accepts the Solution against [`palomar/Agazzi/Challenge.lean`](../../palomar/Agazzi/Challenge.lean), under Lean's kernel and under NanoDa.
@@ -266,7 +265,7 @@ One departure from Guerra's text is forced: Guerra proves a bound for Hessians o
 
 Their gradient analogues are proved in the package, the last one by Liouville's theorem. Guerra's "by density" presupposes that `𝒮` is bounded on `L^p`, which the package does not prove; its density step uses the convergence of the Fourier transforms in `L¹` and Fatou's lemma instead.
 
-A shorter proof of the upper bound, on the torus and by transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6), is kept beside the planar one and not used by [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378) (Section 11).
+A shorter proof of the upper bound, on the torus and by transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6), is [`beurlingNorm_le_of_torus`](../../Agazzi/Corollary2/NormTorus.lean#L355); [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378) does not use it (Section 11).
 
 Every proof follows its source step by step. Only the following differ, and only in mechanics:
 - In Lemma 4, the sup norm of `Fin 2 → ℝ` is used inside the proof (balls, `ρ`), in place of the Euclidean norm, with the constants adjusted.
@@ -388,7 +387,7 @@ Each was checked on paper only, except where noted.
 - **The convexity of `F`** is immediate from its definition as a supremum of the affine functions `G_z`.
 - **Theorem 1 for `|A| > 1`.** The chain `L (A) = sup_z G_z (A) = sup_z ∫_Q G_z (Du) ≤ ∫_Q L (Du)` skips `F`.
 - **Lehto's lower bound.** Duality, `‖𝒮‖_p = ‖𝒮‖_{p'}`, replaces the second family `f̄_α`. The formalization uses it.
-- **The upper bound `‖𝒮‖_p ≤ p* − 1` on the torus.** The paper's Corollary 2 is periodic, so the bound can be proved on the torus and transferred to the plane. Corollary 2 at `A = 0` and Burkholder's inequality give `‖∂u‖_{L^p (Q)} ≤ (p* − 1) ‖∂̄u‖_{L^p (Q)}` for smooth periodic `u`, hence the bound on `L^p_0 (𝕋²)`, and transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6, in lean4-harmonic-analysis) gives `L^p (ℂ)`. It needs none of the planar tools: neither the Cauchy transform nor the cut-offs. This one is checked in Lean: [`beurlingNorm_le_of_torus`](../../Agazzi/Corollary2/NormTorus.lean#L355), in [`Agazzi/Corollary2/NormTorus.lean`](../../Agazzi/Corollary2/NormTorus.lean), kept beside the paper's route and not used by [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378).
+- **The upper bound `‖𝒮‖_p ≤ p* − 1` on the torus.** The paper's Corollary 2 is periodic, so the bound can be proved on the torus and transferred to the plane. Corollary 2 at `A = 0` and Burkholder's inequality give `‖∂u‖_{L^p (Q)} ≤ (p* − 1) ‖∂̄u‖_{L^p (Q)}` for smooth periodic `u`, hence the bound on `L^p_0 (𝕋²)`, and transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6, in lean4-harmonic-analysis) gives `L^p (ℂ)`. It needs none of the planar tools: neither the Cauchy transform nor the cut-offs. This one is checked in Lean: [`beurlingNorm_le_of_torus`](../../Agazzi/Corollary2/NormTorus.lean#L355), in [`Agazzi/Corollary2/NormTorus.lean`](../../Agazzi/Corollary2/NormTorus.lean); [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378) follows the paper's route instead.
 - **Guerra's passage with another dense class.** The Schwartz functions whose Fourier transform is compactly supported off `0` (Hytönen–van Neerven–Veraar–Weis, Prop. 2.4.23 (ii)) have Schwartz Cauchy transforms, built on the Fourier side, so the cut-off step needs neither the kernel nor its estimates. This was checked in Lean; lean4-harmonic-analysis records it among its shorter proofs.
 
 ### The formalization

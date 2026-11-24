@@ -4,12 +4,7 @@ The paper formalized here is A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Ca
 - It claims Iwaniec's conjecture of 1982: the Beurling–Ahlfors transform `𝒮` has norm `p* − 1` on `L^p (ℂ)`, where `p* = max (p, p / (p − 1))`.
 - It deduces the conjecture from the quasiconvexity of an integrand `L` on `ℝ^{2×2}` (Theorem 1). Writing `A z = a₊ z + a₋ z̄`, `L (A) = |a₊|² − |a₋|²` if `|a₊| + |a₋| ≤ 1` and `2|a₊| − 1` otherwise.
 
-Every result of the paper is formalized and proved, in Lean 4 with Mathlib, and so are the statements of its introduction and proofs:
-- the Hessian case of Theorem 1, in its periodic form and in the compactly supported form of Guerra, and the equivalence of the two forms;
-- the uniqueness of the projection in Lemma 4;
-- Astala's sharp higher integrability of quasiconformal maps, as a consequence of Corollary 2, with the sharpness of the exponent.
-
-This includes the results the paper cites, and nothing is assumed.
+Every result of the paper is formalized and proved in Lean 4 with Mathlib, together with the claims of its introduction and proofs that have a precise statement and the results it cites.
 - The proofs follow the paper's arguments or, where the paper only cites, the arguments of the cited sources. Two cited statements are proved by other arguments: Lehto's lower bound, whose source was not available, and Guerra's Theorem 1.1, which follows from the paper's Theorem 1 ([report, Section 2](docs/Agazzi/REPORT.md#2-results-from-prior-work-and-how-the-paper-uses-them)).
 - Not formalized: the extensions that the paper announces for later articles of the series, without precise statements ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)).
 - No Palomar preflight has been run, and nothing has been submitted.
@@ -75,7 +70,7 @@ It also states the two values of `p* − 1`.
 
 The audit found no error and no missing hypothesis. Its findings are E1–E5 above and the typos (E6). E2, E3 and E5 are gaps, each filled in Lean; E1 concerns a remark of the introduction, and the equivalence of the two forms is proved in Lean. See the [report](docs/Agazzi/REPORT.md).
 
-The proofs follow the paper's arguments, and those of the cited sources where the paper only cites them. The upper bound for `‖𝒮‖_p` follows the planar argument of Baernstein–Montgomery-Smith, from their Conjecture 2 to the norm, and Guerra's passage to `L^p (ℂ)` with cut-offs, in the gradient case ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)). A shorter proof of the upper bound, on the torus and by transference, is kept beside it and not used by the paper's results ([`Agazzi.beurlingNorm_le_of_torus`](Agazzi/Corollary2/NormTorus.lean); [report, Section 11](docs/Agazzi/REPORT.md#11-whats-next)). Astala's theorem follows from `‖𝒮‖_p = p − 1`, `p ≥ 2`, by Iwaniec's derivation (1982): a cut-off, `∂g = 𝒮 ∂̄g` for compactly supported `g ∈ W^{1,2}`, and a Neumann series for the Beltrami equation on `L^p`, compared with its `L²` solution, in the package HarmonicAnalysis.
+The proofs follow the paper's arguments, and those of the cited sources where the paper only cites them. The upper bound for `‖𝒮‖_p` follows the planar argument of Baernstein–Montgomery-Smith, from their Conjecture 2 to the norm, and Guerra's passage to `L^p (ℂ)` with cut-offs, in the gradient case ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)). A shorter proof of the upper bound, on the torus and by transference, is [`Agazzi.beurlingNorm_le_of_torus`](Agazzi/Corollary2/NormTorus.lean); the paper's results do not use it ([report, Section 11](docs/Agazzi/REPORT.md#11-whats-next)). Astala's theorem follows from `‖𝒮‖_p = p − 1`, `p ≥ 2`, by Iwaniec's derivation (1982): a cut-off, `∂g = 𝒮 ∂̄g` for compactly supported `g ∈ W^{1,2}`, and a Neumann series for the Beltrami equation on `L^p`, compared with its `L²` solution, in the package HarmonicAnalysis.
 
 ## Trust
 
@@ -90,11 +85,9 @@ The proofs follow the paper's arguments, and those of the cited sources where th
 | Library | Pin | Used for |
 | --- | --- | --- |
 | Mathlib | `v4.36.0-rc2` | everything |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `a3778e4`, by local path | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps; the general toolkit of Lemma 4 and Theorem 1 (periodic integrals, derivatives of Lipschitz functions, gradient constraints, support functions, periodization); the equivalence of periodic and compactly supported Hessian test functions |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `4c9fb08`, by local path | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, duality, the case `n = 1` of Dragičević's lower bound; the Cauchy transform of `C_c^∞` functions and the passage from `C_c^∞` to the norm by Guerra's cut-offs; weak derivatives, mollification and Sobolev's embedding in the plane, `𝒮` on `L²` and on `L² ∩ L^p`, the higher integrability of solutions of the Beltrami equation, the radial stretch; torus multipliers and transference (for the shorter proof on the torus) |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `a3778e4` | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps; the general toolkit of Lemma 4 and Theorem 1 (periodic integrals, derivatives of Lipschitz functions, gradient constraints, support functions, periodization); the equivalence of periodic and compactly supported Hessian test functions |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `4c9fb08` | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, duality, the case `n = 1` of Dragičević's lower bound; the Cauchy transform of `C_c^∞` functions and the passage from `C_c^∞` to the norm by Guerra's cut-offs; weak derivatives, mollification and Sobolev's embedding in the plane, `𝒮` on `L²` and on `L² ∩ L^p`, the higher integrability of solutions of the Beltrami equation, the radial stretch; torus multipliers and transference (for the shorter proof on the torus) |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `dc3966c` | Burkholder's function and its majorization |
-
-The first two packages are required by local path (`../lean4-calculus-of-variations`, `../lean4-harmonic-analysis`), at the commits shown, until those commits are published; a build needs the two clones next to this repository.
 
 ## Palomar
 
