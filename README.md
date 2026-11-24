@@ -1,5 +1,7 @@
 # Iwaniec's conjecture in Lean: the quasiconvexity of `L` and the `L^p` norm of the Beurling–Ahlfors transform
 
+[![Lean Action CI](https://github.com/vltanh/lean4-iwaniec/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/vltanh/lean4-iwaniec/actions/workflows/lean_action_ci.yml)
+
 The paper formalized here is A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Cassese, D. Faraco, A. Guerra, M. Hormozi, B. Kirchheim, A. Koski, V. Kovač, J. Kristensen, F. Pasqualotto, I. Prause, E. Saksman, V. Šverák, L. Székelyhidi, R. Tione, A. Volberg and H. Yang, *Sharp higher integrability theory, Part I: the `L^p`-norm of the Beurling–Ahlfors transform*, [arXiv:2609.28311v2](https://arxiv.org/abs/2609.28311) (preprint, October 2026).
 - It claims Iwaniec's conjecture of 1982: the Beurling–Ahlfors transform `𝒮` has norm `p* − 1` on `L^p (ℂ)`, where `p* = max (p, p / (p − 1))`.
 - It deduces the conjecture from the quasiconvexity of an integrand `L` on `ℝ^{2×2}` (Theorem 1). Writing `A z = a₊ z + a₋ z̄`, `L (A) = |a₊|² − |a₋|²` if `|a₊| + |a₋| ≤ 1` and `2|a₊| − 1` otherwise.
@@ -7,7 +9,7 @@ The paper formalized here is A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Ca
 Every result of the paper is formalized and proved in Lean 4 with Mathlib, together with the claims of its introduction and proofs that have a precise statement and the results it cites.
 - The proofs follow the paper's arguments or, where the paper only cites, the arguments of the cited sources. Two cited statements are proved by other arguments: Lehto's lower bound, whose source was not available, and Guerra's Theorem 1.1, which follows from the paper's Theorem 1 ([report, Section 2](docs/Agazzi/REPORT.md#2-results-from-prior-work-and-how-the-paper-uses-them)).
 - Not formalized: the extensions that the paper announces for later articles of the series, without precise statements ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)).
-- No Palomar preflight has been run, and nothing has been submitted.
+- Nothing has been submitted to Palomar.
 
 ## Status
 
@@ -103,7 +105,7 @@ To run Comparator (it needs bubblewrap):
 lake env lake comparator --config=palomar/Agazzi/comparator.json
 ```
 
-Palomar's local metadata and source checks pass. Nothing has been submitted, and the preflight workflow has not been run.
+Palomar's local metadata and source checks pass. Nothing has been submitted.
 
 ## Building
 
