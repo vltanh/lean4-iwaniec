@@ -32,7 +32,7 @@ Results marked (C) are stated in the Challenge, [`palomar/Agazzi/Challenge.lean`
 | Corollary 2 (b) (C) | [`Agazzi.corollary2_norm`](Agazzi/Corollary2/Norm.lean#L262) | `‖𝒮‖_{L^p (ℂ) → L^p (ℂ)} = p* − 1` for `1 < p < ∞` |
 | Lemma 3 | [`Agazzi.lemma3`](Agazzi/Proof/RowRepresentation.lean#L220) | `L (A) = sup_{z ∈ 𝒵 (A¹)} G_z (A¹, A²)` |
 | Lemma 4 | [`Agazzi.lemma4_exists`](Agazzi/Proof/ScalarProjection/Existence.lean#L198), [`Agazzi.lemma4`](Agazzi/Proof/ScalarProjection/Main.lean#L748) | the `L² (Q)`-projection on a gradient-constrained class exists, and satisfies `Dw = Dv` or `Dw ∈ ∂K` a.e. and `∫_Q Dw · (Dv − Dw) ≥ 0` |
-| (quasiconvexity in the sense of the package CalculusOfVariations) | [`Agazzi.quasiconvex_integrandL`](Agazzi/Quasiconvex.lean#L69), [`Agazzi.quasiconvex_burkholderB`](Agazzi/Quasiconvex.lean#L75), [`Agazzi.quasiconvex_burkholder`](Agazzi/Quasiconvex.lean#L83) | `L`, and `B_p` for `1 < p < ∞`, are quasiconvex for Lipschitz test maps vanishing outside the unit cube; for `1 < p < 2`, so is `(\|a₊\| − (p − 1)\|a₋\|)(\|a₊\| + \|a₋\|)^{p−1}` |
+| (quasiconvexity in the sense of the package CalculusOfVariations) | [`Agazzi.quasiconvex_integrandL`](Agazzi/Quasiconvex.lean#L68), [`Agazzi.quasiconvex_burkholderB`](Agazzi/Quasiconvex.lean#L74), [`Agazzi.quasiconvex_burkholder`](Agazzi/Quasiconvex.lean#L82) | `L`, and `B_p` for `1 < p < ∞`, are quasiconvex for Lipschitz test maps vanishing outside the unit cube; for `1 < p < 2`, so is `(\|a₊\| − (p − 1)\|a₋\|)(\|a₊\| + \|a₋\|)^{p−1}` |
 
 The Challenge also states four compared theorems, all proved:
 - `det A = |a₊|² − |a₋|²`;
@@ -47,10 +47,6 @@ It also states the two values of `p* − 1`.
 - It defines `‖𝒮‖_p` as the supremum of `‖𝒮 f‖_p / ‖f‖_p` over Schwartz functions, which are dense in `L^p`.
 - The package HarmonicAnalysis proves that this supremum is the norm of the bounded extension (`HarmonicAnalysis.enorm_eq_multiplierNorm`). The Challenge does not restate that bridge.
 - The torus `Q = ℝ² / ℤ²` is represented by `ℤ²`-periodic maps on `ℝ²`, with integrals over the open unit square.
-
-**lean4-morrey.** [`Agazzi.quasiconvex_burkholder`](Agazzi/Quasiconvex.lean#L83) is, by definitional unfolding, `CalculusOfVariations.Quasiconvex (HomogeneousIsotropic.burkholderCoord p)`, `1 < p < 2`, for the coordinate form `burkholderCoord` of the Burkholder function in the library `HomogeneousIsotropic` of [lean4-morrey](https://github.com/vltanh/lean4-morrey).
-- lean4-morrey requires this project and uses that theorem, and [`Agazzi.opNorm_eq`](Agazzi/Bridges.lean#L139) for the operator norm.
-- With it, a nonnegative, isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is quasiconvex for every `p > 0` (`HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_pos`), with no hypothesis on the Burkholder function.
 
 ## What the audit found
 
@@ -82,8 +78,6 @@ The proofs follow the paper's, except the passage from the torus to the plane in
 | [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `b7a207a` | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps |
 | [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `90f1e01` | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, torus multipliers, transference, duality, the density lemma |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `dc3966c` | Burkholder's function and its majorization |
-
-These are the pins of lean4-morrey, so that lean4-morrey can require this project.
 
 ## Palomar
 

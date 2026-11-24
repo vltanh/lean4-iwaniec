@@ -25,8 +25,7 @@ name = "HarmonicAnalysis"
 git = "https://github.com/vltanh/lean4-harmonic-analysis"
 rev = "90f1e01a8e8c8e14f504926a26bd57b4f0729ac4"
 
-# Burkholder's function. Pinned at the revision that lean4-morrey pins, so that the two projects
-# share one build of HarmonicAnalysis (which requires an older revision).
+# Burkholder's function. Pinned at an older revision, which the HarmonicAnalysis pin above requires.
 [[require]]
 name = "BanachProbability"
 git = "https://github.com/vltanh/lean4-banach-probability"

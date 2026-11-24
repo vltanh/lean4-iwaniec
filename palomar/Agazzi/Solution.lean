@@ -10,8 +10,8 @@ public import Agazzi.Quasiconvex
 Each theorem restates the Challenge's word for word and proves it from the library: Theorem 1 is
 `Agazzi.theorem1`, Corollary 2 is `Agazzi.corollary2` and `Agazzi.corollary2_norm`, and the compared
 theorems are in `Agazzi.Bridges`. The module is also the entry point of the library: it imports
-every module that the main results use, and `Agazzi.Quasiconvex`, the form of Corollary 2 that
-lean4-morrey uses.
+every module that the main results use, and `Agazzi.Quasiconvex`, Theorem 1 and Corollary 2 as
+quasiconvexity in the sense of `CalculusOfVariations`.
 -/
 
 @[expose] public section
