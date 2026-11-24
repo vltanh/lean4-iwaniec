@@ -5,7 +5,8 @@ The paper formalized here is A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Ca
 - It deduces the conjecture from the quasiconvexity of an integrand `L` on `ℝ^{2×2}` (Theorem 1). Writing `A z = a₊ z + a₋ z̄`, `L (A) = |a₊|² − |a₋|²` if `|a₊| + |a₋| ≤ 1` and `2|a₊| − 1` otherwise.
 
 Every result of the paper is formalized and proved, in Lean 4 with Mathlib. This includes the results the paper cites, and nothing is assumed.
-- The proofs follow the paper's, with one departure, which is waiting for the author's decision ([report, Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
+- The proofs follow the paper's, with one departure, which is waiting for the maintainer's decision ([report, Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
+- Not formalized: the remarks of the introduction (Astala's area distortion as a consequence; the extensions to forms, to higher dimensions and to other integrands; the attribution of the Hessian case to Guerra), and the uniqueness of the projection, which no proof needs ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)).
 - No Palomar preflight has been run, and nothing has been submitted.
 
 ## Status
@@ -21,7 +22,7 @@ Every result of the paper is formalized and proved, in Lean 4 with Mathlib. This
 
 ## Main results
 
-Results marked (C) are theorems of the Challenge, [`palomar/Agazzi/Challenge.lean`](palomar/Agazzi/Challenge.lean).
+Results marked (C) are stated in the Challenge, [`palomar/Agazzi/Challenge.lean`](palomar/Agazzi/Challenge.lean), as `AgazziChallenge.<name>`, and proved in [`Solution.lean`](palomar/Agazzi/Solution.lean) from the library theorem shown.
 
 | Paper | Lean | Statement |
 | --- | --- | --- |
@@ -55,20 +56,21 @@ It also states the two values of `p* − 1`.
 
 | | Finding |
 | --- | --- |
-| E2 | Corollary 2 is not proved in the paper; the cited arguments work on the plane at `A = 0`, and the periodic case at every `A`, the case `p = 2` and the passage from the torus to `L^p (ℂ)` are left implicit |
+| E2 | Corollary 2 is proved by reference to arguments made on the plane; the periodic case at every `A`, the case `p = 2` and the passage from the torus to `L^p (ℂ)` are left implicit |
 | E3 | Lemma 4: the closedness in `L² (Q)` of the constraint class is asserted without argument |
-| E1 | the attribution of the Hessian case to Guerra (arXiv:2608.23388): the theorem there is for compactly supported `u` on `ℝ²`, which is equivalent but not the periodic statement written |
-| E4, E5 | Lemma 4: the sign change, and the ball that must embed in the torus, are left implicit |
+| E5 | Lemma 4: the ball of the construction must embed in the torus |
+| E1 | a remark: the Hessian case is attributed to Guerra (arXiv:2608.23388), where it is stated for compactly supported `u` on `ℝ²`, an equivalent form |
+| E4 | a remark: the sign change in Lemma 4 is left implicit |
 
-The audit found no error and no missing hypothesis: six findings in all, the four rows above and the typos (E6). Each gap is filled in Lean; see the [report](docs/Agazzi/REPORT.md).
+The audit found no error and no missing hypothesis. Its findings are E1–E5 above and the typos (E6). E2, E3 and E5 are gaps, each filled in Lean; E1 concerns a remark of the introduction, which is not formalized. See the [report](docs/Agazzi/REPORT.md).
 
-The proofs follow the paper's, except the passage from the torus to the plane in the upper bound for `‖𝒮‖_p`. That passage uses transference instead of the planar argument of the cited sources. It was chosen for economy, it is not forced, and it waits for the author's decision ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
+The proofs follow the paper's, except the passage from the torus to the plane in the upper bound for `‖𝒮‖_p`. That passage uses transference instead of the planar argument of the cited sources. It was chosen for economy, it is not forced, and it waits for the maintainer's decision ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
 
 ## Trust
 
 - `lake build` passes. No `sorry` remains outside the Challenge, where they are there by design, and there is no `axiom` and no `native_decide`.
 - [`scripts/Audit.lean`](scripts/Audit.lean) checks every declaration of the library: each depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
-- The route check ([`scripts/route_check.py`](scripts/route_check.py)) compares the results that each formal proof uses with those that the paper's proof cites in the TeX source. It finds no difference.
+- The route check ([`scripts/route_check.py`](scripts/route_check.py)) compares, for each result, the paper's own numbered results that its formal proof uses with those that the paper's proof cites in the TeX source. It finds no difference. It does not compare results from the literature.
 - Comparator accepts the Solution under Lean's kernel and under NanoDa.
 - AI agents reviewed the statements against the TeX source, and the proofs against the paper, independently of the provers. No person has reviewed the proofs.
 

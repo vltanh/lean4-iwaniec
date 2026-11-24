@@ -9,15 +9,20 @@ How this formalization was made, from the run log and the session transcripts.
   session set the first priority (the quasiconvexity of the Burkholder function for `1 < p < 2`)
   and chose the toolchain and the packages, those of lean4-morrey.
 - **Formalization:** AI systems, in one Claude Code session (Claude Code 2.1.330, Claude Agent SDK):
-  - a main session, Claude Fable 5.2, which gave the task, relayed decisions, checked the composition with lean4-morrey, and wrote the four project documents to disk from the lead agent's text;
+  - a main session, Claude Fable 5.2, which:
+    - gave the task and relayed decisions;
+    - checked the composition with lean4-morrey;
+    - wrote the four project documents to disk from the lead agent's text, and corrected them after their review;
   - a lead agent, Claude Opus 5.5, which ran the procedure;
-  - ten sub-agents launched by the lead, all Claude Opus 5.5.
+  - ten sub-agents launched by the lead, all Claude Opus 5.5;
+  - one more sub-agent, Claude Opus 5.5, launched by the main session to review the documents.
 
   There was no earlier draft.
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill. The local copy used is not a git checkout, so its commit is not recorded.
 - **Review:** no person has reviewed the proofs. Independent agents, each starting from the TeX source and not from the provers' notes, checked:
   - the statements against the TeX and against the cited sources;
-  - the proofs against the paper.
+  - the proofs against the paper;
+  - the documents against the TeX, the sources on disk, the code and the literature.
 
 ## First formalization (23 November 2026)
 
@@ -51,10 +56,14 @@ How it was made:
   The route check still passed.
 - **Phase 8–9.**
   - The lead prepared the Palomar metadata and workflows; Palomar's local checks pass.
-  - The harness kept sub-agents from writing report files, so the lead returned the text of [`README.md`](../../README.md), [`docs/Agazzi/REPORT.md`](REPORT.md), this file and `NEXT.md` in its hand-back, and the main session wrote them to disk.
+  - The harness kept sub-agents from writing report files. So, after its hand-back, the lead returned the text of the four documents in a second hand-back, an independent sub-agent reviewed them, and the main session wrote them to disk and applied the review. The four documents:
+    - [`README.md`](../../README.md);
+    - [`docs/Agazzi/REPORT.md`](REPORT.md);
+    - this file;
+    - `NEXT.md`.
   - The repository was published on GitHub at the author's request, so that lean4-morrey can require it. No preflight was run.
 
-Figures, from the start (23 November 2026, 19:44 CST) to the lead's hand-back (21:25 CST). The commit that completes [`REPORT.md`](REPORT.md), written later by the main session, is not included. They come from `session_stats.py` on the session's transcripts:
+Figures, from the start (23 November 2026, 19:44 CST) to the lead's first hand-back (21:25 CST), which ended the Lean work. The later work on the documents is not included. They come from `session_stats.py` on the session's transcripts:
 - **Elapsed time:** 1.67 h (first event 19:44:39 CST, last 21:24:56 CST).
 - **Sub-agents:**
   - 13 in the transcripts: this project's eleven (the lead and the ten it launched, all Claude Opus 5.5), and two that the main session ran for lean4-morrey in the same window (Claude Fable 5.2);
@@ -67,7 +76,7 @@ Figures, from the start (23 November 2026, 19:44 CST) to the lead's hand-back (2
   - Claude Opus 5.5: 618, all in this project's agents.
 
 What the figures leave out or include beyond this project:
-- the work after 21:25 CST: the lead's writing of these documents as text, their independent review, and the main session's writing them to disk;
+- the work after 21:25 CST: the lead's writing of the documents as text, their independent review (one more sub-agent on Claude Opus 5.5), and the main session's writing them to disk and correcting them;
 - the main session's own work in the same window on lean4-morrey, and its two sub-agents there, which the figures include;
 - pauses;
 - cost, which was not tracked.

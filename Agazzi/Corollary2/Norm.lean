@@ -52,9 +52,9 @@ compactly supported test maps to `L^p (ℂ)` with a logarithmic potential and cu
 paper does not say how its periodic inequality reaches `L^p (ℂ)`. The formalization replaces that
 planar passage by the bound on the torus and transference (Hytönen–van Neerven–Veraar–Weis,
 Corollary 5.7.6, as in the package `HarmonicAnalysis`). Reason: economy (the planar route needs the
-Cauchy transform of Schwartz functions and its cut-offs, which no Lean library has); it is not
-forced, so it is recorded as a departure for the user's decision, with the planar route as the
-alternative.
+Cauchy transform of Schwartz functions and its cut-offs, which neither Mathlib nor the packages
+used here provide; other Lean libraries were not consulted); it is not forced, so it is recorded
+as a departure for the user's decision, with the planar route as the alternative.
 -/
 
 @[expose] public section

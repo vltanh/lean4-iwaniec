@@ -1,14 +1,26 @@
 # Audit of the paper and the formalization
 
 Paper: A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Cassese, D. Faraco, A. Guerra, M. Hormozi, B. Kirchheim, A. Koski, V. Kovač, J. Kristensen, F. Pasqualotto, I. Prause, E. Saksman, V. Šverák, L. Székelyhidi, R. Tione, A. Volberg and H. Yang, *Sharp higher integrability theory, Part I: the `L^p`-norm of the Beurling–Ahlfors transform*, [arXiv:2609.28311v2](https://arxiv.org/abs/2609.28311).
-- Version 2 is of 8 October 2026. Version 1, of 23 September 2026, differs only in its author list, according to the arXiv comment.
+- Version 2 is of 8 October 2026, version 1 of 23 September 2026. The arXiv comment of v2 reads "updated list of authors", but the TeX sources also differ in content:
+  - v1 states `(eq:BA-definition)` as `𝒮 ∘ ∂_z = ∂_z̄` (v1, l. 306), which is false for the symbol `ξ̄ / ξ`; v2 has `𝒮 ∘ ∂_z̄ = ∂_z` (l. 298);
+  - v2 renames the `u` of Lemma 4 to `v`;
+  - v1 carries a "preliminary version" notice, and v2 rewords the introduction;
+  - the author list grows from 15 to 20 names (v1's "Hang Chang" is v2's "Hang Yang", with the same address).
 - The audit was made against the arXiv LaTeX source of v2 (`main.tex`). Line numbers are those of that file.
-- Result numbers are the paper's: Theorem 1, Corollary 2, Lemma 3 and Lemma 4 share one counter.
+- Result numbers are the paper's. Its four results share one counter:
+  - Theorem 1;
+  - Corollary 2;
+  - Lemma 3;
+  - Lemma 4.
 
 Lean names are in the namespace [`Agazzi`](../../Agazzi) unless they begin with `External.`, `AgazziChallenge.` or a package's namespace.
 
 Status of the formalization:
-- Every result of the paper is proved: Lemma 3, Lemma 4, Theorem 1 and both assertions of Corollary 2.
+- Every result of the paper is proved:
+  - Lemma 3;
+  - Lemma 4;
+  - Theorem 1;
+  - both assertions of Corollary 2.
 - Theorem 1 and the first assertion of Corollary 2 are also proved for Lipschitz periodic test maps.
 - Every cited result is proved, in [`Agazzi/External/`](../../Agazzi/External), by the arguments named in Section 2.
 - Nothing is assumed: the formalization is unconditional.
@@ -16,17 +28,18 @@ Status of the formalization:
 - [`scripts/Audit.lean`](../../scripts/Audit.lean) checks that every declaration of the library depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
 - Comparator accepts the Solution against [`palomar/Agazzi/Challenge.lean`](../../palomar/Agazzi/Challenge.lean), under Lean's kernel and under NanoDa.
 - No statement of the paper had to change.
-- Every proof follows the paper's, except one step of the second assertion of Corollary 2. That step is a departure made for economy, waiting for the author's decision (Section 7).
+- Every proof follows the paper's, except one step of the second assertion of Corollary 2. That step is a departure made for economy, waiting for the maintainer's decision (Section 7).
 
 ## 1. Summary
 
 | Kind | Findings |
 | --- | --- |
 | Errors | none |
-| Gaps | E1: the Hessian case attributed to Guerra is the compactly supported statement of that preprint, not the periodic one written. E2: Corollary 2 is not proved; the cited arguments are planar, at `A = 0`. E3: the closedness of `𝒞` in `L² (Q)` is not argued. E4: the sign change in Lemma 4 is left implicit. E5: the ball of Lemma 4 must embed in the torus |
+| Gaps | E2: Corollary 2 is proved by reference to planar arguments. E3: the closedness of `𝒞` in `L² (Q)` is not argued. E5: the ball of Lemma 4 must embed in the torus |
+| Remarks | E1: the Hessian case attributed to Guerra is stated there for compactly supported potentials on `ℝ²`, an equivalent form. E4: the sign change in Lemma 4 is left implicit |
 | Typos | E6 |
 | Missing hypotheses | none |
-| Redundant hypotheses | Lemma 4: `p ∈ K` is not used by the two assertions |
+| Redundant hypotheses | none in the paper (Lemma 4's `p ∈ K` is used only for the existence of `ζ`; see Section 5) |
 | Use of cited results | Kinderlehrer–Stampacchia: correct, once `𝒞` is closed (E3). Baernstein–Montgomery-Smith: correct; their arguments are applied in the periodic setting (E2). Lehto: the classical statement |
 
 ## 2. Results from prior work and how the paper uses them
@@ -39,21 +52,23 @@ Status of the formalization:
 | The projection is characterized by `⟪x − y, v − y⟫ ≤ 0` | Lemma 4, l. 412–415: `(eq:projection-variational-inequality)` | Kinderlehrer–Stampacchia, Ch. I, Thm 2.3 | [`External.KinderlehrerStampacchia.theorem2_3`](../../Agazzi/External/KinderlehrerStampacchia/Projection.lean#L39) | Mathlib's `norm_eq_iInf_iff_real_inner_le_zero` |
 | (1.2a): `∫_0^∞ t^{p−1} L (z/t, w/t) dt = β_p Φ_p (z, w)`, `1 < p < 2` | Corollary 2, l. 301 ("by the arguments in") | Baernstein–Montgomery-Smith, §1 | [`External.BaernsteinMontgomerySmith.equation1_2a`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L231) | direct integration (the source: "one calculates") |
 | (1.2b): `∫_0^∞ t^{p−1} M (w/t, z/t) dt = γ_p Φ_p (z, w)`, `2 < p` | Corollary 2, l. 301 | Baernstein–Montgomery-Smith, §1 | [`External.BaernsteinMontgomerySmith.equation1_2b`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L288) | direct integration |
-| `Φ_p (z, w) ≤ (p* − 1)^p \|z\|^p − \|w\|^p` | Corollary 2, l. 301 (the norm) | Baernstein–Montgomery-Smith, §1 ("From [Bu3, p. 77] follows the inequality") | [`External.BaernsteinMontgomerySmith.phi_le`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L332) | Burkholder's majorization (Burkholder 1988, (1.10)), as formalized in BanachProbability (`BanachProbability.Burkholder.burkholderU_ge`), with `Φ_p (z, w) = −U (\|w\|, \|z\|)` |
+| `Φ_p (z, w) ≤ (p* − 1)^p \|z\|^p − \|w\|^p` | Corollary 2, l. 301 (the norm) | Baernstein–Montgomery-Smith, §1 ("From [Bu3, p. 77] follows the inequality") | [`External.BaernsteinMontgomerySmith.phi_le`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L332) | Burkholder's majorization (Burkholder 1988, (1.10)), as formalized in BanachProbability (`BanachProbability.Burkholder.burkholderU_ge`), with `Φ_p (z, w) = −U (\|w\|, \|z\|)` (the package's `U`, subordinate argument first; `Φ_p (z, w) = −u_p (z, w)` in Burkholder's notation) |
 | `‖𝒮‖_p ≥ p* − 1` | Corollary 2, l. 320 ("classical [Lehto1965]") | Lehto 1965 | [`External.Lehto.lowerBound`](../../Agazzi/External/Lehto/LowerBound.lean#L82) | not Lehto's argument, which was not read: the extremals `f_α` of Baernstein–Montgomery-Smith, continued outside the disc by Dragičević's cut-off, with the density lemma of HarmonicAnalysis; duality for the half `1/(p − 1)` |
 
 The paper uses the arguments of Baernstein and Montgomery-Smith, and not only their statements. Its Corollary 2 is proved "by the arguments in" their paper, and the formalization follows those arguments: the Mellin identities, Fubini's theorem and the null Lagrangian. The one exception is the passage from the torus to the plane (Section 7).
 
-The source of Kinderlehrer–Stampacchia was not read. Its numbering is taken from the paper, and its statements are the standard ones.
+The source of Kinderlehrer–Stampacchia was not read. Its numbering is taken from the paper, the assignment of the two statements to the two numbers is inferred from l. 412, and its statements are the standard ones.
 
 ### Standard facts used without citation
+
+A selection: the facts whose proofs take more than a line in Lean.
 
 | Fact | Where | In the formalization |
 | --- | --- | --- |
 | `\|A\| = \|a₊\| + \|a₋\|`, `det A = \|a₊\|² − \|a₋\|²` | l. 268 | [`opNorm_eq`](../../Agazzi/Bridges.lean#L139), [`det_eq`](../../Agazzi/Bridges.lean#L77) |
 | `F (A) = \|A² + J A¹\| − 1 = 2\|a₊\| − 1`, `F` convex | l. 341, 344 | [`rowF_eq_norm`](../../Agazzi/Proof/RowRepresentation.lean#L148), [`rowF_eq`](../../Agazzi/Proof/RowRepresentation.lean#L155), [`convexOn_rowF`](../../Agazzi/Proof/RowRepresentation.lean#L167) |
 | The determinant is a null Lagrangian for periodic Lipschitz perturbations | l. 386 | [`setIntegral_unitCube_det_add_grad`](../../Agazzi/Basic/Analysis/Calculus/Periodic.lean#L187), from the package's `setIntegral_minor_add_grad` and `quasiconvexAtOn_iff_periodic` |
-| Jensen's inequality for `F` ("convexity gives") | l. 379 | `F` as a supremum of affine `G_z`, each with `∫_Q G_z (Du) = G_z (A)` ([`setIntegral_unitCube_grad_eq_zero`](../../Agazzi/Basic/Analysis/Calculus/Periodic.lean#L178)) |
+| Jensen's inequality for `F` ("convexity gives") | l. 378 | `F` as a supremum of affine `G_z`, each with `∫_Q G_z (Du) = G_z (A)` ([`setIntegral_unitCube_grad_eq_zero`](../../Agazzi/Basic/Analysis/Calculus/Periodic.lean#L178)) |
 | Rademacher's theorem | Lemma 4 | Mathlib's `LipschitzWith.ae_differentiableAt` |
 | `H` Lipschitz, `DH ∈ K` | l. 421 | [`lipschitzWith_supportFun`](../../Agazzi/Basic/Analysis/Convex/SupportFunction.lean#L102), [`gradient_supportFun_mem`](../../Agazzi/Basic/Analysis/Convex/SupportFunction.lean#L143) |
 | `Dw = Dv` a.e. on `{h = 0}`; `D max {w, c}` | l. 417, 434 | [`ae_fderiv_eq_zero_of_eq_zero`](../../Agazzi/Basic/Analysis/Calculus/LipschitzFDeriv.lean#L38), [`ae_fderiv_max_eq_or`](../../Agazzi/Basic/Analysis/Calculus/LipschitzFDeriv.lean#L56) |
@@ -73,28 +88,40 @@ These citations only give context and are not used in proofs:
 - Šverák 1990 and Burkholder 1984, 1989 (origin of `L` and `B_p`);
 - Dacorogna 2007 (quasiconvexity);
 - Astala–Iwaniec–Martin 2009 (`𝒮`);
-- Astala et al. 2012, 2022, 2024 and Guerra–Kristensen 2021;
-- the suboptimal upper bounds (Bañuelos–Wang, Nazarov–Volberg, Dragičević–Volberg, Bañuelos–Janakiraman, Borichev–Janakiraman–Volberg) and Bañuelos's survey;
-- Iwaniec 1982, Astala 1994, Donaldson–Sullivan, Iwaniec–Martin, Iwaniec–Sbordone and Iwaniec 2002;
+- Astala et al. 2012, 2023, 2024 and Guerra–Kristensen 2021;
+- the suboptimal upper bounds:
+  - Bañuelos–Wang;
+  - Nazarov–Volberg;
+  - Dragičević–Volberg;
+  - Bañuelos–Janakiraman;
+  - Borichev–Janakiraman–Volberg;
+  - Bañuelos's survey;
+- the conjecture and its setting:
+  - Iwaniec 1982;
+  - Astala 1994;
+  - Donaldson–Sullivan;
+  - Iwaniec–Martin;
+  - Iwaniec–Sbordone;
+  - Iwaniec 2002;
 - Faraco–Székelyhidi, Kirchheim–Székelyhidi and Székelyhidi 2005;
 - Ambrosio–De Philippis–Kirchheim, De Philippis–Figalli and De Philippis–Guerra–Tione;
 - Bañuelos–Lindeman, Duse and Petermichl–Slavin–Wick.
 
 ## 3. Errors and gaps in the paper
 
-### E1. The Hessian case (l. 285)
+### E1. The Hessian case (l. 285): a remark on an attribution
 
 "In the case where $\varphi=\D u$ for some $u\in C^\infty_{\tp{per}}(Q)$ this result had been proved in \cite{Guerra2026b}."
 
 Guerra's theorem (arXiv:2608.23388, theorem `thm:L` of its TeX) is stated differently: "For every $A\in\mathbb R^{2\times2}$ and every $u\in C_c^\infty(\mathbb R^2)$ we have $\int_{\mathbb R^2}\bigl[L(A+\D^2u)-L(A)\bigr]\d x\geq0$". That is, compactly supported potentials on `ℝ²`, not periodic ones.
 
-The two forms are equivalent by the standard argument relating periodic and compactly supported test maps (Dacorogna, Prop. 5.13; here not checked for Hessians in Lean). So the claim holds, but it is not literally Guerra's statement. Not formalized: the sentence is context.
+The two forms are equivalent, by the standard argument that relates periodic and compactly supported test maps (Dacorogna, Prop. 5.13; the independent review checked the cut-off argument for Hessians on paper, not in Lean). So the claim holds, but it is not literally Guerra's statement. This is a remark, not a gap: no proof uses the sentence, and it is not formalized.
 
-### E2. Corollary 2 has no proof (l. 301–316)
+### E2. Corollary 2 is proved only by reference (l. 301–316)
 
 "By the arguments in \cite{Baernstein1997a} (see also \cite{Guerra2026b} for further details), Theorem~\ref{thm:L-quasiconvexity} implies:"
 
-Baernstein and Montgomery-Smith argue on the plane, for `f ∈ Ẇ^{1,2} (ℂ)` and at `A = 0`: their (1.1), Conjecture 2, Conjecture 3 and remark (b). Corollary 2 is a periodic statement at every `A`. The same arguments work, with the following adjustments, which the paper does not mention:
+Baernstein and Montgomery-Smith argue on the plane at `A = 0`, for `f ∈ Ẇ^{1,2} (ℂ)` in their (1.1) and `f ∈ Ẇ^{1,p} (ℂ)` in their Conjectures 2 and 3 and remark (b). Guerra's "further details" work at every `A`, for Hessians of compactly supported potentials. Corollary 2 is a periodic statement at every `A`, for all gradients. The same arguments work, with the following adjustments, which the paper does not mention:
 - the Mellin identities are applied at `A / t` with the test maps `φ / t`;
 - Fubini's theorem is used on `Q × (0, ∞)`, with an integrable majorant;
 - for `p > 2`, the null Lagrangian `det`;
@@ -118,11 +145,11 @@ Closedness is not argued, and it is what the existence of the projection rests o
 - an `L²`-convergent sequence has an a.e.-convergent subsequence;
 - being equi-Lipschitz and periodic, that subsequence converges everywhere ([`exists_tendsto_of_ae_restrict_unitCube_tendsto`](../../Agazzi/Basic/Analysis/Calculus/GradientConstraint.lean#L178)), to a limit that keeps the slope bound.
 
-### E4. "By changing signs" (l. 422)
+### E4. "By changing signs" (l. 422): a remark
 
 "By changing signs, we may assume $h(x_0)>0$."
 
-The reduction replaces `(η, ζ, K, p)` by `(−η, −ζ, −K, −p)`. It is correct, but terse.
+The reduction replaces `(η, ζ, K, p)` by `(−η, −ζ, −K, −p)`. It is a standard reduction and it is correct; the paper states it in three words.
 
 The formalization runs the mirror construction explicitly, with `s = ±1`:
 - the cone `c (x) = w (x₀) − ε + H (x − x₀)`;
@@ -137,13 +164,13 @@ The independent review checked that this is the image of the paper's constructio
 
 On the torus, this needs `B_r (x₀)` to embed in `Q` (for instance `r < 1/2`) and a periodic extension. Since `r` can be shrunk, the step holds. The formalization takes `r ≤ 1/4` and periodizes with [`supPeriodize`](../../Agazzi/Basic/Topology/MetricSpace/Periodize.lean#L41) ([`Agazzi/Basic/Topology/MetricSpace/Periodize.lean`](../../Agazzi/Basic/Topology/MetricSpace/Periodize.lean)).
 
-### E6. Typos
+### E6. Typos and notation
 
+- l. 321: "Previous, suboptimal bounds, had been obtained": stray commas.
 - l. 327: "implying a similar results".
-- l. 345: Lemma 3 has no label; the formalization uses the label of its display, `eq:L-row-representation`.
 - l. 377: "where $\varphi\in C^\infty_\tp{per}(Q)$" for $C^\infty_\tp{per}(Q;\R^2)$.
 - l. 382: "to $u^1(x)=A^1\cdot x+\eta(x)$": `η` is not introduced; it is `φ¹`.
-- l. 401: "take $p\in K$": the point of `K` has the name of the exponent `p` of Corollary 2.
+- l. 401: "take $p\in K$": a clash of notation, not a typo: the point of `K` has the name of the exponent `p` of Corollary 2.
 
 ## 4. Missing hypotheses
 
@@ -151,9 +178,12 @@ None: every statement of the paper is true as printed.
 
 ## 5. Redundant hypotheses
 
-| Result | Hypothesis that is not needed | Lean |
-| --- | --- | --- |
-| Lemma 4, the two assertions | `p ∈ K`: `ζ ∈ 𝒞` implies it, since `p` is the mean of `p + Dζ` over `Q` and `K` is closed and convex; it is needed for `𝒞 ≠ ∅`, that is, for the existence of the projection | [`lemma4`](../../Agazzi/Proof/ScalarProjection/Main.lean#L748) keeps the paper's hypothesis, which its proof does not use; [`lemma4_exists`](../../Agazzi/Proof/ScalarProjection/Existence.lean#L198) uses it |
+None in the paper's statements.
+
+- In Lemma 4, `p ∈ K` is equivalent to `𝒞 ≠ ∅`: if `ξ ∈ 𝒞`, then `p = ∫_Q (p + Dξ) ∈ K`, since `K` is closed and convex, `∫_Q Dξ = 0` and `|Q| = 1`.
+- The paper uses it once, for the existence of `ζ` (l. 412).
+- Lean's [`lemma4`](../../Agazzi/Proof/ScalarProjection/Main.lean#L748) takes a minimizer as a hypothesis, so there `p ∈ K` follows from the others and is unused; [`lemma4_exists`](../../Agazzi/Proof/ScalarProjection/Existence.lean#L198) uses it.
+- "`K` nonempty" follows from `p ∈ K`.
 
 ## 6. How the formalization reads the paper
 
@@ -168,6 +198,7 @@ None: every statement of the paper is true as printed.
   - [`lemma4_exists`](../../Agazzi/Proof/ScalarProjection/Existence.lean#L198) proves existence through `Lp ℝ 2`.
 - `‖𝒮‖_{L^p (ℂ; ℂ) → L^p (ℂ; ℂ)}` is `beurlingNorm p`: the supremum of `‖𝒮 f‖_p / ‖f‖_p` over Schwartz functions, with `𝒮` the multiplier `ξ̄ / ξ` under Mathlib's Fourier transform. It equals the package's `beurlingPowNorm 1 p` ([`beurlingNorm_eq_beurlingPowNorm`](../../Agazzi/Bridges.lean#L53)), and `𝒮 ∂_z̄ = ∂_z` ([`beurling_dzbar`](../../Agazzi/Bridges.lean#L67)).
 - `B_p` ([`burkholderB`](../../palomar/Agazzi/Challenge.lean#L88)) is defined for every real `p` and used for `p > 1`.
+- Lemma 3 has no `\label` in the TeX (l. 345). The formalization names it by its display, `eq:L-row-representation`.
 - Theorem 1 and the first assertion of Corollary 2 are proved for Lipschitz periodic test maps ([`theorem1_lipschitz`](../../Agazzi/Theorem1.lean#L250), [`corollary2_lipschitz`](../../Agazzi/Corollary2/Quasiconvexity.lean#L285)), by the paper's arguments, which use nothing more. The paper's statements for `C^∞` maps follow ([`theorem1`](../../Agazzi/Theorem1.lean#L401), [`corollary2`](../../Agazzi/Corollary2/Quasiconvexity.lean#L424)). This stronger form gives quasiconvexity in the sense of the package CalculusOfVariations, with Lipschitz test maps vanishing outside the unit cube ([`quasiconvex_integrandL`](../../Agazzi/Quasiconvex.lean#L69), [`quasiconvex_burkholderB`](../../Agazzi/Quasiconvex.lean#L75), [`quasiconvex_burkholder`](../../Agazzi/Quasiconvex.lean#L83)).
 
 No statement of the paper was corrected.
@@ -176,7 +207,7 @@ No statement of the paper was corrected.
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |
-| Corollary 2, second assertion: the upper bound `‖𝒮‖_p ≤ p* − 1` ([`beurlingNorm_le`](../../Agazzi/Corollary2/Norm.lean#L255)) | Not given; the cited arguments are planar. Baernstein and Montgomery-Smith derive the norm from the inequality on `Ẇ^{1,p} (ℂ)` (their remark (b)); Guerra passes from compactly supported test maps to `L^p (ℂ)` with a potential and cut-offs `η_R` (Hessian case) | Corollary 2 at `A = 0`, Burkholder's inequality and `u ↦ ū` give the bound on `L^p_0 (𝕋²)` ([`Corollary2Norm.torusBeurlingPowNorm_one_le`](../../Agazzi/Corollary2/Norm.lean#L239)); transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6, in HarmonicAnalysis) gives `L^p (ℂ)` | It is not necessary. It was made for economy: the planar route needs the Cauchy transform of Schwartz functions and its cut-offs, which no Lean library has. It waits for the author's decision between keeping it and formalizing the planar route | E2 |
+| Corollary 2, second assertion: the upper bound `‖𝒮‖_p ≤ p* − 1` ([`beurlingNorm_le`](../../Agazzi/Corollary2/Norm.lean#L255)) | Not given; the cited arguments are planar. Baernstein and Montgomery-Smith derive the norm from the inequality on `Ẇ^{1,p} (ℂ)` (their remark (b)); Guerra passes from compactly supported test maps to `L^p (ℂ)` with a potential and cut-offs `η_R` (Hessian case) | Corollary 2 at `A = 0`, Burkholder's inequality and `u ↦ ū` give the bound on `L^p_0 (𝕋²)` ([`Corollary2Norm.torusBeurlingPowNorm_one_le`](../../Agazzi/Corollary2/Norm.lean#L239)); transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6, in HarmonicAnalysis) gives `L^p (ℂ)` | It is not necessary. It was made for economy: the planar route needs the Cauchy transform of Schwartz functions and its cut-offs, which neither Mathlib nor the three packages provides (other Lean libraries were not consulted). It waits for the maintainer's decision between keeping it and formalizing the planar route | E2 |
 
 The departure is labelled "Departure from the paper:" in the docstrings of [`Agazzi/Corollary2/Norm.lean`](../../Agazzi/Corollary2/Norm.lean).
 
@@ -199,12 +230,13 @@ From the current output of [`scripts/Audit.lean`](../../scripts/Audit.lean). Eve
 | Lemma 3 | [`lemma3`](../../Agazzi/Proof/RowRepresentation.lean#L220) | none |
 | Lemma 4 | [`lemma4`](../../Agazzi/Proof/ScalarProjection/Main.lean#L748) | [`External.KinderlehrerStampacchia.theorem2_3`](../../Agazzi/External/KinderlehrerStampacchia/Projection.lean#L39) |
 
-The route check finds that every proof uses the results that the paper's proof cites, and no other. [`docs/Agazzi/route_differences.tsv`](route_differences.tsv) records no difference.
+The route check compares, for each result, the paper's own numbered results that its formal proof uses with those that the paper's proof cites. It finds no difference, and [`docs/Agazzi/route_differences.tsv`](route_differences.tsv) records none. It does not compare results from the literature: the transference step of Section 7 is not cited by the paper.
 
 ## 9. Not formalized
 
 - The uniqueness of the projection (l. 412): not needed.
 - The remarks of the introduction:
+  - the Hessian case of Theorem 1 is due to Guerra (l. 285; E1);
   - Corollary 2 implies the sharp higher integrability of quasiconformal maps of Astala 1994 (l. 325);
   - the proof extends to higher dimensions and to the Beurling–Ahlfors transform on forms (l. 327);
   - it extends to the integrands of Faraco–Székelyhidi, Kirchheim–Székelyhidi and Székelyhidi (l. 327).
@@ -213,17 +245,23 @@ The route check finds that every proof uses the results that the paper's proof c
 ## 10. The paper in the literature
 
 Sources: the paper's own account (l. 276–327), and searches on 23 November 2026:
-- arXiv, through its API, by title, author and keyword;
+- arXiv, through its API, by title, author and keyword, for work since August 2026;
+- Semantic Scholar's list of the works that cite the paper, with the arXiv full texts of those works;
+- the v1 source of the paper;
 - GitHub code search, for `2609.28311`.
 
-Bibliographic data not verified against the work itself are marked "as in the paper's bibliography".
+Bibliographic data not verified against the work itself are marked "as in the paper's bibliography". Not available, and not read:
+- Kinderlehrer–Stampacchia's book;
+- Lehto 1965;
+- Iwaniec 1982;
+- Burkholder 1988.
 
 ### Before the paper
 
-- D. L. Burkholder, *Differential subordination of harmonic functions and martingales*, in: Harmonic Analysis and PDE (El Escorial, 1987), Lecture Notes in Math. 1384, Springer, 1989, 1–23 (published; as in the paper's bibliography). V. Šverák, *Examples of rank-one convex functions*, Proc. Roy. Soc. Edinburgh 114A (1990), 237–242 (published; as in the paper's bibliography). These are the origin of `L`; not read here.
-- A. Baernstein II and S. J. Montgomery-Smith, *Some conjectures about integral means of `∂f` and `∂̄f`* (published 1999; [arXiv:math/9709215v2](https://arxiv.org/abs/math/9709215), read). They show that the quasiconvexity of `L` implies that of `B_p` and Iwaniec's conjecture, and give the extremals `f_α` (Section 2).
+- D. L. Burkholder, *Differential subordination of harmonic functions and martingales*, in: Harmonic Analysis and PDE (El Escorial, 1987), Lecture Notes in Math. 1384, Springer, 1989, 1–23 (published; the series and the conference are taken from other bibliographies). V. Šverák, *Examples of rank-one convex functions*, Proc. Roy. Soc. Edinburgh 114A (1990), 237–242 (published; as in the paper's bibliography). These are the origin of `L`; not read here.
+- A. Baernstein II and S. J. Montgomery-Smith, *Some conjectures about integral means of `∂f` and `∂̄f`* (published 1999; first version 15 September 1997; [arXiv:math/9709215v2](https://arxiv.org/abs/math/9709215), read). They show that their Conjecture 1, the quasiconvexity of `L` at `0` on the plane, implies their Conjecture 2 (`∫ Φ_p (∂f, ∂̄f) ≥ 0`) and Iwaniec's conjecture, and they give the functions `f_α` that show that `p* − 1` cannot be lowered (see Section 2 of this report).
 - T. Iwaniec, *Extremal inequalities in Sobolev spaces and quasiconformal mappings*, Z. Anal. Anwend. 1 (1982) (published; as in the paper's bibliography; not read). This is the conjecture `‖𝒮‖_p = p* − 1`. O. Lehto (1965) proved the lower bound (not read).
-- Upper bounds `C (p* − 1)`, as the paper lists them (published; not read here):
+- Suboptimal upper bounds, as the paper lists them (l. 321; published; not read here):
   - Bañuelos–Wang (Duke 1995);
   - Nazarov–Volberg (St. Petersburg Math. J. 2004);
   - Dragičević–Volberg (Indiana 2005);
@@ -232,25 +270,33 @@ Bibliographic data not verified against the work itself are marked "as in the pa
   - the survey of R. Bañuelos, [arXiv:1012.4850](https://arxiv.org/abs/1012.4850) (Illinois J. Math. 2010).
 - Quasiconvexity of the Burkholder functional under sign restrictions, as the paper lists them:
   - Astala–Iwaniec–Prause–Saksman (J. AMS 2012);
-  - Astala–Faraco–Guerra–Koski–Kristensen, [arXiv:2309.03495](https://arxiv.org/abs/2309.03495) (2023, preprint as cited) and Commun. Pure Appl. Anal. 2024;
+  - Astala–Faraco–Guerra–Koski–Kristensen, *The local Burkholder functional, quasiconvexity and geometric function theory*, [arXiv:2309.03495](https://arxiv.org/abs/2309.03495) (2023; no journal reference on arXiv);
+  - the same authors, *Lower semicontinuity, Stoilow factorization and principal maps*, Commun. Pure Appl. Anal. 23 (2024) (as in the paper's bibliography);
   - Guerra–Kristensen, [arXiv:2112.10563](https://arxiv.org/abs/2112.10563) (Arch. Ration. Mech. Anal. 2022).
 
 ### Concurrent work
 
-- A. Guerra, *Quasiconvexity of the Burkholder function on symmetric matrices*, [arXiv:2608.23388v1](https://arxiv.org/abs/2608.23388) (24 August 2026, preprint, read in part). It claims Theorem 1 for Hessians `D²u`, `u ∈ C_c^∞ (ℝ²)`, by Morse theory, with sharp weak-type and `L^p` bounds for `𝒮` on real-valued functions. The paper cites it (E1, E2).
-- *The sharp `L^p` bound for the imaginary part of the Beurling–Ahlfors operator on the lattice*, [arXiv:2609.13573](https://arxiv.org/abs/2609.13573) (11 September 2026, preprint). Found by the search; its abstract and its relation to the paper were not checked.
+- A. Guerra, *Quasiconvexity of the Burkholder function on symmetric matrices*, [arXiv:2608.23388v1](https://arxiv.org/abs/2608.23388) (24 August 2026, preprint, read in part). It claims Theorem 1 for Hessians `D²u`, `u ∈ C_c^∞ (ℝ²)`, by Morse theory, with sharp weak-type and `L^p` bounds for `𝒮` on real-valued `h` (for `p > 2`: when `𝒮h` is real-valued). The paper cites it (E1, E2).
+- K. Domelevo and S. Petermichl, *The sharp `L^p` bound for the imaginary part of the Beurling–Ahlfors operator on the lattice*, [arXiv:2609.13573](https://arxiv.org/abs/2609.13573) (v1 11 September, v2 15 September 2026, preprint). It claims the sharp `ℓ^p` bound `p* − 1` for a family of second-order discrete Riesz transforms on `ℤ^N`, which includes the imaginary part of the discrete Beurling–Ahlfors operator on `ℤ²`. It predates the paper, which does not cite it.
 - The README of the package lean4-harmonic-analysis records a bound `1.523958 (p* − 1)` as claimed in a 2026 manuscript of the repository Tencent-Hunyuan/Hyra-results. This was not checked here.
 
 ### Since the paper
 
-- No later version, erratum or correction of the paper was found.
-- The arXiv search returned later preprints on neighbouring questions. Whether they cite or build on the paper was not checked:
-  - [arXiv:2610.19410](https://arxiv.org/abs/2610.19410) (October 2026, *Fractional elementary symmetric functions and Hessian estimates in the plane*);
-  - [arXiv:2611.17088](https://arxiv.org/abs/2611.17088) (November 2026, *Mixed inner variation and global Hessian integrability for degenerate Monge–Ampère equations*).
+- No version later than v2, and no erratum, was found (arXiv API, 23 November 2026).
+- Preprints that cite the paper, from Semantic Scholar's citation list and the arXiv full texts; their claims are as their authors state them:
+  - G. N. Memana, N. S. Trudinger and P.-L. Yung, *Fractional elementary symmetric functions and Hessian estimates in the plane*, [arXiv:2610.19410](https://arxiv.org/abs/2610.19410) (14 October 2026). It cites v1 and builds a real-variable proof of the local Burkholder inequality of Astala–Faraco–Guerra–Koski–Kristensen on the paper's Lemma 3, Lemma 4 and Theorem 1, passing from the torus to the disc by zero extension.
+  - A. Braides, J. Kristensen and S. Scalabrino, *Energies with values in networks and geometric quasiconvexity*, [arXiv:2610.32444](https://arxiv.org/abs/2610.32444) (23 October 2026). It uses the quasiconvexity of `B_p`, `1 < p < 2`, for a lower bound on a homogenized density.
+  - D. Zhong, [arXiv:2608.16757v2](https://arxiv.org/abs/2608.16757) (28 September 2026). It discusses why the paper's row-wise projection does not preserve Hessian structure.
+  - Three preprints cite only the value of the norm:
+    - T. Sprekeler and H. V. Tran, [arXiv:2610.17142](https://arxiv.org/abs/2610.17142);
+    - K. Moen and C. Pérez, [arXiv:2610.31888](https://arxiv.org/abs/2610.31888);
+    - J. C. Cantero et al., [arXiv:2611.23073](https://arxiv.org/abs/2611.23073).
+- [arXiv:2611.17088](https://arxiv.org/abs/2611.17088) (N. Q. Le, 12 November 2026), on degenerate Monge–Ampère equations, was returned by the search but does not cite the paper.
+- No Part II of the series and no independent proof of the conjecture was found.
 
 ### Formalizations
 
-- This is, as far as the search found, the first formalization of the paper, of Theorem 1 and of Iwaniec's conjecture.
+- This is, as far as the search found, the first formalization of the paper, of Theorem 1 and of Iwaniec's conjecture. The independent review did not repeat the GitHub search.
 - The GitHub code search for `2609.28311` found no Lean formalization. It found only mentions in the READMEs of lean4-morrey and lean4-harmonic-analysis, and non-Lean listings (feeds, a problem catalogue).
 - The README of lean4-harmonic-analysis lists other Lean formalizations about `𝒮`. None of them was opened or consulted here:
   - boundedness on `L^p` (will1491/no-wandering-domains, TauCetiProject/TauCeti);
@@ -267,7 +313,7 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 - **The series.** The paper announces later parts of the series:
   - the higher-dimensional theory: the Beurling–Ahlfors transform on forms, after Donaldson–Sullivan and Iwaniec–Martin, with the sharp higher integrability of quasiregular maps in even dimensions;
   - the separating functions of Faraco–Székelyhidi, Kirchheim–Székelyhidi and Székelyhidi.
-- **Weak type.** Guerra's argument for the weak-type corollary of arXiv:2608.23388 (`L (A/λ) ≤ (2/λ) |a₊| − 1_{|a₋| > λ}`, applied to the Cauchy transform with cut-offs) is written for real-valued `h`. Combined with Theorem 1 for all matrices, and with `f ↦ f̄`, which exchanges `a₊` and `a₋`, it appears to give `λ |{|𝒮 h| > λ}| ≤ 2 ‖h‖₁` for complex-valued `h`. Guerra's laminates show that the constant `2` is sharp for real `h`. This was checked here only for the pointwise inequality, on paper; it has not been checked against the literature.
+- **Weak type.** Guerra's weak-type corollary (arXiv:2608.23388) applies `L (A/λ) ≤ (2/λ) |a₊| − 1_{|a₋| > λ}` to the Hessian of the logarithmic potential of a real-valued `h`, with cut-offs. With Theorem 1 for all matrices, the same bound applied to `f̄`, where `f` is the Cauchy transform of a complex-valued `h` (`∂̄f = h`, `∂f = 𝒮h`; conjugation exchanges `|a₊|` and `|a₋|`), appears to give `λ |{|𝒮 h| > λ}| ≤ 2 ‖h‖₁`. Guerra claims, by laminates, that `2` is sharp for real `h`, hence also for complex `h`. The pointwise bound was checked on paper, twice. The compactly supported form of Theorem 1 that the argument needs is in Lean ([`quasiconvex_integrandL`](../../Agazzi/Quasiconvex.lean#L69)). Neither the paper nor Guerra's preprint states the complex case, and an arXiv abstract search of 23 November 2026 found no work that does.
 - **Higher powers.** The conjecture `‖𝒮^n‖_p = κ_n (p)` for `p ≥ 2` (Dragičević) remains open for `n ≥ 2`, as far as lean4-harmonic-analysis's README records. Corollary 2 gives `‖𝒮²‖_p ≤ (p* − 1)²`, but this does not improve on the known bounds for large `p`.
 - **Morrey's problem.** [lean4-morrey](https://github.com/vltanh/lean4-morrey) requires this project and uses [`quasiconvex_burkholder`](../../Agazzi/Quasiconvex.lean#L83): with it, the theorem of its library `HomogeneousIsotropic` holds with no hypothesis for `1 < p < 2`. Nonnegative, isotropic, positively `p`-homogeneous, rank-one convex integrands on `ℝ^{2×2}` are quasiconvex for every `p > 0` (polyconvex for `p ≥ 2`). At the multiples of orthogonal matrices, and given the quasiconvexity of `B_p`, the case `1 < p < 2` is a theorem of Guerra and Kristensen (2022).
 
@@ -283,7 +329,7 @@ Each was checked on paper only.
 
 ### The formalization
 
-- **The planar route for the norm** (Section 7), if the author prefers it to transference. It needs the Cauchy transform of Schwartz functions, its decay, and the cut-offs `η_R`.
+- **The planar route for the norm** (Section 7), if the maintainer prefers it to transference. It needs the Cauchy transform of Schwartz functions, its decay, and the cut-offs `η_R`.
 - **[`Agazzi/Basic/`](../../Agazzi/Basic) holds the gradient-constrained `L²` projection on the torus,** with its tools. All of it is general, and its natural home is lean4-calculus-of-variations ([`Agazzi/Basic/README.md`](../../Agazzi/Basic/README.md)):
   - periodic integrals and the periodic null Lagrangian;
   - derivatives of Lipschitz functions;
