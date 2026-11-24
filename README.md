@@ -75,11 +75,9 @@ The proofs follow the paper's arguments, and those of the cited sources where th
 | Library | Pin | Used for |
 | --- | --- | --- |
 | Mathlib | `v4.36.0-rc2` | everything |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | local path, commit `220f56c` (not yet published) | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps; the general toolkit of Lemma 4 and Theorem 1 (periodic integrals, derivatives of Lipschitz functions, gradient constraints, support functions, periodization) |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | local path, commit `495bafe` (not yet published) | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, duality, the case `n = 1` of Dragičević's lower bound; the Cauchy transform of `C_c^∞` functions and the passage from `C_c^∞` to the norm by Guerra's cut-offs; torus multipliers and transference (for the shorter proof on the torus) |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `220f56c` | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps; the general toolkit of Lemma 4 and Theorem 1 (periodic integrals, derivatives of Lipschitz functions, gradient constraints, support functions, periodization) |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `495bafe` | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, duality, the case `n = 1` of Dragičević's lower bound; the Cauchy transform of `C_c^∞` functions and the passage from `C_c^∞` to the norm by Guerra's cut-offs; torus multipliers and transference (for the shorter proof on the torus) |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `dc3966c` | Burkholder's function and its majorization |
-
-Until their new commits are published, lean4-calculus-of-variations and lean4-harmonic-analysis are required by local path (`../lean4-calculus-of-variations`, `../lean4-harmonic-analysis` in [`lakefile.toml`](lakefile.toml)): the repository then builds only next to clones of the two packages, and Comparator, whose sandbox sees only the repository, needs copies of them inside it.
 
 ## Palomar
 

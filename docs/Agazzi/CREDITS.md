@@ -115,7 +115,7 @@ How it was made:
 
   The Fourier-supported route is recorded among the package's shorter proofs.
 - **Follow-up 2: the torus route as a shorter proof.** At the author's request, the bound on the torus and the transference step, removed earlier in the round, were restored from the history as an alternative proof ([`Agazzi/Corollary2/NormTorus.lean`](../../Agazzi/Corollary2/NormTorus.lean)), not used by [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378).
-- **Commits.** Each package has local commits of this round, not yet published. The project requires the two packages by local path until they are published and pinned.
+- **Commits.** The main session published the packages' commits of this round (lean4-calculus-of-variations `220f56c`, lean4-harmonic-analysis `495bafe`) and pinned the project to them.
 
 Figures, from the start of the round (24 November 2026, 08:40 CST) to the end of the Lean work, the checks and these documents (10:19 CST), from `session_stats.py` on the transcripts of the lead and of its six sub-agents:
 - **Elapsed time:** 1.65 h.
