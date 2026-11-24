@@ -1,0 +1,18 @@
+{
+  "challenge_module": "Agazzi.Challenge",
+  "solution_module": "Agazzi.Solution",
+  "theorem_names": [
+    "AgazziChallenge.det_eq",
+    "AgazziChallenge.opNorm_eq",
+    "AgazziChallenge.volume_unitSquare",
+    "AgazziChallenge.beurling_dzbar",
+    "AgazziChallenge.theorem1",
+    "AgazziChallenge.corollary2",
+    "AgazziChallenge.corollary2_norm",
+    "AgazziChallenge.pStar_sub_one_of_le_two",
+    "AgazziChallenge.pStar_sub_one_of_two_le"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}
