@@ -252,8 +252,8 @@ private theorem thm1_integral_rowG (A : Matrix (Fin 2) (Fin 2) ℝ) {φ : (Fin 2
           (hI i j).const_mul _, Finset.sum_eq_zero fun i _ => hinner i, setIntegral_const,
           measureReal_def, thm1_volume_unitSquare, ENNReal.toReal_one, one_smul, add_zero]
 
-/-- **Theorem 1** for Lipschitz periodic test maps (`φ ∈ W^{1,∞}_per (Q; ℝ²)`), by the paper's
-proof: for all `A ∈ ℝ^{2×2}`, `∫_Q [L (A + Dφ) − L (A)] dx ≥ 0`.
+/-- **Theorem 1** (`thm:L-quasiconvexity`) for Lipschitz periodic test maps
+(`φ ∈ W^{1,∞}_per (Q; ℝ²)`), by the paper's proof: for all `A ∈ ℝ^{2×2}`, `∫_Q [L (A + Dφ) − L (A)] dx ≥ 0`.
 
 The proof of the paper (TeX lines 376–396), with `u = A x + φ`, `Du = A + Dφ` (`|Q| = 1`, so the
 claim is `∫_Q L (Du) ≥ L (A)`):

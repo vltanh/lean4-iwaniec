@@ -19,8 +19,8 @@ public import Agazzi.External.Lehto.LowerBound
 
 The paper derives it from Theorem 1 "by the arguments in [Baernstein1997a]" (TeX line 301), with the
 lower bound from [Lehto1965] (TeX line 320). The upper bound `beurlingNorm_le` follows the argument
-of Baernstein–Montgomery-Smith (§1, "Conjecture 2 ⇒ Conjecture 3", and remark (b)), in the periodic
-setting of the paper, in four steps.
+of Baernstein–Montgomery-Smith (§1, "Conjecture 2 ⇒ Conjecture 3", and remark (b)) in steps 1 and
+2, in the periodic setting of the paper; steps 3 and 4 depart from it (below).
 
 1. For smooth `ℤ²`-periodic `u : ℝ² → ℂ` and `φ = (Re u, Im u)`, `a₊ (D φ) = ∂u` and
    `a₋ (D φ) = ∂̄u` (`Agazzi.Corollary2Norm.conformalPart_jacobian_toRealPair`,
@@ -43,10 +43,18 @@ setting of the paper, in four steps.
    (`Agazzi.Corollary2Norm.torusBeurlingPowNorm_one_le`).
 4. Transference from `𝕋²` to `ℂ` (`HarmonicAnalysis.beurlingPowNorm_le_torusBeurlingPowNorm`).
 
-The paper does not say how it passes from the periodic inequality to `L^p (ℂ)`: Baernstein and
-Montgomery-Smith work on the plane, with compactly supported `f`. Step 4, transference
-(Hytönen–van Neerven–Veraar–Weis, Corollary 5.7.6, as in the package `HarmonicAnalysis`), is the
-formalization's route for this step, the cheapest sound one given the package.
+Departure from the paper: steps 3 and 4. The paper's Theorem 1 and Corollary 2 are periodic, while
+the arguments it cites work on the plane: Baernstein and Montgomery-Smith derive the norm from the
+inequality for `f ∈ Ẇ^{1,p} (ℂ)` (their Conjecture 3 and remark (b)), and Guerra's "further
+details" (arXiv:2608.23388, section "Proofs of the corollaries", the corollaries labelled
+`cor:beurling` and `cor:beurling-lp` in its TeX, Hessian case) pass from
+compactly supported test maps to `L^p (ℂ)` with a logarithmic potential and cut-offs `η_R`. The
+paper does not say how its periodic inequality reaches `L^p (ℂ)`. The formalization replaces that
+planar passage by the bound on the torus and transference (Hytönen–van Neerven–Veraar–Weis,
+Corollary 5.7.6, as in the package `HarmonicAnalysis`). Reason: economy (the planar route needs the
+Cauchy transform of Schwartz functions and its cut-offs, which no Lean library has); it is not
+forced, so it is recorded as a departure for the user's decision, with the planar route as the
+alternative.
 -/
 
 @[expose] public section
@@ -239,9 +247,11 @@ end Corollary2Norm
 The argument of Baernstein–Montgomery-Smith (§1) in the periodic setting: Corollary 2 at `A = 0`
 and Burkholder's inequality give `‖∂u‖_{L^p (Q)} ≤ (p* − 1) ‖∂̄u‖_{L^p (Q)}` for smooth periodic
 `u` (for `p < 2` through `u ↦ ū`, the interchangeability of `∂` and `∂̄`), that is, the bound on
-`L^p_0 (𝕋²)` (`Corollary2Norm.torusBeurlingPowNorm_one_le`). The passage to `L^p (ℂ)`, which the
-paper leaves implicit, is here transference
-(`HarmonicAnalysis.beurlingPowNorm_le_torusBeurlingPowNorm`). -/
+`L^p_0 (𝕋²)` (`Corollary2Norm.torusBeurlingPowNorm_one_le`).
+
+Departure from the paper: the passage to `L^p (ℂ)`, which the paper leaves implicit and its cited
+arguments make on the plane (Guerra's cut-offs), is here transference
+(`HarmonicAnalysis.beurlingPowNorm_le_torusBeurlingPowNorm`); see the module docstring. -/
 theorem beurlingNorm_le {p : ℝ} (hp : 1 < p) : beurlingNorm p ≤ ENNReal.ofReal (pStar p - 1) := by
   rw [beurlingNorm_eq_beurlingPowNorm]
   exact (HarmonicAnalysis.beurlingPowNorm_le_torusBeurlingPowNorm 1 hp).trans

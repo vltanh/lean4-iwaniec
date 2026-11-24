@@ -270,7 +270,7 @@ private theorem setIntegral_sub_nonneg_of_mellin {f : Matrix (Fin 2) (Fin 2) ℝ
 
 /-! ### Corollary 2 -/
 
-/-- **Corollary 2**, first assertion, for Lipschitz periodic test maps: for `1 < p`,
+/-- **Corollary 2** (`cor:Bp-BA`), first assertion, for Lipschitz periodic test maps: for `1 < p`,
 `∫_Q [B_p (A + Dφ) − B_p (A)] dx ≥ 0`.
 
 Proof: the arguments of Baernstein and Montgomery-Smith. For `1 < p < 2`,

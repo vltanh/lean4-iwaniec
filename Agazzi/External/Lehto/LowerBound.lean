@@ -34,7 +34,8 @@ continued outside the disc by a rapidly decaying cutoff (`External.Lehto.extrema
 * `‖∂f_α‖_p / ‖∂̄f_α‖_p → p − 1` as `α → 1/p` (`External.Lehto.tendsto_eLpNorm_div_extremalFun`).
 
 Then `‖𝓑‖_p = ‖𝓑‖_q`, `q = p / (p − 1)` (`HarmonicAnalysis.beurlingPowNorm_conjExponent`), gives
-`‖𝓑‖_p ≥ q − 1`; the source takes the conjugates `f̄_α` instead.
+`‖𝓑‖_p ≥ q − 1`; Baernstein and Montgomery-Smith take the
+conjugates `f̄_α` instead.
 
 ## References
 

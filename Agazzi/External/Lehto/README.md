@@ -34,7 +34,8 @@ the density lemma of the package `HarmonicAnalysis`:
   `∂̄φ_k → ∂̄f_α` in `L^p`.
 - Hence `‖𝓑‖_p ≥ p − 1` (`External.Lehto.sub_one_le_beurlingPowNorm_one`). The other half,
   `‖𝓑‖_p ≥ p' − 1 = 1/(p − 1)`, is duality, `‖𝓑‖_p = ‖𝓑‖_{p'}`
-  (`HarmonicAnalysis.beurlingPowNorm_conjExponent`), in place of the source's conjugates `f̄_α`.
+  (`HarmonicAnalysis.beurlingPowNorm_conjExponent`), in place of the conjugates `f̄_α` that
+  Baernstein and Montgomery-Smith use.
 
 ## Shorter routes and reuse
 
