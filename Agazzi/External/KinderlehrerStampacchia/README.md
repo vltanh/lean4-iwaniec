@@ -16,9 +16,9 @@ numbering is the paper's (arXiv:2609.28311, TeX line 412).
 
 ## How the paper uses them
 
-In Lemma 4, in `L² (Q)`, with the constraint set `𝒞`: the projection `ζ` of `η` exists, and
-`∫_Q (η − ζ)(ξ − ζ) ≤ 0` for every `ξ ∈ 𝒞` (`Agazzi.lemma4_exists`,
-`Agazzi.lemma4_variationalInequality`).
+In Lemma 4, in `L² (Q)`, with the constraint set `𝒞`: the projection `ζ` of `η` exists and is
+unique, and `∫_Q (η − ζ)(ξ − ζ) ≤ 0` for every `ξ ∈ 𝒞` (`Agazzi.lemma4_exists`,
+`Agazzi.lemma4_unique`, `Agazzi.lemma4_variationalInequality`).
 
 ## Arguments used
 

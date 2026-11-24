@@ -11,7 +11,7 @@ public import HarmonicAnalysis.BeurlingAhlfors.Beltrami
 public import HarmonicAnalysis.Complex.RadialStretch
 
 /-!
-# Astala's theorem from Corollary 2 (TeX lines 323–324)
+# Astala's theorem from Corollary 2 (TeX line 325)
 
 "Corollary 2 implies the sharp higher integrability of derivatives of quasiconformal maps in the
 plane, originally obtained by complex-analytical methods in [Astala1994]."
@@ -148,7 +148,7 @@ private theorem memLpLoc_apply {Ω : Set ℂ} {Df : ℂ → ℂ →L[ℝ] ℂ} {
     (h : HarmonicAnalysis.MemLpLoc Df p Ω) (v : ℂ) : MemLpLoc (fun z => Df z v) p Ω :=
   fun K hKΩ hK => (ContinuousLinearMap.apply ℝ ℂ v).comp_memLp' (h K hKΩ hK)
 
-/-- **Astala's theorem, from Corollary 2** (TeX lines 323–324; K. Astala, Acta Math. 173 (1994)):
+/-- **Astala's theorem, from Corollary 2** (TeX line 325; K. Astala, Acta Math. 173 (1994)):
 let `Ω ⊆ ℂ` be open, `0 ≤ k < 1`, and `f ∈ W^{1,2}_loc (Ω)` with the weak partial derivatives
 `fx`, `fy` and `|∂̄f| ≤ k |∂f|` almost everywhere in `Ω` (`∂̄f = (fx + i fy)/2`,
 `∂f = (fx − i fy)/2`: `f` is `K`-quasiregular, `K = (1 + k)/(1 − k)`). Then `Df ∈ L^p_loc (Ω)` for
@@ -198,7 +198,7 @@ private theorem norm_apply_sub_I_mul (A : ℂ →L[ℝ] ℂ) :
   simp only [HarmonicAnalysis.dzPart, norm_mul, norm_inv, Complex.norm_ofNat]
   field_simp
 
-/-- **Sharpness of Astala's theorem** (TeX lines 323–324): for `K > 1`, the radial stretch
+/-- **Sharpness of Astala's theorem** (TeX line 325): for `K > 1`, the radial stretch
 `f (z) = z |z|^{1/K − 1}` is `K`-quasiconformal: a homeomorphism of `ℂ`, in `W^{1,2}_loc (ℂ)`
 with the weak partial derivatives `fx = ∂_x f`, `fy = ∂_y f` (its pointwise ones), and
 `|∂̄f| = k |∂f|` off `0` (`|fx + i fy| = k |fx − i fy|`), `k = (K − 1)/(K + 1)`. For

@@ -4,9 +4,14 @@ The paper formalized here is A. Agazzi, K. Astala, R. Bañuelos, G. Bruno, G. Ca
 - It claims Iwaniec's conjecture of 1982: the Beurling–Ahlfors transform `𝒮` has norm `p* − 1` on `L^p (ℂ)`, where `p* = max (p, p / (p − 1))`.
 - It deduces the conjecture from the quasiconvexity of an integrand `L` on `ℝ^{2×2}` (Theorem 1). Writing `A z = a₊ z + a₋ z̄`, `L (A) = |a₊|² − |a₋|²` if `|a₊| + |a₋| ≤ 1` and `2|a₊| − 1` otherwise.
 
-Every result of the paper is formalized and proved, in Lean 4 with Mathlib. This includes the results the paper cites, and nothing is assumed.
-- The proofs follow the paper's arguments or, where the paper only cites, the arguments of the cited sources ([report, Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)).
-- Not formalized: the remarks of the introduction (Astala's area distortion as a consequence; the extensions to forms, to higher dimensions and to other integrands; the attribution of the Hessian case to Guerra), and the uniqueness of the projection, which no proof needs ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)).
+Every result of the paper is formalized and proved, in Lean 4 with Mathlib, and so are the statements of its introduction and proofs:
+- the Hessian case of Theorem 1, in its periodic form and in the compactly supported form of Guerra, and the equivalence of the two forms;
+- the uniqueness of the projection in Lemma 4;
+- Astala's sharp higher integrability of quasiconformal maps, as a consequence of Corollary 2, with the sharpness of the exponent.
+
+This includes the results the paper cites, and nothing is assumed.
+- The proofs follow the paper's arguments or, where the paper only cites, the arguments of the cited sources. Two cited statements are proved by other arguments: Lehto's lower bound, whose source was not available, and Guerra's Theorem 1.1, which follows from the paper's Theorem 1 ([report, Section 2](docs/Agazzi/REPORT.md#2-results-from-prior-work-and-how-the-paper-uses-them)).
+- Not formalized: the extensions that the paper announces for later articles of the series, without precise statements ([report, Section 9](docs/Agazzi/REPORT.md#9-not-formalized)).
 - No Palomar preflight has been run, and nothing has been submitted.
 
 ## Status
@@ -16,9 +21,12 @@ Every result of the paper is formalized and proved, in Lean 4 with Mathlib. This
 | §1, Theorem 1: the quasiconvexity of `L` | proved, for `C^∞` periodic test maps (the paper's statement) and for Lipschitz periodic ones |
 | §1, Corollary 2, first assertion: the quasiconvexity of `B_p`, `1 < p < ∞` | proved |
 | §1, Corollary 2, second assertion: `‖𝒮‖_p = p* − 1` | proved |
+| §1, the Hessian case of Theorem 1 (l. 285) | proved, in the periodic form and in Guerra's compactly supported form; the two forms are equivalent |
+| §1, Corollary 2 implies Astala's sharp higher integrability (l. 325) | proved, with the sharpness of the exponent |
 | §2, Lemma 3: the row representation of `L` | proved |
 | §2, Lemma 4: the scalar projection lemma | proved |
-| Cited results (Kinderlehrer–Stampacchia, Baernstein–Montgomery-Smith, Lehto) | proved |
+| §2, Lemma 4: the uniqueness of the projection (l. 412) | proved |
+| Cited results (Kinderlehrer–Stampacchia, Baernstein–Montgomery-Smith, Guerra, Lehto, Astala) | proved |
 
 ## Main results
 
@@ -28,10 +36,16 @@ Results marked (C) are stated in the Challenge, [`palomar/Agazzi/Challenge.lean`
 | --- | --- | --- |
 | Theorem 1 (C) | [`Agazzi.theorem1`](Agazzi/Theorem1.lean#L401) | `∫_Q [L (A + Dφ) − L (A)] ≥ 0` for every `A ∈ ℝ^{2×2}` and every `C^∞` `ℤ²`-periodic `φ : ℝ² → ℝ²` |
 | Theorem 1, Lipschitz form | [`Agazzi.theorem1_lipschitz`](Agazzi/Theorem1.lean#L250) | the same for Lipschitz periodic `φ` |
+| Theorem 1 for Hessians (C) | [`Agazzi.theorem1_hessian`](Agazzi/Hessian.lean#L66) | `∫_Q [L (A + D²u) − L (A)] ≥ 0` for every `A` and every `C^∞` `ℤ²`-periodic `u : ℝ² → ℝ` |
+| Theorem 1 for Hessians, the two forms | [`Agazzi.theorem1_hessian_iff`](Agazzi/Hessian.lean#L78) | at every `A`, the inequality for all periodic `u` holds if and only if `∫_{ℝ²} [L (A + D²u) − L (A)] ≥ 0` for all `u ∈ C_c^∞ (ℝ²)` |
+| Guerra, Theorem 1.1 | [`External.Guerra.theorem1_1`](Agazzi/External/Guerra/TheoremL.lean#L43) | `∫_{ℝ²} [L (A + D²u) − L (A)] ≥ 0` for every `A` and every `u ∈ C_c^∞ (ℝ²)` |
 | Corollary 2 (a) (C) | [`Agazzi.corollary2`](Agazzi/Corollary2/Quasiconvexity.lean#L424) | `∫_Q [B_p (A + Dφ) − B_p (A)] ≥ 0` for `1 < p < ∞` |
 | Corollary 2 (b) (C) | [`Agazzi.corollary2_norm`](Agazzi/Corollary2/Norm.lean#L378) | `‖𝒮‖_{L^p (ℂ) → L^p (ℂ)} = p* − 1` for `1 < p < ∞` |
+| Astala's theorem, from Corollary 2 (C) | [`Agazzi.astala`](Agazzi/Astala.lean#L158) | for `0 ≤ k < 1` and `f ∈ W^{1,2}_loc (Ω)` with `\|∂̄f\| ≤ k \|∂f\|` a.e., `Df ∈ L^p_loc (Ω)` for `2 ≤ p < 1 + 1/k = 2K/(K − 1)` |
+| its sharpness (C) | [`Agazzi.astala_sharp`](Agazzi/Astala.lean#L210) | `z \|z\|^{1/K − 1}` is `K`-quasiconformal, and its derivative is not in `L^{2K/(K−1)}` near `0` |
 | Lemma 3 | [`Agazzi.lemma3`](Agazzi/Proof/RowRepresentation.lean#L220) | `L (A) = sup_{z ∈ 𝒵 (A¹)} G_z (A¹, A²)` |
-| Lemma 4 | [`Agazzi.lemma4_exists`](Agazzi/Proof/ScalarProjection/Existence.lean#L198), [`Agazzi.lemma4`](Agazzi/Proof/ScalarProjection/Main.lean#L748) | the `L² (Q)`-projection on a gradient-constrained class exists, and satisfies `Dw = Dv` or `Dw ∈ ∂K` a.e. and `∫_Q Dw · (Dv − Dw) ≥ 0` |
+| Lemma 4 | [`Agazzi.lemma4_exists`](Agazzi/Proof/ScalarProjection/Existence.lean#L200), [`Agazzi.lemma4`](Agazzi/Proof/ScalarProjection/Main.lean#L748) | the `L² (Q)`-projection on a gradient-constrained class exists, and satisfies `Dw = Dv` or `Dw ∈ ∂K` a.e. and `∫_Q Dw · (Dv − Dw) ≥ 0` |
+| Lemma 4, uniqueness | [`Agazzi.lemma4_unique`](Agazzi/Proof/ScalarProjection/Existence.lean#L238), [`Agazzi.lemma4_existsUnique`](Agazzi/Proof/ScalarProjection/Existence.lean#L259) | the projection is unique, as a Lipschitz periodic function |
 | (quasiconvexity in the sense of the package CalculusOfVariations) | [`Agazzi.quasiconvex_integrandL`](Agazzi/Quasiconvex.lean#L68), [`Agazzi.quasiconvex_burkholderB`](Agazzi/Quasiconvex.lean#L74), [`Agazzi.quasiconvex_burkholder`](Agazzi/Quasiconvex.lean#L82) | `L`, and `B_p` for `1 < p < ∞`, are quasiconvex for Lipschitz test maps vanishing outside the unit cube; for `1 < p < 2`, so is `(\|a₊\| − (p − 1)\|a₋\|)(\|a₊\| + \|a₋\|)^{p−1}` |
 
 The Challenge also states four compared theorems, all proved:
@@ -47,6 +61,7 @@ It also states the two values of `p* − 1`.
 - It defines `‖𝒮‖_p` as the supremum of `‖𝒮 f‖_p / ‖f‖_p` over Schwartz functions, which are dense in `L^p`.
 - The package HarmonicAnalysis proves that this supremum is the norm of the bounded extension (`HarmonicAnalysis.enorm_eq_multiplierNorm`). The Challenge does not restate that bridge.
 - The torus `Q = ℝ² / ℤ²` is represented by `ℤ²`-periodic maps on `ℝ²`, with integrals over the open unit square.
+- `W^{1,2}_loc (Ω)` is defined in the Challenge as usual, by weak partial derivatives: `MemW12Loc Ω f fx fy` says that `f`, `fx` and `fy` are in `L²` of every compact subset of `Ω` and that `∫ f ∂_x φ = −∫ fx φ`, `∫ f ∂_y φ = −∫ fy φ` for every real `φ ∈ C_c^∞` with support in `Ω`. `Df ∈ L^p_loc (Ω)` means that `fx` and `fy` are in `L^p_loc (Ω)`, and the condition `p < 1 + 1/k` is written `k (p − 1) < 1`, which also covers `k = 0`.
 
 ## What the audit found
 
@@ -58,9 +73,9 @@ It also states the two values of `p* − 1`.
 | E1 | a remark: the Hessian case is attributed to Guerra (arXiv:2608.23388), where it is stated for compactly supported `u` on `ℝ²`, an equivalent form |
 | E4 | a remark: the sign change in Lemma 4 is left implicit |
 
-The audit found no error and no missing hypothesis. Its findings are E1–E5 above and the typos (E6). E2, E3 and E5 are gaps, each filled in Lean; E1 concerns a remark of the introduction, which is not formalized. See the [report](docs/Agazzi/REPORT.md).
+The audit found no error and no missing hypothesis. Its findings are E1–E5 above and the typos (E6). E2, E3 and E5 are gaps, each filled in Lean; E1 concerns a remark of the introduction, and the equivalence of the two forms is proved in Lean. See the [report](docs/Agazzi/REPORT.md).
 
-The proofs follow the paper's arguments, and those of the cited sources where the paper only cites them. The upper bound for `‖𝒮‖_p` follows the planar argument of Baernstein–Montgomery-Smith, from their Conjecture 2 to the norm, and Guerra's passage to `L^p (ℂ)` with cut-offs, in the gradient case ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)). A shorter proof of the upper bound, on the torus and by transference, is kept beside it and not used by the paper's results ([`Agazzi.beurlingNorm_le_of_torus`](Agazzi/Corollary2/NormTorus.lean); [report, Section 11](docs/Agazzi/REPORT.md#11-whats-next)).
+The proofs follow the paper's arguments, and those of the cited sources where the paper only cites them. The upper bound for `‖𝒮‖_p` follows the planar argument of Baernstein–Montgomery-Smith, from their Conjecture 2 to the norm, and Guerra's passage to `L^p (ℂ)` with cut-offs, in the gradient case ([Section 7](docs/Agazzi/REPORT.md#7-departures-from-the-papers-proofs)). A shorter proof of the upper bound, on the torus and by transference, is kept beside it and not used by the paper's results ([`Agazzi.beurlingNorm_le_of_torus`](Agazzi/Corollary2/NormTorus.lean); [report, Section 11](docs/Agazzi/REPORT.md#11-whats-next)). Astala's theorem follows from `‖𝒮‖_p = p − 1`, `p ≥ 2`, by Iwaniec's derivation (1982): a cut-off, `∂g = 𝒮 ∂̄g` for compactly supported `g ∈ W^{1,2}`, and a Neumann series for the Beltrami equation on `L^p`, compared with its `L²` solution, in the package HarmonicAnalysis.
 
 ## Trust
 
@@ -68,16 +83,18 @@ The proofs follow the paper's arguments, and those of the cited sources where th
 - [`scripts/Audit.lean`](scripts/Audit.lean) checks every declaration of the library: each depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
 - The route check ([`scripts/route_check.py`](scripts/route_check.py)) compares, for each result, the paper's own numbered results that its formal proof uses with those that the paper's proof cites in the TeX source. It finds no difference. It does not compare results from the literature.
 - Comparator accepts the Solution under Lean's kernel and under NanoDa.
-- AI agents reviewed the statements against the TeX source, and the proofs against the paper, independently of the provers. No person has reviewed the proofs.
+- AI agents reviewed the statements against the TeX source, and the proofs of the numbered results against the paper, independently of the provers. No person has reviewed the proofs.
 
 ## Dependencies
 
 | Library | Pin | Used for |
 | --- | --- | --- |
 | Mathlib | `v4.36.0-rc2` | everything |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `220f56c` | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps; the general toolkit of Lemma 4 and Theorem 1 (periodic integrals, derivatives of Lipschitz functions, gradient constraints, support functions, periodization) |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `495bafe` | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, duality, the case `n = 1` of Dragičević's lower bound; the Cauchy transform of `C_c^∞` functions and the passage from `C_c^∞` to the norm by Guerra's cut-offs; torus multipliers and transference (for the shorter proof on the torus) |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `a3778e4`, by local path | quasiconvexity, periodic and Dirichlet test maps, null Lagrangians, mollification, gradients of Lipschitz maps; the general toolkit of Lemma 4 and Theorem 1 (periodic integrals, derivatives of Lipschitz functions, gradient constraints, support functions, periodization); the equivalence of periodic and compactly supported Hessian test functions |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `4c9fb08`, by local path | the Beurling–Ahlfors transform and its norm, `𝒮 ∂̄ = ∂`, duality, the case `n = 1` of Dragičević's lower bound; the Cauchy transform of `C_c^∞` functions and the passage from `C_c^∞` to the norm by Guerra's cut-offs; weak derivatives, mollification and Sobolev's embedding in the plane, `𝒮` on `L²` and on `L² ∩ L^p`, the higher integrability of solutions of the Beltrami equation, the radial stretch; torus multipliers and transference (for the shorter proof on the torus) |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `dc3966c` | Burkholder's function and its majorization |
+
+The first two packages are required by local path (`../lean4-calculus-of-variations`, `../lean4-harmonic-analysis`), at the commits shown, until those commits are published; a build needs the two clones next to this repository.
 
 ## Palomar
 
@@ -110,7 +127,7 @@ python3 scripts/route_check.py check docs/Agazzi/paper_routes.tsv --accept docs/
 
 | Directory | Contents |
 | --- | --- |
-| [`Agazzi/`](Agazzi) | the Lean code: `Defs.lean` (the definitions of the Challenge), `Bridges.lean`, `Proof/` (§2: Lemma 3, Lemma 4), `Theorem1.lean`, `Corollary2/`, `Quasiconvex.lean`; `External/` (the cited results, one directory per source, each with a README). The general lemmas are in the packages (Dependencies) |
+| [`Agazzi/`](Agazzi) | the Lean code: `Defs.lean` (the definitions of the Challenge), `Bridges.lean`, `Proof/` (§2: Lemma 3, Lemma 4), `Theorem1.lean`, `Hessian.lean` (Theorem 1 for Hessians), `Corollary2/`, `Astala.lean` (Astala's theorem from Corollary 2), `Quasiconvex.lean`; `External/` (the cited results, one directory per source, each with a README). The general lemmas are in the packages (Dependencies) |
 | [`palomar/Agazzi/`](palomar/Agazzi) | the Palomar submission |
 | [`docs/Agazzi/`](docs/Agazzi) | [`REPORT.md`](docs/Agazzi/REPORT.md), [`CREDITS.md`](docs/Agazzi/CREDITS.md), the routes of the paper's proofs |
 | [`scripts/`](scripts) | the audit, the route check, the Challenge's copy of the definitions |
@@ -121,12 +138,8 @@ python3 scripts/route_check.py check docs/Agazzi/paper_routes.tsv --accept docs/
 - The integrand `L` is due to Burkholder (1989) and Šverák (1990).
 - Baernstein and Montgomery-Smith (1999) showed that its quasiconvexity implies Iwaniec's conjecture.
 - Guerra (arXiv:2608.23388, 2026, preprint) claims Theorem 1 for Hessians.
+- Astala (1994) proved the sharp higher integrability of quasiconformal maps by complex analysis; Iwaniec (1982) had shown that it follows from the conjectured norm of `𝒮`.
 - No other formalization of the paper was found. Other formalizations of `𝒮` are listed in the [report, Section 10](docs/Agazzi/REPORT.md#10-the-paper-in-the-literature).
-- The formalization was made by AI agents, at the request of the author and maintainer, The-Anh Vu-Le:
-  - a main session (Claude Fable 5.2 in Claude Code) and a lead agent with sub-agents (Claude Opus 5.5);
-  - in a second round, a lead agent with six sub-agents (Claude Opus 5.5), for the planar proof of the upper bound and the move of general code into the packages;
-  - following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill.
-
-  No person has reviewed the proofs. See [`CREDITS.md`](docs/Agazzi/CREDITS.md).
+- The formalization was made by AI agents (Claude Fable 5.2 and Claude Opus 5.5, in Claude Code), at the request of the author and maintainer, The-Anh Vu-Le, following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill. No person has reviewed the proofs. See [`CREDITS.md`](docs/Agazzi/CREDITS.md).
 
 License: Apache-2.0 ([LICENSE](LICENSE)).

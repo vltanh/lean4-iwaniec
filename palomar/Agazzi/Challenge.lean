@@ -58,10 +58,12 @@ Statements.
 * `theorem1_hessian` (the Hessian case of Theorem 1, TeX line 285): for all `A` and all
   `u ∈ C^∞_per (Q)`, `∫_Q [L (A + D²u) − L (A)] ≥ 0`, with `D²u` the derivative matrix of the
   gradient `(∂₁u, ∂₂u)`.
-* `astala` (the consequence of Corollary 2 stated at TeX lines 323–324: Astala's sharp higher
+* `astala` (the consequence of Corollary 2 stated at TeX line 325: Astala's sharp higher
   integrability of quasiregular maps): for `0 ≤ k < 1` and `f ∈ W^{1,2}_loc (Ω)` with
   `|∂̄f| ≤ k |∂f|` a.e. in the open `Ω`, `Df ∈ L^p_loc (Ω)` for `2 ≤ p` with `k (p − 1) < 1`,
-  that is `p < 1 + 1/k = 2K/(K − 1)`, `K = (1 + k)/(1 − k)`.
+  that is `p < 1 + 1/k = 2K/(K − 1)`, `K = (1 + k)/(1 − k)` (every `p ≥ 2` if `k = 0`). The maps
+  need not be homeomorphisms: the statement covers the quasiregular maps, and so the quasiconformal
+  maps of the paper.
 * `astala_sharp`: for `K > 1`, `f (z) = z |z|^{1/K − 1}` is a homeomorphism in `W^{1,2}_loc (ℂ)`
   with `|∂̄f| = k |∂f|` off `0`, `k = (K − 1)/(K + 1)`, `k (2K/(K − 1) − 1) = 1`, and `∂_x f` is not
   in `L^{2K/(K−1)}` of any disc around `0`.
@@ -231,9 +233,11 @@ theorem theorem1_hessian (A : Matrix (Fin 2) (Fin 2) ℝ) {u : (Fin 2 → ℝ) �
       (integrandL (A + jacobian (fun y i => fderiv ℝ u y (Pi.single i 1)) x) - integrandL A) := by
   sorry
 
-/-- **Astala's theorem, from Corollary 2** (TeX lines 323–324): for `0 ≤ k < 1`, an open `Ω ⊆ ℂ`
+/-- **Astala's theorem, from Corollary 2** (TeX line 325): for `0 ≤ k < 1`, an open `Ω ⊆ ℂ`
 and `f ∈ W^{1,2}_loc (Ω)` with weak partial derivatives `fx`, `fy` and `|∂̄f| ≤ k |∂f|` almost
-everywhere in `Ω`, `Df ∈ L^p_loc (Ω)` for every `p ≥ 2` with `k (p − 1) < 1`. -/
+everywhere in `Ω` (`f` is `K`-quasiregular, `K = (1 + k)/(1 − k)`; the quasiconformal maps of the
+paper are the homeomorphic ones), `Df ∈ L^p_loc (Ω)` for every `p ≥ 2` with `k (p − 1) < 1`, that is
+`2 ≤ p < 1 + 1/k = 2K/(K − 1)` (every `p ≥ 2` if `k = 0`). -/
 theorem astala {Ω : Set ℂ} (hΩ : IsOpen Ω) {k p : ℝ} (hk : 0 ≤ k) (hk1 : k < 1) (hp : 2 ≤ p)
     (hpk : k * (p - 1) < 1) {f fx fy : ℂ → ℂ} (hf : MemW12Loc Ω f fx fy)
     (hbel : ∀ᵐ z ∂(volume.restrict Ω),

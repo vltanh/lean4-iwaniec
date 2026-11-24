@@ -13,7 +13,10 @@ project:
 
     Hence (Corollary 2) the Burkholder integrands B_p are quasiconvex for every 1 < p < ∞, and
     the norm of the Beurling–Ahlfors transform on L^p(C) is p* − 1, p* = max (p, p/(p − 1)):
-    Iwaniec's conjecture of 1982. Everything is proved, including the results the paper cites.
+    Iwaniec's conjecture of 1982. Also proved: the Hessian case of Theorem 1, the uniqueness of the
+    projection in Lemma 4, and Astala's sharp higher integrability of quasiconformal maps as a
+    consequence of Corollary 2, with its sharpness. Everything is proved, including the results the
+    paper cites.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -68,7 +71,7 @@ sources:
     type: "preprint"
     location: "https://arxiv.org/abs/2608.23388v1"
     relationship: "background"
-    note: "Cited by the paper for further details of Corollary 2: the Mellin representation of B_p is followed, and its passage to L^p(C) by a potential and cut-offs (proof of cor:beurling-lp), with its dense class C_c^∞, is followed in the gradient case, with the Cauchy transform, in the package HarmonicAnalysis (see fidelity)."
+    note: "Cited by the paper for further details of Corollary 2: the Mellin representation of B_p is followed, and its passage to L^p(C) by a potential and cut-offs (proof of cor:beurling-lp), with its dense class C_c^∞, is followed in the gradient case, with the Cauchy transform, in the package HarmonicAnalysis (see fidelity). Cited for the Hessian case of Theorem 1: its Theorem 1.1 (thm:L), for compactly supported potentials, is stated as External.Guerra.theorem1_1 and proved from Theorem 1 and the equivalence of periodic and compactly supported Hessian test functions, not by Guerra's Morse-theory argument."
   - title: "An introduction to variational inequalities and their applications"
     authors:
       - "David Kinderlehrer"
@@ -85,6 +88,21 @@ sources:
     relationship: "background"
     note: "The lower bound p* − 1, proved by the case n = 1 of Dragičević's lower bound in the package HarmonicAnalysis (with test functions that are, on the unit disc, the extremals of Baernstein and Montgomery-Smith) and duality; Lehto's paper was not read."
 
+  - title: "Area distortion of quasiconformal mappings"
+    authors:
+      - "Kari Astala"
+    type: "article"
+    location: "Acta Math. 173 (1994), 37–60"
+    relationship: "background"
+    note: "The higher integrability of the derivatives of quasiconformal maps, which the paper says Corollary 2 implies (TeX line 325); formalized in that form, for quasiregular maps, with its sharpness (Agazzi.astala, Agazzi.astala_sharp). The paper was not read."
+  - title: "Extremal inequalities in Sobolev spaces and quasiconformal mappings"
+    authors:
+      - "Tadeusz Iwaniec"
+    type: "article"
+    location: "Z. Anal. Anwendungen 1 (1982)"
+    relationship: "background"
+    note: "The derivation of higher integrability from the L^p norm of the Beurling–Ahlfors transform (a cut-off, a Neumann series for the Beltrami equation on L^p, compared with the L² solution), as presented in Astala–Iwaniec–Martin (2009), Chapters 13–14; formalized in the package HarmonicAnalysis (HarmonicAnalysis.memLpLoc_of_beltrami). Neither source was read."
+
 related_formalizations:
   - id: "https://github.com/facebookresearch/atlas-lean"
     relationship: "independent"
@@ -94,8 +112,11 @@ status:
   scope: >-
     Every numbered result of the paper is formalized and proved: Lemma 3, Lemma 4, Theorem 1
     (also for Lipschitz periodic test maps), Corollary 2 (both assertions), and every result
-    the paper cites. Not formalized: the uniqueness of the projection in Lemma 4 (not needed),
-    and the remarks of the introduction on consequences and generalizations.
+    the paper cites. So are the statements of the introduction and of the proofs: the Hessian
+    case of Theorem 1 (also in Guerra's compactly supported form, with the equivalence of the two
+    forms), the uniqueness of the projection in Lemma 4, and Astala's higher integrability as a
+    consequence of Corollary 2, with its sharpness. Not formalized: the extensions that the paper
+    announces for later articles of the series, without precise statements.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -105,9 +126,9 @@ automation:
     - method: "agent"
       models: ["Claude Opus 5.5 (claude-opus-5-5)"]
       framework: "Claude Code 2.1.330 (Claude Agent SDK)"
-      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build. A second round (the planar proof of the upper bound, general code moved into the packages): a lead agent and six sub-agents, one per package task."
+      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build. A second round (the planar proof of the upper bound, general code moved into the packages): a lead agent and six sub-agents, one per package task. A third round (the Hessian case, the uniqueness of the projection, Astala's theorem; Sobolev spaces and the Beltrami equation in the packages): a lead agent and six sub-agents, five provers and one statement reviewer."
       cost:
-        wall_time: "about 1.6 hours elapsed from the start to the verified build, and about 4.9 hours of sub-agent time; second round, about 1.7 hours elapsed and 1.2 hours of sub-agent time (session transcripts)"
+        wall_time: "about 1.6 hours elapsed from the start to the verified build, and about 4.9 hours of sub-agent time; second round, about 1.7 hours elapsed and 1.2 hours of sub-agent time; third round, about 1.7 hours elapsed and 1.3 hours of sub-agent time (session transcripts)"
         spend_usd: "not tracked"
         hardware: "local machine"
       prompting_notes: "A coordinating session gave the task; the lead followed the skill's phases and briefed the sub-agents."
@@ -117,8 +138,12 @@ automation:
 fidelity:
   divergences: >-
     Statements: none changed. Readings: the torus as periodic maps on R² with integrals over the
-    unit square; W^{1,∞}_per as Lipschitz periodic functions; the L² projection as a minimizer;
-    the norm of the transform as the supremum over Schwartz functions. Theorem 1 and the first
+    unit square; W^{1,∞}_per as Lipschitz periodic functions, so that the uniqueness of the L²
+    projection, a minimizer, is equality of Lipschitz periodic functions; the norm of the
+    transform as the supremum over Schwartz functions; W^{1,2}_loc(Ω) by weak partial derivatives
+    in L²_loc, with real test functions; Df in L^p_loc as both partials in L^p_loc; the range
+    2 ≤ p < 1 + 1/k as k (p − 1) < 1; Astala's theorem for quasiregular maps (no homeomorphism
+    assumed), which contains the quasiconformal case of the paper. Theorem 1 and the first
     assertion of Corollary 2 are proved for Lipschitz periodic test maps, by the paper's
     arguments, and the paper's smooth statements follow. Proofs: every proof follows the
     paper's argument or, where the paper only cites, that of the cited sources. The upper bound
@@ -129,7 +154,10 @@ fidelity:
     h and its logarithmic potential); Guerra's "by density", which presupposes the L^p-boundedness
     of the transform, is made by Fatou's lemma with the convergence of the Fourier transforms in
     L¹. A shorter proof of the upper bound, on the torus and by transference (Hytönen–van
-    Neerven–Veraar–Weis, Cor. 5.7.6), is kept beside it and not used. Gaps of the paper
+    Neerven–Veraar–Weis, Cor. 5.7.6), is kept beside it and not used. Astala's theorem follows
+    from Corollary 2 (b) by Iwaniec's derivation, in the package HarmonicAnalysis; Guerra's
+    Theorem 1.1 is proved from Theorem 1, not by Guerra's argument, and Lehto's lower bound by
+    Dragičević's case n = 1 and duality, not by Lehto's argument. Gaps of the paper
     filled: the closedness of the constraint set in L²(Q), the periodization of the ball in
     Lemma 4, the sign change, the passage of the BMS arguments to periodic maps at every A and
     back to the plane for the norm.
@@ -168,6 +196,21 @@ alignment:
       module: "Agazzi.Challenge"
       status: "proved"
       note: "p* − 1 = p − 1 for p ≥ 2."
+    - source: "Introduction, TeX line 285: the Hessian case of Theorem 1"
+      lean: "AgazziChallenge.theorem1_hessian"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "φ = Du for u ∈ C^∞_per(Q), D²u as the derivative matrix of the gradient."
+    - source: "Introduction, TeX line 325: Corollary 2 implies Astala's higher integrability"
+      lean: "AgazziChallenge.astala"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "f ∈ W^{1,2}_loc(Ω) with |∂̄f| ≤ k|∂f| a.e., 0 ≤ k < 1: Df ∈ L^p_loc(Ω) for 2 ≤ p, k(p − 1) < 1; for quasiregular maps."
+    - source: "Introduction, TeX line 325: the sharpness of the exponent"
+      lean: "AgazziChallenge.astala_sharp"
+      module: "Agazzi.Challenge"
+      status: "proved"
+      note: "z|z|^{1/K−1} is K-quasiconformal and its x-derivative is not in L^{2K/(K−1)} of any disc around 0."
     - source: "Introduction, TeX line 268"
       lean: "AgazziChallenge.det_eq"
       module: "Agazzi.Challenge"

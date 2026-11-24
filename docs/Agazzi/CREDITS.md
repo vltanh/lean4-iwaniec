@@ -15,7 +15,7 @@ How this formalization was made, from the run log and the session transcripts.
   - ten sub-agents launched by the lead, all Claude Opus 5.5;
   - one more sub-agent, Claude Opus 5.5, launched by the main session to review the documents.
 
-  There was no earlier draft. The second round (below) was made in the same Claude Code session, by a lead agent and six sub-agents, all Claude Opus 5.5.
+  There was no earlier draft. The second and the third rounds (below) were made in the same Claude Code session, each by a lead agent and six sub-agents, all Claude Opus 5.5.
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill. The local copy used is not a git checkout, so its commit is not recorded.
 - **Review:** no person has reviewed the proofs. Independent agents, each starting from the TeX source and not from the provers' notes, checked:
   - the statements against the TeX and against the cited sources;
@@ -129,3 +129,44 @@ What the figures leave out:
 - the lead's last edits, checks and commits after 10:19 CST;
 - cost, which was not tracked.
 
+## Third round (24 November 2026)
+
+The author asked for the statements of the paper that were not yet formalized:
+- the Hessian case of Theorem 1 (l. 285), with Guerra's theorem as Guerra states it, for compactly supported potentials on `ℝ²`, and the equivalence of the periodic and the compactly supported forms (E1), in both directions;
+- the uniqueness of the projection in Lemma 4 (l. 412);
+- Astala's sharp higher integrability of quasiconformal maps, in the form that Corollary 2 gives it (l. 325), with its sharpness and with Iwaniec's derivation;
+- in the documents, the announced extensions kept as such, and every account of earlier rounds moved out of the README and the report.
+
+How it was made:
+- **Lead.** A lead agent (Claude Opus 5.5), given the task by the main session:
+  - read the TeX of the paper's introduction and of Lemma 4, and Guerra's Theorem 1.1;
+  - surveyed Mathlib `v4.36.0-rc2` and the packages: Mathlib has the Gagliardo–Nirenberg–Sobolev inequality for `C¹` functions, the Fourier transform on `L²` and mollifiers, but no Sobolev spaces defined by weak derivatives;
+  - fixed the definitions and the statements of the general theory, with `sorry`, in the two packages, and built them:
+    - in lean4-harmonic-analysis, weak derivatives and local Sobolev spaces, mollification, Sobolev's embedding in the plane, `𝒮` on `L²`, Iwaniec's higher integrability for the Beltrami equation, and the radial stretch;
+    - in lean4-calculus-of-variations, the second-order form of Dacorogna's Prop. 5.13;
+  - wrote, in this repository, the uniqueness of the projection, the Hessian case and its equivalence, Guerra's theorem, Astala's theorem from Corollary 2 and its sharpness, and the Challenge's definitions and statements;
+  - ran the checks, and Comparator with in-project copies of the two packages;
+  - wrote the documents.
+- **Sub-agents.** Six, all Claude Opus 5.5, each in its own files, against a private snapshot of the build:
+  - in lean4-calculus-of-variations, the two directions of the second-order Dacorogna Prop. 5.13;
+  - in lean4-harmonic-analysis:
+    - weak derivatives, the Leibniz rule with a cut-off, the Wirtinger parts of a real-linear map, and mollification;
+    - Sobolev's embedding in the plane, and Iwaniec's argument for the Beltrami equation;
+    - the Beurling–Ahlfors transform on `L²`, its `L^p` bound on `L² ∩ L^p`, and `𝒮 ∂̄g = ∂g` for compactly supported `g ∈ W^{1,2}`;
+    - the radial stretch;
+  - an independent review of the new statements against the TeX of the paper and of Guerra's preprint. It found every statement faithful, a wrong TeX line number (the Astala sentence is at l. 325) and stale text in the documents, all corrected.
+
+  No statement was found false, and none was weakened. The lead removed two hypotheses that the proofs did not use: the openness of the set in the package's Leibniz rule, and the measurability and local boundedness of the integrand in the direction "periodic ⇒ compactly supported" of the Hessian equivalence.
+- **Commits.** Local commits in the two packages, which this repository requires by local path until they are published; nothing was pushed.
+
+Figures, from the start of the round (24 November 2026, 11:35 CST) to the end of the Lean work, the checks and these documents (13:18 CST), from `session_stats.py` on the transcripts of the lead and of its six sub-agents:
+- **Elapsed time:** 1.71 h.
+- **Sub-agents:** 6, at most 3 running at once, 1.28 h of work in total.
+- **Sub-agents' tool calls and tokens:** 333 tool calls; 0.54M output tokens, 1.22M input tokens, 44M cache reads.
+- **Lead's tool calls and tokens:** 200 tool calls; 0.29M output tokens, 2.18M input tokens, 76M cache reads.
+- **Model calls:** Claude Opus 5.5: 189 by the lead and 305 by its sub-agents.
+
+What the figures leave out:
+- the main session's own work in this round;
+- the lead's last checks and commits after 13:18 CST;
+- cost, which was not tracked.

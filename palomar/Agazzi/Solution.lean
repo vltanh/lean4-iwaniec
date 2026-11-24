@@ -12,9 +12,10 @@ public import Agazzi.Quasiconvex
 Each theorem restates the Challenge's word for word and proves it from the library: Theorem 1 is
 `Agazzi.theorem1`, Corollary 2 is `Agazzi.corollary2` and `Agazzi.corollary2_norm`, the Hessian case
 of Theorem 1 is `Agazzi.theorem1_hessian`, Astala's theorem and its sharpness are `Agazzi.astala`
-and `Agazzi.astala_sharp`, and the compared theorems are in `Agazzi.Bridges`. The module is also the entry point of the library: it imports
-every module that the main results use, and `Agazzi.Quasiconvex`, Theorem 1 and Corollary 2 as
-quasiconvexity in the sense of `CalculusOfVariations`.
+and `Agazzi.astala_sharp`, and the compared theorems are in `Agazzi.Bridges`. The module is also
+the entry point of the library: it imports every module that the main results use, and
+`Agazzi.Quasiconvex`, Theorem 1 and Corollary 2 as quasiconvexity in the sense of
+`CalculusOfVariations`.
 -/
 
 @[expose] public section
@@ -83,9 +84,11 @@ theorem theorem1_hessian (A : Matrix (Fin 2) (Fin 2) ℝ) {u : (Fin 2 → ℝ) �
       (integrandL (A + jacobian (fun y i => fderiv ℝ u y (Pi.single i 1)) x) - integrandL A) :=
   Agazzi.theorem1_hessian A hu hper
 
-/-- **Astala's theorem, from Corollary 2** (TeX lines 323–324): for `0 ≤ k < 1`, an open `Ω ⊆ ℂ`
+/-- **Astala's theorem, from Corollary 2** (TeX line 325): for `0 ≤ k < 1`, an open `Ω ⊆ ℂ`
 and `f ∈ W^{1,2}_loc (Ω)` with weak partial derivatives `fx`, `fy` and `|∂̄f| ≤ k |∂f|` almost
-everywhere in `Ω`, `Df ∈ L^p_loc (Ω)` for every `p ≥ 2` with `k (p − 1) < 1`. -/
+everywhere in `Ω` (`f` is `K`-quasiregular, `K = (1 + k)/(1 − k)`; the quasiconformal maps of the
+paper are the homeomorphic ones), `Df ∈ L^p_loc (Ω)` for every `p ≥ 2` with `k (p − 1) < 1`, that is
+`2 ≤ p < 1 + 1/k = 2K/(K − 1)` (every `p ≥ 2` if `k = 0`). -/
 theorem astala {Ω : Set ℂ} (hΩ : IsOpen Ω) {k p : ℝ} (hk : 0 ≤ k) (hk1 : k < 1) (hp : 2 ≤ p)
     (hpk : k * (p - 1) < 1) {f fx fy : ℂ → ℂ} (hf : MemW12Loc Ω f fx fy)
     (hbel : ∀ᵐ z ∂(volume.restrict Ω),
