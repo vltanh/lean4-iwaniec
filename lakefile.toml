@@ -1,0 +1,44 @@
+name = "Iwaniec"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Agazzi", "Palomar"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.36.0-rc2"
+
+# Quasiconvexity, periodic test maps, null Lagrangians.
+[[require]]
+name = "CalculusOfVariations"
+git = "https://github.com/vltanh/lean4-calculus-of-variations"
+rev = "b7a207a470596b2bc7721d363803ffc009f23f31"
+
+# The Beurling–Ahlfors transform, Fourier multipliers, transference.
+[[require]]
+name = "HarmonicAnalysis"
+git = "https://github.com/vltanh/lean4-harmonic-analysis"
+rev = "90f1e01a8e8c8e14f504926a26bd57b4f0729ac4"
+
+# Burkholder's function. Pinned at the revision that lean4-morrey pins, so that the two projects
+# share one build of HarmonicAnalysis (which requires an older revision).
+[[require]]
+name = "BanachProbability"
+git = "https://github.com/vltanh/lean4-banach-probability"
+rev = "dc3966ce34fbc31b2936a0ca9b8a50356d690ae1"
+
+[[lean_lib]]
+name = "Agazzi"
+globs = ["Agazzi.+"]
+
+# Last: Lake gives a module to the last library whose patterns match it, and `Agazzi.+` also
+# matches the Challenge and the Solution.
+[[lean_lib]]
+name = "Palomar"
+srcDir = "palomar"
+roots = ["Agazzi.Challenge", "Agazzi.Solution"]

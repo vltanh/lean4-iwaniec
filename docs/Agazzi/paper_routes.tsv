@@ -1,0 +1,13 @@
+# label	environment	proved	cited statements (from route_check.py extract)
+# Theorem 1: the proof (TeX lines 376-396) also uses Lemma 3 through its display
+# \eqref{eq:L-row-representation} ("and \eqref{eq:L-row-representation} yields", line 382), which the
+# extraction does not attribute; row edited by hand.
+thm:L-quasiconvexity	theorem	1	eq:L-row-representation,lem:scalar-projection
+# Corollary 2: the paper gives no proof environment; it says (line 301) "By the arguments in
+# [Baernstein1997a] (see also [Guerra2026b]), Theorem~\ref{thm:L-quasiconvexity} implies". The
+# formalization proves it by those arguments from Theorem 1; row edited by hand.
+cor:Bp-BA	corollary	1	thm:L-quasiconvexity
+# Lemma 3 has no \label; the extraction names it by the label of its display, which the
+# formalization uses as its label too.
+eq:L-row-representation	lemma	1
+lem:scalar-projection	lemma	1
