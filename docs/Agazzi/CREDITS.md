@@ -15,7 +15,7 @@ How this formalization was made, from the run log and the session transcripts.
   - ten sub-agents launched by the lead, all Claude Opus 5.5;
   - one more sub-agent, Claude Opus 5.5, launched by the main session to review the documents.
 
-  There was no earlier draft. The second round (below) was made in the same Claude Code session, by a lead agent and three sub-agents, all Claude Opus 5.5.
+  There was no earlier draft. The second round (below) was made in the same Claude Code session, by a lead agent and six sub-agents, all Claude Opus 5.5.
 - **Procedure:** the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill. The local copy used is not a git checkout, so its commit is not recorded.
 - **Review:** no person has reviewed the proofs. Independent agents, each starting from the TeX source and not from the provers' notes, checked:
   - the statements against the TeX and against the cited sources;
@@ -103,17 +103,29 @@ How it was made:
   - the Cauchy transform on the dense class and Guerra's cut-off argument (`‖𝒮‖_p` as the best constant of `‖∂u‖_p ≤ C ‖∂̄u‖_p` on `C_c^∞`) in lean4-harmonic-analysis, in a separate worktree.
 
   The first two ran at the same time. The lead merged the third one's branch into the package and checked the three packages' work against the brief.
+- **Follow-up 1: Guerra's dense class.** The third sub-agent's proof of remark (b) used a dense class of Schwartz functions with Fourier transform supported off `0`, for economy. The author's rule is that a departure that is not forced is a proof to rewrite, so the proof was redone along Guerra's lines, with Guerra's class `C_c^∞` and the Cauchy kernel. The lead fixed the definitions and the statements; three more sub-agents (Claude Opus 5.5) worked in parallel, each in its own worktree of lean4-harmonic-analysis:
+  - the Cauchy–Pompeiu formula `C (∂̄g) = g`, by polar coordinates;
+  - the smoothness, derivatives and decay of the Cauchy transform;
+  - the regularity of `𝒮 g`, a Liouville lemma, and the `C_c^∞` cut-offs of Schwartz functions with `L¹` convergence of the Fourier transforms.
+
+  The lead:
+  - wrote the identity `∂ (C g) = 𝒮 g`, by Liouville's theorem;
+  - wrote Guerra's cut-off step for `C g` and the density step;
+  - merged the work into one commit.
+
+  The Fourier-supported route is recorded among the package's shorter proofs.
+- **Follow-up 2: the torus route as a shorter proof.** At the author's request, the bound on the torus and the transference step, removed earlier in the round, were restored from the history as an alternative proof ([`Agazzi/Corollary2/NormTorus.lean`](../../Agazzi/Corollary2/NormTorus.lean)), not used by [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378).
 - **Commits.** Each package has local commits of this round, not yet published. The project requires the two packages by local path until they are published and pinned.
 
-Figures, from the start of the round (24 November 2026, 08:40 CST) to the end of the Lean work, the checks and these documents (09:49 CST), from `session_stats.py` on the transcripts of the lead and of its three sub-agents:
-- **Elapsed time:** 1.15 h.
-- **Sub-agents:** 3, at most 2 running at once, 0.80 h of work in total.
-- **Sub-agents' tool calls and tokens:** 230 tool calls; 0.34M output tokens, 0.94M input tokens, 45M cache reads.
-- **Lead's tool calls and tokens:** 171 tool calls; 0.19M output tokens, 0.95M input tokens, 52M cache reads.
-- **Model calls:** Claude Opus 5.5: 164 by the lead and 205 by its sub-agents.
+Figures, from the start of the round (24 November 2026, 08:40 CST) to the end of the Lean work, the checks and these documents (10:19 CST), from `session_stats.py` on the transcripts of the lead and of its six sub-agents:
+- **Elapsed time:** 1.65 h.
+- **Sub-agents:** 6, at most 3 running at once, 1.23 h of work in total.
+- **Sub-agents' tool calls and tokens:** 350 tool calls; 0.51M output tokens, 1.38M input tokens, 57M cache reads.
+- **Lead's tool calls and tokens:** 238 tool calls; 0.32M output tokens, 1.70M input tokens, 91M cache reads.
+- **Model calls:** Claude Opus 5.5: 229 by the lead and 320 by its sub-agents.
 
 What the figures leave out:
 - the main session's own work in this round, whose transcript also holds work on another project in the same window;
-- the lead's last edits and commits after 09:49 CST;
+- the lead's last edits, checks and commits after 10:19 CST;
 - cost, which was not tracked.
 

@@ -68,7 +68,7 @@ sources:
     type: "preprint"
     location: "https://arxiv.org/abs/2608.23388v1"
     relationship: "background"
-    note: "Cited by the paper for further details of Corollary 2: the Mellin representation of B_p is followed, and its passage to L^p(C) by a potential and cut-offs (proof of cor:beurling-lp) is followed in the gradient case, with the Cauchy transform and a dense class whose Cauchy transforms are Schwartz functions, in the package HarmonicAnalysis (see fidelity)."
+    note: "Cited by the paper for further details of Corollary 2: the Mellin representation of B_p is followed, and its passage to L^p(C) by a potential and cut-offs (proof of cor:beurling-lp), with its dense class C_c^∞, is followed in the gradient case, with the Cauchy transform, in the package HarmonicAnalysis (see fidelity)."
   - title: "An introduction to variational inequalities and their applications"
     authors:
       - "David Kinderlehrer"
@@ -105,9 +105,9 @@ automation:
     - method: "agent"
       models: ["Claude Opus 5.5 (claude-opus-5-5)"]
       framework: "Claude Code 2.1.330 (Claude Agent SDK)"
-      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build. A second round (the planar proof of the upper bound, general code moved into the packages): a lead agent and three sub-agents, one per package task."
+      tool_setup: "The formalize-math-paper skill (github.com/vltanh/formalize-math-paper); a lead agent and ten sub-agents (statement review, seven provers in parallel, proof review, cleanup), each checking files against a private snapshot of the build. A second round (the planar proof of the upper bound, general code moved into the packages): a lead agent and six sub-agents, one per package task."
       cost:
-        wall_time: "about 1.6 hours elapsed from the start to the verified build, and about 4.9 hours of sub-agent time; second round, about 1.2 hours elapsed and 0.8 hours of sub-agent time (session transcripts)"
+        wall_time: "about 1.6 hours elapsed from the start to the verified build, and about 4.9 hours of sub-agent time; second round, about 1.7 hours elapsed and 1.2 hours of sub-agent time (session transcripts)"
         spend_usd: "not tracked"
         hardware: "local machine"
       prompting_notes: "A coordinating session gave the task; the lead followed the skill's phases and briefed the sub-agents."
@@ -124,11 +124,12 @@ fidelity:
     paper's argument or, where the paper only cites, that of the cited sources. The upper bound
     for the norm follows Baernstein–Montgomery-Smith on the plane (Corollary 2 at A = 0 for
     compactly supported maps, Conjectures 2 and 3, remark (b)) and Guerra's passage to L^p(C),
-    with three repairs along that argument, made in the package HarmonicAnalysis: the gradient
-    case (the Cauchy transform in place of the logarithmic potential); the dense class of the
-    Schwartz functions with Fourier transform compactly supported off 0 (Hytönen–van
-    Neerven–Veraar–Weis, Prop. 2.4.23 (ii)) in place of C_c^∞ (economy: their Cauchy transforms
-    are Schwartz functions; not forced); and the density step made explicit. Gaps of the paper
+    with its dense class C_c^∞, in the package HarmonicAnalysis. The one departure is forced: the
+    gradient case (a complex g and its Cauchy transform) in place of Guerra's Hessian case (a real
+    h and its logarithmic potential); Guerra's "by density", which presupposes the L^p-boundedness
+    of the transform, is made by Fatou's lemma with the convergence of the Fourier transforms in
+    L¹. A shorter proof of the upper bound, on the torus and by transference (Hytönen–van
+    Neerven–Veraar–Weis, Cor. 5.7.6), is kept beside it and not used. Gaps of the paper
     filled: the closedness of the constraint set in L²(Q), the periodization of the ball in
     Lemma 4, the sign change, the passage of the BMS arguments to periodic maps at every A and
     back to the plane for the norm.

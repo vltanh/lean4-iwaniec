@@ -58,19 +58,18 @@ Lagrangian `det` and Fubini's theorem. For the norm (`Agazzi.beurlingNorm_le`):
 - The inequality: Burkholder's majorization `V ≤ U` (Burkholder 1988, (1.10)), as formalized in
   the package BanachProbability (`BanachProbability.Burkholder.burkholderU_ge`), with
   `Φ_p (z, w) = −U (|w|, |z|)`.
-- Remark (b): Guerra's passage to `L^p (ℂ)` (proof of `cor:beurling-lp`), in the gradient case, as
-  formalized in the package HarmonicAnalysis
+- Remark (b): Guerra's passage to `L^p (ℂ)` (proof of `cor:beurling-lp`), with Guerra's dense
+  class `C_c^∞`, in the gradient case, as formalized in the package HarmonicAnalysis
   (`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`):
-  - for `g` in a dense class, its Cauchy transform `f` has `∂̄f = g` and `∂f = 𝒮 g`;
+  - for `g ∈ C_c^∞`, its Cauchy transform `f (z) = (1/π) ∫ g (w) / (z − w) dw` has:
+    - `∂̄f = g`, by the Cauchy–Pompeiu formula;
+    - `∂f = 𝒮 g`, by Liouville's theorem for `∂f − 𝒮 g`;
+    - `f = O (1/|z|)` and `∂f = O (1/|z|²)`;
   - the inequality is applied to `η_R f`, with Guerra's cut-offs `η_R`, and `R → ∞`;
   - density then reaches every Schwartz `g`.
 
-  Two departures from Guerra's text, both along the lines of that argument:
-  - the Cauchy transform in place of the logarithmic potential: Guerra treats Hessians of real
-    potentials, while the norm on complex `L^p` needs the gradient case;
-  - the dense class: the Schwartz functions whose Fourier transform is compactly supported in
-    `ℂ ∖ {0}` (Hytönen–van Neerven–Veraar–Weis, Prop. 2.4.23 (ii)), in place of `C_c^∞`. Their
-    Cauchy transforms are Schwartz functions, built on the Fourier side, so no Cauchy kernel and
-    no decay estimate are needed. Guerra's class would also work, since the Cauchy transform of
-    `g ∈ C_c^∞` is `O (1/|z|)` and the cut-off error `‖f ∇η_R‖_p` is then `O (R^{2/p − 2})`; the
-    change is for economy.
+  The one departure is forced: Guerra treats Hessians of real potentials (the logarithmic
+  potential), while the norm on complex `L^p` needs the gradient case (the Cauchy transform).
+  Guerra's "by density" presupposes the boundedness of `𝒮` on `L^p`, which the package does not
+  prove; its density step uses the convergence of the Fourier transforms in `L¹` and Fatou's
+  lemma.

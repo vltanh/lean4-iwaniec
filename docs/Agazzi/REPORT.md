@@ -53,7 +53,7 @@ Status of the formalization:
 | (1.2a): `∫_0^∞ t^{p−1} L (z/t, w/t) dt = β_p Φ_p (z, w)`, `1 < p < 2` | Corollary 2, l. 301 ("by the arguments in") | Baernstein–Montgomery-Smith, §1 | [`External.BaernsteinMontgomerySmith.equation1_2a`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L231) | direct integration (the source: "one calculates") |
 | (1.2b): `∫_0^∞ t^{p−1} M (w/t, z/t) dt = γ_p Φ_p (z, w)`, `2 < p` | Corollary 2, l. 301 | Baernstein–Montgomery-Smith, §1 | [`External.BaernsteinMontgomerySmith.equation1_2b`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L288) | direct integration |
 | `Φ_p (z, w) ≤ (p* − 1)^p \|z\|^p − \|w\|^p` | Corollary 2, l. 301 (the norm) | Baernstein–Montgomery-Smith, §1 ("From [Bu3, p. 77] follows the inequality") | [`External.BaernsteinMontgomerySmith.phi_le`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L332) | Burkholder's majorization (Burkholder 1988, (1.10)), as formalized in BanachProbability (`BanachProbability.Burkholder.burkholderU_ge`), with `Φ_p (z, w) = −U (\|w\|, \|z\|)` (the package's `U`, subordinate argument first; `Φ_p (z, w) = −u_p (z, w)` in Burkholder's notation) |
-| `‖𝒮‖_p ≤ C` if `∫ \|∂f\|^p ≤ C^p ∫ \|∂̄f\|^p` for all `f ∈ C_c^∞ (ℂ)` (remark (b): Conjecture 3 gives the norm) | Corollary 2, l. 301 (the norm) | Baernstein–Montgomery-Smith, §1, remark (b), without proof; Guerra, arXiv:2608.23388, proof of `cor:beurling-lp`, for further details (l. 301) | [`External.BaernsteinMontgomerySmith.remark_b`](../../Agazzi/External/BaernsteinMontgomerySmith/RemarkB.lean#L111) | Guerra's passage to `L^p (ℂ)`: density, a potential, cut-offs `η_R`, limit; in the gradient case, with the Cauchy transform, and with a dense class whose Cauchy transforms are Schwartz functions, as formalized in HarmonicAnalysis (`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`; Section 7) |
+| `‖𝒮‖_p ≤ C` if `∫ \|∂f\|^p ≤ C^p ∫ \|∂̄f\|^p` for all `f ∈ C_c^∞ (ℂ)` (remark (b): Conjecture 3 gives the norm) | Corollary 2, l. 301 (the norm) | Baernstein–Montgomery-Smith, §1, remark (b), without proof; Guerra, arXiv:2608.23388, proof of `cor:beurling-lp`, for further details (l. 301) | [`External.BaernsteinMontgomerySmith.remark_b`](../../Agazzi/External/BaernsteinMontgomerySmith/RemarkB.lean#L116) | Guerra's passage to `L^p (ℂ)`, with Guerra's dense class `C_c^∞`: a potential (in the gradient case, the Cauchy transform `(1/π) ∫ g (w) / (z − w) dw`, with `∂̄f = g`, `∂f = 𝒮 g` and its decay), cut-offs `η_R`, limit, density; as formalized in HarmonicAnalysis (`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`; Section 7) |
 | `‖𝒮‖_p ≥ p* − 1` | Corollary 2, l. 320 ("classical [Lehto1965]") | Lehto 1965 | [`External.Lehto.lowerBound`](../../Agazzi/External/Lehto/LowerBound.lean#L68) | not Lehto's argument, which was not read: the case `n = 1` of Dragičević's lower bound, in HarmonicAnalysis (`HarmonicAnalysis.sub_one_le_beurlingPowNorm_one`), with Dragičević's test functions, which on the unit disc are the extremals `f_α` of Baernstein–Montgomery-Smith; duality for the half `1/(p − 1)` |
 
 The paper uses the arguments of Baernstein and Montgomery-Smith, and not only their statements. Its Corollary 2 is proved "by the arguments in" their paper ("see also [Guerra2026b] for further details"), and the formalization follows those arguments:
@@ -136,11 +136,11 @@ For the norm, the paper does not say how its periodic inequality reaches `L^p (�
 
 The corollary holds. In Lean:
 - [`corollary2_lipschitz`](../../Agazzi/Corollary2/Quasiconvexity.lean#L285) and [`corollary2`](../../Agazzi/Corollary2/Quasiconvexity.lean#L424) follow Baernstein–Montgomery-Smith, through [`burkholderB_eq_mellin_of_lt_two`](../../Agazzi/Corollary2/Quasiconvexity.lean#L136), [`burkholderB_eq_mellin_of_two_lt`](../../Agazzi/Corollary2/Quasiconvexity.lean#L153) and [`burkholderB_two`](../../Agazzi/Corollary2/Quasiconvexity.lean#L173);
-- [`beurlingNorm_le`](../../Agazzi/Corollary2/Norm.lean#L369) and [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L376) follow them on the plane:
-  - Corollary 2 at `A = 0` gives quasiconvexity on every ball ([`Corollary2Norm.integral_burkholderB_jacobian_nonneg`](../../Agazzi/Corollary2/Norm.lean#L244));
-  - that gives Conjecture 2 for `u ∈ C_c^∞ (ℂ)` ([`Corollary2Norm.integral_phi_dz_dzbar_nonneg`](../../Agazzi/Corollary2/Norm.lean#L276), [`Corollary2Norm.integral_phi_dzbar_dz_nonneg`](../../Agazzi/Corollary2/Norm.lean#L291));
-  - with Burkholder's inequality and `u ↦ ū`, Conjecture 3 ([`Corollary2Norm.integral_norm_dz_rpow_le`](../../Agazzi/Corollary2/Norm.lean#L339));
-  - remark (b) ([`External.BaernsteinMontgomerySmith.remark_b`](../../Agazzi/External/BaernsteinMontgomerySmith/RemarkB.lean#L111)) concludes, by Guerra's argument, as formalized in HarmonicAnalysis.
+- [`beurlingNorm_le`](../../Agazzi/Corollary2/Norm.lean#L371) and [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378) follow them on the plane:
+  - Corollary 2 at `A = 0` gives quasiconvexity on every ball ([`Corollary2Norm.integral_burkholderB_jacobian_nonneg`](../../Agazzi/Corollary2/Norm.lean#L246));
+  - that gives Conjecture 2 for `u ∈ C_c^∞ (ℂ)` ([`Corollary2Norm.integral_phi_dz_dzbar_nonneg`](../../Agazzi/Corollary2/Norm.lean#L278), [`Corollary2Norm.integral_phi_dzbar_dz_nonneg`](../../Agazzi/Corollary2/Norm.lean#L293));
+  - with Burkholder's inequality and `u ↦ ū`, Conjecture 3 ([`Corollary2Norm.integral_norm_dz_rpow_le`](../../Agazzi/Corollary2/Norm.lean#L341));
+  - remark (b) ([`External.BaernsteinMontgomerySmith.remark_b`](../../Agazzi/External/BaernsteinMontgomerySmith/RemarkB.lean#L116)) concludes, by Guerra's argument, as formalized in HarmonicAnalysis.
 
 ### E3. The closedness of `𝒞` (l. 412)
 
@@ -216,17 +216,27 @@ No statement of the paper was corrected.
 
 None. Every proof follows the paper's argument or, where the paper only cites, the argument of the cited sources.
 
-The second assertion of Corollary 2 is proved "by the arguments in" Baernstein–Montgomery-Smith, with Guerra's "further details" (E2). Its upper bound, [`beurlingNorm_le`](../../Agazzi/Corollary2/Norm.lean#L369), follows those planar arguments:
+The second assertion of Corollary 2 is proved "by the arguments in" Baernstein–Montgomery-Smith, with Guerra's "further details" (E2). Its upper bound, [`beurlingNorm_le`](../../Agazzi/Corollary2/Norm.lean#L371), follows those planar arguments:
 - Corollary 2 at `A = 0` as quasiconvexity with compactly supported test maps;
 - their Conjectures 2 and 3 for `u ∈ C_c^∞ (ℂ)`, with Burkholder's inequality and the interchange of `∂` and `∂̄`;
 - their remark (b), by Guerra's passage to `L^p (ℂ)` with a potential and cut-offs `η_R`.
 
-The remark is proved in the package HarmonicAnalysis (`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`), whose docstrings record three repairs of Guerra's text, each along the lines of that argument:
-- the gradient case: Guerra proves a bound for Hessians of real potentials; the norm on complex `L^p` needs the gradient case, so the potential of `g` is its Cauchy transform `f`, with `∂̄f = g` and `∂f = 𝒮 g`, in place of the logarithmic potential;
-- the dense class: the Schwartz functions whose Fourier transform is compactly supported in `ℂ ∖ {0}` (Hytönen–van Neerven–Veraar–Weis, Prop. 2.4.23 (ii)), in place of `C_c^∞`. Their Cauchy transforms are Schwartz functions, constructed on the Fourier side, so that neither the Cauchy kernel nor decay estimates are needed. Guerra's class would also work: for `g ∈ C_c^∞`, `f = O (1/|z|)`, and the cut-off error `‖f ∇η_R‖_p` is `O (R^{2/p − 2})`, which tends to `0` for every `p > 1`. The change is for economy and is not forced;
-- the density step: Guerra's "by density" is made explicit for the Schwartz functions over which the norm is a supremum. The Fourier transforms of the approximants converge in `L¹`, so `𝒮` of them converges uniformly, and Fatou's lemma concludes, without the boundedness of `𝒮` on `L^p`.
+The remark is proved in the package HarmonicAnalysis (`HarmonicAnalysis.beurlingPowNorm_one_le_of_forall_hasCompactSupport`) by Guerra's proof, with Guerra's dense class `C_c^∞`:
+- for `g ∈ C_c^∞`, the potential is its Cauchy transform `f (z) = (1/π) ∫ g (w) / (z − w) dw`:
+  - `∂̄f = g`, by the Cauchy–Pompeiu formula;
+  - `∂f = 𝒮 g`;
+  - `f = O (1/|z|)` and `∂f = O (1/|z|²)`;
+- the inequality is applied to `η_R f`, with Guerra's cut-offs, and `R → ∞`: the cut-off error `‖f ∇η_R‖_p` is `O (R^{2/p − 2})`, which tends to `0` for every `p > 1`;
+- density carries the bound from `C_c^∞` to the Schwartz functions over which the norm is a supremum.
 
-Until the second round of this formalization (CREDITS.md), the upper bound passed from the torus to the plane by the bound on `L^p_0 (𝕋²)` and transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6), a departure made for economy. The planar argument above replaced it, and the torus bound was removed.
+One departure from Guerra's text is forced: Guerra proves a bound for Hessians of real potentials (a real `h`, its logarithmic potential), and the norm on complex `L^p` needs the gradient case (a complex `g`, its Cauchy transform). Guerra states the properties of the potential without proof:
+- `Δu = 2h`;
+- its decay;
+- `𝒮h = 2u_{zz}`, which applies `𝒮 ∘ ∂_z̄ = ∂_z` to a function that is not a Schwartz function.
+
+Their gradient analogues are proved in the package, the last one by Liouville's theorem. Guerra's "by density" presupposes that `𝒮` is bounded on `L^p`, which the package does not prove; its density step uses the convergence of the Fourier transforms in `L¹` and Fatou's lemma instead.
+
+In the first round of this formalization, the upper bound passed from the torus to the plane by the bound on `L^p_0 (𝕋²)` and transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6), a departure made for economy. In the second round, the planar argument above replaced it in the proof of [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378), and the torus route is kept beside it as a shorter proof, not used by the paper's results (Section 11).
 
 Every proof follows its source step by step. Only the following differ, and only in mechanics:
 - In Lemma 4, the sup norm of `Fin 2 → ℝ` is used inside the proof (balls, `ρ`), in place of the Euclidean norm, with the constants adjusted.
@@ -236,7 +246,7 @@ Every proof follows its source step by step. Only the following differ, and only
 
 ## 8. What each result depends on
 
-From the current output of [`scripts/Audit.lean`](../../scripts/Audit.lean). Every result depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and so do all 327 declarations of the library.
+From the current output of [`scripts/Audit.lean`](../../scripts/Audit.lean). Every result depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and so do all 357 declarations of the library.
 
 | Result | Lean | Results from prior work used |
 | --- | --- | --- |
@@ -244,7 +254,8 @@ From the current output of [`scripts/Audit.lean`](../../scripts/Audit.lean). Eve
 | Theorem 1, Lipschitz form | [`theorem1_lipschitz`](../../Agazzi/Theorem1.lean#L250) | [`External.KinderlehrerStampacchia.lemma2_1`](../../Agazzi/External/KinderlehrerStampacchia/Projection.lean#L50), [`External.KinderlehrerStampacchia.theorem2_3`](../../Agazzi/External/KinderlehrerStampacchia/Projection.lean#L39) |
 | Corollary 2 (a) | [`corollary2`](../../Agazzi/Corollary2/Quasiconvexity.lean#L424) | [`External.KinderlehrerStampacchia.lemma2_1`](../../Agazzi/External/KinderlehrerStampacchia/Projection.lean#L50), [`External.KinderlehrerStampacchia.theorem2_3`](../../Agazzi/External/KinderlehrerStampacchia/Projection.lean#L39), [`External.BaernsteinMontgomerySmith.equation1_2a`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L231), [`External.BaernsteinMontgomerySmith.equation1_2b`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L288) |
 | Corollary 2 (a), Lipschitz form | [`corollary2_lipschitz`](../../Agazzi/Corollary2/Quasiconvexity.lean#L285) | the same |
-| Corollary 2 (b) | [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L376) | the same, and [`External.BaernsteinMontgomerySmith.phi_le`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L332), [`External.BaernsteinMontgomerySmith.remark_b`](../../Agazzi/External/BaernsteinMontgomerySmith/RemarkB.lean#L111), [`External.Lehto.lowerBound`](../../Agazzi/External/Lehto/LowerBound.lean#L68) |
+| Corollary 2 (b) | [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378) | the same, and [`External.BaernsteinMontgomerySmith.phi_le`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L332), [`External.BaernsteinMontgomerySmith.remark_b`](../../Agazzi/External/BaernsteinMontgomerySmith/RemarkB.lean#L116), [`External.Lehto.lowerBound`](../../Agazzi/External/Lehto/LowerBound.lean#L68) |
+| Corollary 2 (b), upper bound: the alternative proof on the torus (Section 11) | [`beurlingNorm_le_of_torus`](../../Agazzi/Corollary2/NormTorus.lean#L355) | the results of Corollary 2 (a), and [`External.BaernsteinMontgomerySmith.phi_le`](../../Agazzi/External/BaernsteinMontgomerySmith/Basic.lean#L332); transference from the package HarmonicAnalysis |
 | Lemma 3 | [`lemma3`](../../Agazzi/Proof/RowRepresentation.lean#L220) | none |
 | Lemma 4 | [`lemma4`](../../Agazzi/Proof/ScalarProjection/Main.lean#L748) | [`External.KinderlehrerStampacchia.theorem2_3`](../../Agazzi/External/KinderlehrerStampacchia/Projection.lean#L39) |
 
@@ -331,7 +342,7 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 - **The series.** The paper announces later parts of the series:
   - the higher-dimensional theory: the Beurling–Ahlfors transform on forms, after Donaldson–Sullivan and Iwaniec–Martin, with the sharp higher integrability of quasiregular maps in even dimensions;
   - the separating functions of Faraco–Székelyhidi, Kirchheim–Székelyhidi and Székelyhidi.
-- **Weak type.** Guerra's weak-type corollary (arXiv:2608.23388) applies `L (A/λ) ≤ (2/λ) |a₊| − 1_{|a₋| > λ}` to the Hessian of the logarithmic potential of a real-valued `h`, with cut-offs. With Theorem 1 for all matrices, the same bound applied to `f̄`, where `f` is the Cauchy transform of a complex-valued `h` (`∂̄f = h`, `∂f = 𝒮h`; conjugation exchanges `|a₊|` and `|a₋|`), appears to give `λ |{|𝒮 h| > λ}| ≤ 2 ‖h‖₁`. Guerra claims, by laminates, that `2` is sharp for real `h`, hence also for complex `h`. The pointwise bound was checked on paper, twice. The compactly supported form of Theorem 1 that the argument needs is in Lean ([`quasiconvex_integrandL`](../../Agazzi/Quasiconvex.lean#L68)). Neither the paper nor Guerra's preprint states the complex case, and an arXiv abstract search of 23 November 2026 found no work that does. The Cauchy transform and Guerra's cut-offs are now in lean4-harmonic-analysis, for the Schwartz functions whose Fourier transform is compactly supported off `0`; these have integral `0` and are not dense in `L¹`, so the weak-type limit would need another dense class.
+- **Weak type.** Guerra's weak-type corollary (arXiv:2608.23388) applies `L (A/λ) ≤ (2/λ) |a₊| − 1_{|a₋| > λ}` to the Hessian of the logarithmic potential of a real-valued `h`, with cut-offs. With Theorem 1 for all matrices, the same bound applied to `f̄`, where `f` is the Cauchy transform of a complex-valued `h` (`∂̄f = h`, `∂f = 𝒮h`; conjugation exchanges `|a₊|` and `|a₋|`), appears to give `λ |{|𝒮 h| > λ}| ≤ 2 ‖h‖₁`. Guerra claims, by laminates, that `2` is sharp for real `h`, hence also for complex `h`. The pointwise bound was checked on paper, twice. The compactly supported form of Theorem 1 that the argument needs is in Lean ([`quasiconvex_integrandL`](../../Agazzi/Quasiconvex.lean#L68)). Neither the paper nor Guerra's preprint states the complex case, and an arXiv abstract search of 23 November 2026 found no work that does. The Cauchy transform of `g ∈ C_c^∞`, with its decay, and Guerra's cut-offs are now in lean4-harmonic-analysis.
 - **Higher powers.** The conjecture `‖𝒮^n‖_p = κ_n (p)` for `p ≥ 2` (Dragičević) remains open for `n ≥ 2`, as far as lean4-harmonic-analysis's README records. Corollary 2 gives `‖𝒮²‖_p ≤ (p* − 1)²`, but this does not improve on the known bounds for large `p`.
 
 ### Simpler proofs
@@ -343,10 +354,11 @@ Each was checked on paper only, except where noted.
 - **The convexity of `F`** is immediate from its definition as a supremum of the affine functions `G_z`.
 - **Theorem 1 for `|A| > 1`.** The chain `L (A) = sup_z G_z (A) = sup_z ∫_Q G_z (Du) ≤ ∫_Q L (Du)` skips `F`.
 - **Lehto's lower bound.** Duality, `‖𝒮‖_p = ‖𝒮‖_{p'}`, replaces the second family `f̄_α`. The formalization uses it.
+- **The upper bound `‖𝒮‖_p ≤ p* − 1` on the torus.** The paper's Corollary 2 is periodic, so the bound can be proved on the torus and transferred to the plane. Corollary 2 at `A = 0` and Burkholder's inequality give `‖∂u‖_{L^p (Q)} ≤ (p* − 1) ‖∂̄u‖_{L^p (Q)}` for smooth periodic `u`, hence the bound on `L^p_0 (𝕋²)`, and transference (Hytönen–van Neerven–Veraar–Weis, Cor. 5.7.6, in lean4-harmonic-analysis) gives `L^p (ℂ)`. It needs none of the planar tools: neither the Cauchy transform nor the cut-offs. This one is checked in Lean: [`beurlingNorm_le_of_torus`](../../Agazzi/Corollary2/NormTorus.lean#L355), in [`Agazzi/Corollary2/NormTorus.lean`](../../Agazzi/Corollary2/NormTorus.lean), kept beside the paper's route and not used by [`corollary2_norm`](../../Agazzi/Corollary2/Norm.lean#L378).
+- **Guerra's passage with another dense class.** The Schwartz functions whose Fourier transform is compactly supported off `0` (Hytönen–van Neerven–Veraar–Weis, Prop. 2.4.23 (ii)) have Schwartz Cauchy transforms, built on the Fourier side, so the cut-off step needs neither the kernel nor its estimates. This was checked in Lean, in an earlier commit of lean4-harmonic-analysis, which records it among its shorter proofs.
 
 ### The formalization
 
-- **The kernel of the Cauchy transform.** The Cauchy transform of lean4-harmonic-analysis, used for the norm (Section 7), is defined on the Fourier side; its kernel formula `(1/π) ∫ g (w) / (z − w) dw` is not proved, and that package lists it as a planned extension.
 - **The gradient-constrained `L²` projection** (the closedness of `𝒞` and the existence of the projection) is stated for the paper's objects, in [`Agazzi/Proof/ScalarProjection/`](../../Agazzi/Proof/ScalarProjection), and stays here. Its general tools are in lean4-calculus-of-variations, and a general form on `(0, 1)^m` could join them.
 - **`External/` holds material other formalizations could reuse:** the Mellin identities of Baernstein–Montgomery-Smith.
 - **Duplicates.** Three private copies of `volume unitSquare = 1` remain, and some public helpers are missing from their module docstrings.
